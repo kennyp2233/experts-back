@@ -1,0 +1,36 @@
+# Dependencias instaladas con npm
+/node_modules
+
+# Archivos generados por el sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos de registro
+*.log
+
+# Archivos de configuración
+.env
+
+# Archivos de compilación
+/dist
+
+# Dependencias instaladas con yarn
+/yarn.lock
+
+# Dependencias instaladas con npm
+/package-lock.json
+
+# Archivos de respaldo
+*.bak
+
+# Archivos de caché
+*.cache
+
+# Archivos de compilación de TypeScript
+*.tsbuildinfo
+
+# Archivos de configuración de VS Code
+.vscode/
+
+# Para archivos de entorno
+.env
