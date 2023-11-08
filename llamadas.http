@@ -1,0 +1,27 @@
+
+POST http://localhost:3000/api/v1/aerolineas HTTP/1.1
+Host: localhost:3000
+Content-Type: application/json
+
+{
+    "alias": "alias",
+    "nombre": "nombre",
+    "ci_ruc": "ci_ruc",
+    "direccion": "direccion",
+    "telefono": "telefono",
+    "email": "email",
+    "ciudad": "ciudad",
+    "pais": "pais",
+    "contacto": "contacto",
+    "modo": "modo",
+    "maestra_guias_hijas": true,
+    "codigo": "codigo",
+    "prefijo_awb": "prefijo_awb",
+    "codigo_cae": "codigo_cae",
+    "estado_activo": true
+}
+###
+
+GET http://localhost:3000/api/v1/aerolineas HTTP/1.1
+Host: localhost:3000
+

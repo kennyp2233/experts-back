@@ -1,20 +1,20 @@
 import express from 'express';
-import aerolinea from '../services/aerolineasServicio';
+import aerolinea from '../services/aerolineas.servicio';
 import { AerolineaCreationAttributesI } from '../../type';
 
 
 const router = express.Router();
 const aero = new aerolinea();
 
-router.get('/aerolineas', (_, res) => {
-    res.send('Obteniendo aerolineas');
+router.get('/aerolineas', async (_, res) => {
+    res.send(await aero.getAerolineas());
 });
 /*
 router.get('/aerolineas', (_, res) => {
     res.send('Obteniendo aerolineas');
 });
 */
-router.post('/aerolineas', async (_, res) => {
+router.post('/aerolineas', async (req, res) => {
     const aerolineaNew: AerolineaCreationAttributesI = {
         alias: 'alias',
         nombre: 'nombre',
@@ -33,7 +33,8 @@ router.post('/aerolineas', async (_, res) => {
         estado_activo: true
     }
     try {
-        aero.createAerolinea(aerolineaNew);
+        console.log(req.body);
+        aero.createAerolinea(req.body);
         res.status(201).json({
             ok: true,
             msg: 'Creando aerolinea',
