@@ -1,6 +1,7 @@
 import express from 'express';
 import aerolineasRouter from '../routes/aerolineas.route';
 import bodyParser from 'body-parser';
+
 const app = express();
 
 app.get('/', (_, res) => {

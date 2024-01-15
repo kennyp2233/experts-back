@@ -12,63 +12,63 @@ const Aerolineas = sequelize.define<Model<AerolineaAttributesI, AerolineaCreatio
     },
     alias: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     nombre: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     ci_ruc: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     direccion: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     telefono: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     email: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     ciudad: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     pais: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     contacto: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     modo: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     maestra_guias_hijas: {
         type: DataTypes.BOOLEAN,
-        allowNull: false,
+        allowNull: true,
     },
     codigo: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     prefijo_awb: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     codigo_cae: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     estado_activo: {
         type: DataTypes.BOOLEAN,
-        allowNull: false,
+        allowNull: true,
     }
 }, {
     timestamps: false,

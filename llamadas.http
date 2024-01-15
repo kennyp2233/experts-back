@@ -1,11 +1,15 @@
 
+###
+GET http://localhost:3000/api/v1/aerolineas HTTP/1.1
+
+###
 POST http://localhost:3000/api/v1/aerolineas HTTP/1.1
-Host: localhost:3000
+
 Content-Type: application/json
 
 {
     "alias": "alias",
-    "nombre": "nombre",
+    "nombre": "",
     "ci_ruc": "ci_ruc",
     "direccion": "direccion",
     "telefono": "telefono",
@@ -20,8 +24,6 @@ Content-Type: application/json
     "codigo_cae": "codigo_cae",
     "estado_activo": true
 }
+
 ###
-
-GET http://localhost:3000/api/v1/aerolineas HTTP/1.1
-Host: localhost:3000
-
+GET http://localhost:3000/api/v1/aerolineas?id=8 HTTP/1.1

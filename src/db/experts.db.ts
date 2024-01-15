@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize";
 import dotenv from "dotenv";
-import Aerolineas from "./models/aerolineas.model";
+
 dotenv.config();
 
 const sequelize = new Sequelize(

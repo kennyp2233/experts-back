@@ -6,34 +6,17 @@ import { AerolineaCreationAttributesI } from '../../type';
 const router = express.Router();
 const aero = new aerolinea();
 
-router.get('/aerolineas', async (_, res) => {
-    res.send(await aero.getAerolineas());
-});
-/*
-router.get('/aerolineas', (_, res) => {
-    res.send('Obteniendo aerolineas');
-});
-*/
-router.post('/aerolineas', async (req, res) => {
-    const aerolineaNew: AerolineaCreationAttributesI = {
-        alias: 'alias',
-        nombre: 'nombre',
-        ci_ruc: 'ci_ruc',
-        direccion: 'direccion',
-        telefono: 'telefono',
-        email: 'email',
-        ciudad: 'ciudad',
-        pais: 'pais',
-        contacto: 'contacto',
-        modo: 'modo',
-        maestra_guias_hijas: true,
-        codigo: 'codigo',
-        prefijo_awb: 'prefijo_awb',
-        codigo_cae: 'codigo_cae',
-        estado_activo: true
+router.get('/aerolineas', async (req, res) => {
+    if (req.query.id) {
+        const id = (req.query as { id: string }).id;
+        res.send(await aero.getAerolinea(Number.parseInt(id)));
+    } else {
+        res.send(await aero.getAerolineas());
     }
+});
+
+router.post('/aerolineas', async (req, res) => {
     try {
-        console.log(req.body);
         aero.createAerolinea(req.body);
         res.status(201).json({
             ok: true,
@@ -48,7 +31,6 @@ router.post('/aerolineas', async (req, res) => {
             status: 500
         });
     }
-
 });
 
 router.put('/aerolineas', (_, res) => {
