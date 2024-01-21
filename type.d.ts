@@ -1,3 +1,4 @@
+import exp from "constants";
 
 export interface AerolineaAttributesI {
     id_aerolinea: number;
@@ -20,3 +21,13 @@ export interface AerolineaAttributesI {
 
 export interface AerolineaCreationAttributesI extends Optional<AerolineaAttributesI, "id_aerolinea"> { }
 
+
+
+export interface OrigenesAttributes {
+    id_origenes: number;
+    nombre: string;
+    id_pais: number;
+    id_aduana: number;
+}
+
+export interface OrigenesCreationAttributes extends Optional<OrigenesAttributes, "id_origenes"> { }

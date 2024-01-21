@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.33, for Win64 (x86_64)
 --
--- Host: localhost    Database: experts_db
+-- Host: 127.0.0.1    Database: experts_db
 -- ------------------------------------------------------
--- Server version	8.2.0
+-- Server version	8.0.35
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -40,7 +40,7 @@ CREATE TABLE `aerolineas` (
   `codigo_cae` varchar(45) DEFAULT NULL,
   `estado_activo` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id_aerolinea`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -199,10 +199,6 @@ CREATE TABLE `consignatario` (
   `email` varchar(45) DEFAULT NULL,
   `ciudad` varchar(45) DEFAULT NULL,
   `pais` varchar(45) DEFAULT NULL,
-  `id_info_guia_m` int NOT NULL,
-  `id_info_guia_h` int NOT NULL,
-  `id_info_fito` int NOT NULL,
-  `id_info_cae` int NOT NULL,
   PRIMARY KEY (`id_consignatario`),
   KEY `fk_c_cliente_idx` (`id_cliente`),
   KEY `fk_c_embarcador_idx` (`id_embarcador`),
@@ -228,7 +224,6 @@ DROP TABLE IF EXISTS `consignatario_cae_sice`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `consignatario_cae_sice` (
-  `id_info` int NOT NULL AUTO_INCREMENT,
   `id_consignatario` int NOT NULL,
   `consignee_nombre` varchar(45) DEFAULT NULL,
   `consignee_direccion` varchar(45) DEFAULT NULL,
@@ -245,7 +240,8 @@ CREATE TABLE `consignatario_cae_sice` (
   `hawb_ciudad` varchar(45) DEFAULT NULL,
   `hawb_provincia` varchar(45) DEFAULT NULL,
   `hawb_pais` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`id_info`)
+  KEY `fk_cae_sice_consignatrio_idx` (`id_consignatario`),
+  CONSTRAINT `fk_cae_sice_consignatrio` FOREIGN KEY (`id_consignatario`) REFERENCES `consignatario` (`id_consignatario`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -259,6 +255,33 @@ LOCK TABLES `consignatario_cae_sice` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `consignatario_facturacion`
+--
+
+DROP TABLE IF EXISTS `consignatario_facturacion`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `consignatario_facturacion` (
+  `id_consignatario` int NOT NULL,
+  `nombre` varchar(45) DEFAULT NULL,
+  `ruc` varchar(45) DEFAULT NULL,
+  `direccion` text,
+  PRIMARY KEY (`id_consignatario`),
+  KEY `fk_c_f_consignatario_idx` (`id_consignatario`),
+  CONSTRAINT `fk_c_f_consignatario_a` FOREIGN KEY (`id_consignatario`) REFERENCES `consignatario` (`id_consignatario`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `consignatario_facturacion`
+--
+
+LOCK TABLES `consignatario_facturacion` WRITE;
+/*!40000 ALTER TABLE `consignatario_facturacion` DISABLE KEYS */;
+/*!40000 ALTER TABLE `consignatario_facturacion` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `consignatario_fito`
 --
 
@@ -266,14 +289,13 @@ DROP TABLE IF EXISTS `consignatario_fito`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `consignatario_fito` (
-  `id_info` int NOT NULL AUTO_INCREMENT,
   `id_consignatario` int NOT NULL,
   `fito_declared_name` text,
   `fito_forma_a` text,
   `fito_nombre` varchar(45) DEFAULT NULL,
   `fito_direccion` varchar(45) DEFAULT NULL,
   `fito_pais` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`id_info`),
+  PRIMARY KEY (`id_consignatario`),
   KEY `fk_c_f_consignatario_idx` (`id_consignatario`),
   CONSTRAINT `fk_c_f_consignatario` FOREIGN KEY (`id_consignatario`) REFERENCES `consignatario` (`id_consignatario`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -296,12 +318,11 @@ DROP TABLE IF EXISTS `consignatario_guia_h`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `consignatario_guia_h` (
-  `id_info` int NOT NULL AUTO_INCREMENT,
   `id_consignatario` int NOT NULL,
   `gua_h_consignee` varchar(45) DEFAULT NULL,
   `guia_h_name_adress` text,
   `guia_h_notify` text,
-  PRIMARY KEY (`id_info`),
+  PRIMARY KEY (`id_consignatario`),
   KEY `fk_c_h_consignatario_idx` (`id_consignatario`),
   CONSTRAINT `fk_c_h_consignatario` FOREIGN KEY (`id_consignatario`) REFERENCES `consignatario` (`id_consignatario`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -324,13 +345,12 @@ DROP TABLE IF EXISTS `consignatario_guia_m`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `consignatario_guia_m` (
-  `id_info` int NOT NULL AUTO_INCREMENT,
   `id_consignatario` int NOT NULL,
   `guia_m_consignee` text,
   `guia_m_name_address` text,
   `guia_m_notify` text,
   `id_destino_final` int DEFAULT NULL,
-  PRIMARY KEY (`id_info`),
+  PRIMARY KEY (`id_consignatario`),
   KEY `fk_c_m_consignatario_idx` (`id_consignatario`),
   KEY `fk_c_m_destino_idx` (`id_destino_final`),
   CONSTRAINT `fk_c_m_consignatario` FOREIGN KEY (`id_consignatario`) REFERENCES `consignatario` (`id_consignatario`),
@@ -355,7 +375,6 @@ DROP TABLE IF EXISTS `consignatario_transmision`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `consignatario_transmision` (
-  `id_info` int NOT NULL AUTO_INCREMENT,
   `id_consignatario` int NOT NULL,
   `consignee_nombre` varchar(45) DEFAULT NULL,
   `consignee_direccion` varchar(45) DEFAULT NULL,
@@ -375,7 +394,7 @@ CREATE TABLE `consignatario_transmision` (
   `hawb_provincia` varchar(45) DEFAULT NULL,
   `hawb_pais` varchar(45) DEFAULT NULL,
   `hawb_eueori` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`id_info`),
+  PRIMARY KEY (`id_consignatario`),
   KEY `fk_c_t_consignatario_idx` (`id_consignatario`),
   CONSTRAINT `fk_c_t_consignatario` FOREIGN KEY (`id_consignatario`) REFERENCES `consignatario` (`id_consignatario`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -669,4 +688,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-01-14 21:08:12
+-- Dump completed on 2024-01-20 19:02:04
