@@ -240,6 +240,7 @@ CREATE TABLE `consignatario_cae_sice` (
   `hawb_ciudad` varchar(45) DEFAULT NULL,
   `hawb_provincia` varchar(45) DEFAULT NULL,
   `hawb_pais` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id_consignatario`),
   KEY `fk_cae_sice_consignatrio_idx` (`id_consignatario`),
   CONSTRAINT `fk_cae_sice_consignatrio` FOREIGN KEY (`id_consignatario`) REFERENCES `consignatario` (`id_consignatario`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -418,18 +419,26 @@ DROP TABLE IF EXISTS `coordinacion`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `coordinacion` (
   `id_coordinacion` int NOT NULL AUTO_INCREMENT,
-  `consignatario` int NOT NULL,
-  `aerolinea` int NOT NULL,
-  `numero_guia` int NOT NULL,
-  `tipo_embarque` int NOT NULL,
-  `shipper_iata` int NOT NULL,
-  `destinos_awb` int NOT NULL,
-  `destinos_final_docs` int NOT NULL,
-  `pago` varchar(45) NOT NULL,
-  `corte` date DEFAULT NULL,
-  `ruta` int DEFAULT NULL,
-  `coordinacioncol` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`id_coordinacion`)
+  `id_consignatario` int NOT NULL,
+  `id_aerolinea` int NOT NULL,
+  `id_guia_m` int NOT NULL,
+  `id_tipo_embarque` varchar(45) NOT NULL,
+  `id_iata_asignadas` varchar(45) NOT NULL,
+  `pago` tinyint NOT NULL,
+  `fecha_vuelo` date DEFAULT NULL,
+  `referencia` varchar(45) DEFAULT NULL,
+  `cupo_maximo` decimal(10,0) DEFAULT NULL,
+  PRIMARY KEY (`id_coordinacion`),
+  KEY `fk_c_consignatario_idx` (`id_consignatario`),
+  KEY `fk_c_aerolinea_idx` (`id_aerolinea`),
+  KEY `fk_c_guia_m_idx` (`id_guia_m`),
+  KEY `fk_c_tipo_embarque_idx` (`id_tipo_embarque`),
+  KEY `fk_c_agencia_iata_idx` (`id_iata_asignadas`),
+  CONSTRAINT `fk_c_aerolinea` FOREIGN KEY (`id_aerolinea`) REFERENCES `aerolineas` (`id_aerolinea`),
+  CONSTRAINT `fk_c_agencia_iata` FOREIGN KEY (`id_iata_asignadas`) REFERENCES `agencias_iata_asignadas` (`alias`),
+  CONSTRAINT `fk_c_consignatario` FOREIGN KEY (`id_consignatario`) REFERENCES `consignatario` (`id_consignatario`),
+  CONSTRAINT `fk_c_guia_m` FOREIGN KEY (`id_guia_m`) REFERENCES `guias_madre` (`id_guia_madre`),
+  CONSTRAINT `fk_c_tipo_embarque` FOREIGN KEY (`id_tipo_embarque`) REFERENCES `tipo_embarque` (`id_tipo_embarque`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -678,6 +687,82 @@ LOCK TABLES `shipper_info` WRITE;
 /*!40000 ALTER TABLE `shipper_info` DISABLE KEYS */;
 /*!40000 ALTER TABLE `shipper_info` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `tipo_carga`
+--
+
+DROP TABLE IF EXISTS `tipo_carga`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tipo_carga` (
+  `id_tipo_carga` varchar(45) NOT NULL,
+  PRIMARY KEY (`id_tipo_carga`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tipo_carga`
+--
+
+LOCK TABLES `tipo_carga` WRITE;
+/*!40000 ALTER TABLE `tipo_carga` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tipo_carga` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tipo_embalaje`
+--
+
+DROP TABLE IF EXISTS `tipo_embalaje`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tipo_embalaje` (
+  `id_tipo_embalaje` varchar(45) NOT NULL,
+  PRIMARY KEY (`id_tipo_embalaje`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tipo_embalaje`
+--
+
+LOCK TABLES `tipo_embalaje` WRITE;
+/*!40000 ALTER TABLE `tipo_embalaje` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tipo_embalaje` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tipo_embarque`
+--
+
+DROP TABLE IF EXISTS `tipo_embarque`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tipo_embarque` (
+  `id_tipo_embarque` varchar(45) NOT NULL,
+  `descripcion` text,
+  `id_tipo_carga` varchar(45) NOT NULL,
+  `id_tipo_embalaje` varchar(45) NOT NULL,
+  `regimen` varchar(45) DEFAULT NULL,
+  `mercancia` varchar(45) DEFAULT NULL,
+  `harmonised_comidity` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id_tipo_embarque`),
+  KEY `fk_t_e_carga_idx` (`id_tipo_carga`),
+  KEY `fk_t_e_embalaje_idx` (`id_tipo_embalaje`),
+  CONSTRAINT `fk_t_e_carga` FOREIGN KEY (`id_tipo_carga`) REFERENCES `tipo_carga` (`id_tipo_carga`),
+  CONSTRAINT `fk_t_e_embalaje` FOREIGN KEY (`id_tipo_embalaje`) REFERENCES `tipo_embalaje` (`id_tipo_embalaje`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tipo_embarque`
+--
+
+LOCK TABLES `tipo_embarque` WRITE;
+/*!40000 ALTER TABLE `tipo_embarque` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tipo_embarque` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -688,4 +773,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-01-20 19:02:04
+-- Dump completed on 2024-01-27 22:40:30
