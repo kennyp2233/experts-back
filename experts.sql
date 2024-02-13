@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.33, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: experts_db
 -- ------------------------------------------------------
--- Server version	8.0.36
+-- Server version	8.0.35
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -71,6 +71,46 @@ CREATE TABLE `aerolineas` (
 LOCK TABLES `aerolineas` WRITE;
 /*!40000 ALTER TABLE `aerolineas` DISABLE KEYS */;
 /*!40000 ALTER TABLE `aerolineas` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `aerolineas_codigos_plantillas`
+--
+
+DROP TABLE IF EXISTS `aerolineas_codigos_plantillas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `aerolineas_codigos_plantillas` (
+  `id_aerolineas` varchar(50) NOT NULL,
+  `costo_guia_abrv` varchar(45) DEFAULT NULL,
+  `combustible_abrv` varchar(45) DEFAULT NULL,
+  `seguridad_abrv` varchar(45) DEFAULT NULL,
+  `aux_calculo_abrv` varchar(45) DEFAULT NULL,
+  `iva_abrv` varchar(45) DEFAULT NULL,
+  `otros_abrv` varchar(45) DEFAULT NULL,
+  `aux1_abrv` varchar(45) DEFAULT NULL,
+  `aux2_abrv` varchar(45) DEFAULT NULL,
+  `costo_guia_valor` decimal(10,0) DEFAULT NULL,
+  `combustible_valor` decimal(10,0) DEFAULT NULL,
+  `seguroidad_valor` decimal(10,0) DEFAULT NULL,
+  `aux_calculo_valor` decimal(10,0) DEFAULT NULL,
+  `otros_valor` decimal(10,0) DEFAULT NULL,
+  `aux1_valor` decimal(10,0) DEFAULT NULL,
+  `aux2_valor` decimal(10,0) DEFAULT NULL,
+  `plantilla_guia_madre` varchar(45) DEFAULT NULL,
+  `plantilla_formato_aerolinea` varchar(45) DEFAULT NULL,
+  `plantilla_reservas` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id_aerolineas`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `aerolineas_codigos_plantillas`
+--
+
+LOCK TABLES `aerolineas_codigos_plantillas` WRITE;
+/*!40000 ALTER TABLE `aerolineas_codigos_plantillas` DISABLE KEYS */;
+/*!40000 ALTER TABLE `aerolineas_codigos_plantillas` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -440,7 +480,6 @@ DROP TABLE IF EXISTS `coordinacion`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `coordinacion` (
   `id_coordinacion` int NOT NULL AUTO_INCREMENT,
-  `id_consignatario` int NOT NULL,
   `id_aerolinea` varchar(50) NOT NULL,
   `id_guia_madre` int NOT NULL,
   `id_tipo_embarque` varchar(45) NOT NULL,
@@ -450,14 +489,12 @@ CREATE TABLE `coordinacion` (
   `referencia` varchar(45) DEFAULT NULL,
   `cupo_maximo` decimal(10,0) DEFAULT NULL,
   PRIMARY KEY (`id_coordinacion`),
-  KEY `fk_c_consignatario_idx` (`id_consignatario`),
   KEY `fk_c_guia_m_idx` (`id_guia_madre`),
   KEY `fk_c_tipo_embarque_idx` (`id_tipo_embarque`),
   KEY `fk_c_agencia_iata_idx` (`id_iata_asignadas`),
   KEY `fk_c_guia_aerolinea_idx` (`id_aerolinea`),
   CONSTRAINT `fk_c_agencia_iata` FOREIGN KEY (`id_iata_asignadas`) REFERENCES `agencias_iata_asignadas` (`alias`),
-  CONSTRAINT `fk_c_consignatario` FOREIGN KEY (`id_consignatario`) REFERENCES `consignatario` (`id_consignatario`),
-  CONSTRAINT `fk_c_guia_aerolinea` FOREIGN KEY (`id_aerolinea`) REFERENCES `aerolineas` (`id_aerolinea`),
+  CONSTRAINT `fk_c_guia_aerolinea` FOREIGN KEY (`id_aerolinea`) REFERENCES `coordinacion_aerolinea` (`id_aerolinea`),
   CONSTRAINT `fk_c_guia_m` FOREIGN KEY (`id_guia_madre`) REFERENCES `guias_madre` (`id_guia_madre`),
   CONSTRAINT `fk_c_tipo_embarque` FOREIGN KEY (`id_tipo_embarque`) REFERENCES `tipo_embarque` (`id_tipo_embarque`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -470,6 +507,89 @@ CREATE TABLE `coordinacion` (
 LOCK TABLES `coordinacion` WRITE;
 /*!40000 ALTER TABLE `coordinacion` DISABLE KEYS */;
 /*!40000 ALTER TABLE `coordinacion` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `coordinacion_aerolinea`
+--
+
+DROP TABLE IF EXISTS `coordinacion_aerolinea`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `coordinacion_aerolinea` (
+  `id_aerolinea` varchar(50) NOT NULL,
+  `nombre` varchar(50) DEFAULT NULL,
+  `ci_ruc` varchar(14) DEFAULT NULL,
+  `direccion` text,
+  `telefono` varchar(45) DEFAULT NULL,
+  `email` varchar(45) DEFAULT NULL,
+  `ciudad` varchar(45) DEFAULT NULL,
+  `pais` varchar(45) DEFAULT NULL,
+  `contacto` varchar(45) DEFAULT NULL,
+  `modo` varchar(45) DEFAULT NULL,
+  `maestra_guias_hijas` tinyint(1) DEFAULT NULL,
+  `codigo` varchar(45) DEFAULT NULL,
+  `prefijo_awb` varchar(45) DEFAULT NULL,
+  `codigo_cae` varchar(45) DEFAULT NULL,
+  `estado_activo` tinyint(1) DEFAULT NULL,
+  `from1` varchar(45) DEFAULT NULL,
+  `to1` varchar(45) DEFAULT NULL,
+  `by1` varchar(50) DEFAULT NULL,
+  `to2` varchar(45) DEFAULT NULL,
+  `by2` varchar(50) DEFAULT NULL,
+  `to3` varchar(45) DEFAULT NULL,
+  `by3` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id_aerolinea`),
+  KEY `fk_c_a_a1_idx` (`by1`),
+  KEY `fk_c_a_a2_idx` (`by2`),
+  KEY `fk_c_a_a3_idx` (`by3`),
+  KEY `fk_c_a_destinos1_idx` (`to1`),
+  KEY `fk_c_a_destinos2_idx` (`to2`),
+  KEY `fk_c_a_destinos3_idx` (`to3`),
+  KEY `fk_c_a_origenes_idx` (`from1`),
+  CONSTRAINT `fk_c_a_a1` FOREIGN KEY (`by1`) REFERENCES `aerolineas` (`id_aerolinea`),
+  CONSTRAINT `fk_c_a_a2` FOREIGN KEY (`by2`) REFERENCES `aerolineas` (`id_aerolinea`),
+  CONSTRAINT `fk_c_a_a3` FOREIGN KEY (`by3`) REFERENCES `aerolineas` (`id_aerolinea`),
+  CONSTRAINT `fk_c_a_destinos1` FOREIGN KEY (`to1`) REFERENCES `destinos` (`id_destino`),
+  CONSTRAINT `fk_c_a_destinos2` FOREIGN KEY (`to2`) REFERENCES `destinos` (`id_destino`),
+  CONSTRAINT `fk_c_a_destinos3` FOREIGN KEY (`to3`) REFERENCES `destinos` (`id_destino`),
+  CONSTRAINT `fk_c_a_origenes` FOREIGN KEY (`from1`) REFERENCES `origenes` (`id_origenes`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `coordinacion_aerolinea`
+--
+
+LOCK TABLES `coordinacion_aerolinea` WRITE;
+/*!40000 ALTER TABLE `coordinacion_aerolinea` DISABLE KEYS */;
+/*!40000 ALTER TABLE `coordinacion_aerolinea` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `coordinacion_clientes`
+--
+
+DROP TABLE IF EXISTS `coordinacion_clientes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `coordinacion_clientes` (
+  `id_coordinacion` int NOT NULL,
+  `id_consignatario` int NOT NULL,
+  KEY `fk_g_m_consignatario_idx` (`id_consignatario`),
+  KEY `fk_c_c_coordinacion_idx` (`id_coordinacion`),
+  CONSTRAINT `fk_c_c_coordinacion` FOREIGN KEY (`id_coordinacion`) REFERENCES `coordinacion` (`id_coordinacion`),
+  CONSTRAINT `fk_g_m_consignatario` FOREIGN KEY (`id_consignatario`) REFERENCES `consignatario` (`id_consignatario`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `coordinacion_clientes`
+--
+
+LOCK TABLES `coordinacion_clientes` WRITE;
+/*!40000 ALTER TABLE `coordinacion_clientes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `coordinacion_clientes` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -534,6 +654,97 @@ LOCK TABLES `embarcadores` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `fincas`
+--
+
+DROP TABLE IF EXISTS `fincas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `fincas` (
+  `id_finca` int NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(45) NOT NULL,
+  `alias` varchar(45) NOT NULL,
+  `ruc` varchar(45) DEFAULT NULL,
+  `tipo_documento` varchar(45) DEFAULT NULL,
+  `genera_guias_certificadas` tinyint DEFAULT NULL,
+  `i_general_telefono` varchar(45) DEFAULT NULL,
+  `i_general_email` varchar(45) DEFAULT NULL,
+  `i_general_ciudad` varchar(45) DEFAULT NULL,
+  `i_general_provincia` varchar(45) DEFAULT NULL,
+  `i_general_pais` varchar(45) DEFAULT NULL,
+  `i_general_cod_sesa` varchar(45) DEFAULT NULL,
+  `i_general_cod_pais` varchar(45) DEFAULT NULL,
+  `dim_x` decimal(10,0) DEFAULT NULL,
+  `dim_y` decimal(10,0) DEFAULT NULL,
+  `dim_z` decimal(10,0) DEFAULT NULL,
+  `excel_plantilla` text,
+  `a_nombre` text,
+  `a_codigo` varchar(45) DEFAULT NULL,
+  `a_direccion` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id_finca`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `fincas`
+--
+
+LOCK TABLES `fincas` WRITE;
+/*!40000 ALTER TABLE `fincas` DISABLE KEYS */;
+/*!40000 ALTER TABLE `fincas` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `fincas_choferes`
+--
+
+DROP TABLE IF EXISTS `fincas_choferes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `fincas_choferes` (
+  `id_finca` int NOT NULL,
+  `chofer` text,
+  KEY `fk_f_c_finca_idx` (`id_finca`),
+  CONSTRAINT `fk_f_c_finca` FOREIGN KEY (`id_finca`) REFERENCES `fincas` (`id_finca`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `fincas_choferes`
+--
+
+LOCK TABLES `fincas_choferes` WRITE;
+/*!40000 ALTER TABLE `fincas_choferes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `fincas_choferes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `fincas_productos`
+--
+
+DROP TABLE IF EXISTS `fincas_productos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `fincas_productos` (
+  `id_finca` int NOT NULL,
+  `codigo` varchar(45) NOT NULL,
+  `descripcion` text NOT NULL,
+  UNIQUE KEY `codigo_UNIQUE` (`codigo`),
+  KEY `fk_f_p_finca_idx` (`id_finca`),
+  CONSTRAINT `fk_f_p_finca` FOREIGN KEY (`id_finca`) REFERENCES `fincas` (`id_finca`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `fincas_productos`
+--
+
+LOCK TABLES `fincas_productos` WRITE;
+/*!40000 ALTER TABLE `fincas_productos` DISABLE KEYS */;
+/*!40000 ALTER TABLE `fincas_productos` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `guias_inicio`
 --
 
@@ -572,7 +783,7 @@ DROP TABLE IF EXISTS `guias_madre`;
 CREATE TABLE `guias_madre` (
   `id_guia_madre` int NOT NULL AUTO_INCREMENT,
   `id_guia_inicio` int NOT NULL,
-  `numero_guia` varchar(45) NOT NULL,
+  `numero_guia` bigint NOT NULL,
   `numero_coordinacion` varchar(45) DEFAULT NULL,
   `prestamo` tinyint(1) NOT NULL DEFAULT '0',
   `observaciones` text,
@@ -581,6 +792,7 @@ CREATE TABLE `guias_madre` (
   `fecha_devolucion` date DEFAULT NULL,
   `verificar_estado_awb` tinyint NOT NULL,
   PRIMARY KEY (`id_guia_madre`),
+  UNIQUE KEY `numero_guia_UNIQUE` (`numero_guia`),
   KEY `fk_guia_madre_idx` (`id_guia_inicio`),
   CONSTRAINT `fk_g_m_inicio` FOREIGN KEY (`id_guia_inicio`) REFERENCES `guias_inicio` (`id_guia_inicio`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -766,8 +978,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
-<<<<<<< Updated upstream
--- Dump completed on 2024-02-05 22:19:12
-=======
--- Dump completed on 2024-02-03 18:40:33
->>>>>>> Stashed changes
+-- Dump completed on 2024-02-13 18:45:33
