@@ -1,0 +1,571 @@
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "POLONIA",
+    "nombre": "POLONIA",
+    "pais_id": 14,
+    "id_acuerdo": 2
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "AM",
+    "nombre": "ARMENIA",
+    "pais_id": 14,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "AN",
+    "nombre": "NETHERLANDS ANTILLES",
+    "pais_id": 8,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "AR",
+    "nombre": "ARGENTINA",
+    "pais_id": 14,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "AU",
+    "nombre": "AUSTRALIA",
+    "pais_id": 14,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "AZ",
+    "nombre": "AZERBAIJAN",
+    "pais_id": 16,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "BA",
+    "nombre": "BOSNIA AND HERZEGOVINA",
+    "pais_id": 17,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "BB",
+    "nombre": "BARBADOS",
+    "pais_id": 18,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "BE",
+    "nombre": "BELGICA",
+    "pais_id": 20,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "BO",
+    "nombre": "BOLIVIA",
+    "pais_id": 28,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "BR",
+    "nombre": "BRAZIL",
+    "pais_id": 29,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "BY",
+    "nombre": "BELARUS",
+    "pais_id": 34,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "CA",
+    "nombre": "CANADA",
+    "pais_id": 36,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "CH",
+    "nombre": "SWITZERLAND",
+    "pais_id": 41,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "CL",
+    "nombre": "REPUBLICA DE CHILE",
+    "pais_id": 44,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "CO",
+    "nombre": "COLOMBIA",
+    "pais_id": 47,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "CR",
+    "nombre": "COSTA RICA",
+    "pais_id": 48,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "CU",
+    "nombre": "CUBA",
+    "pais_id": 49,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "CZ",
+    "nombre": "CZECH REPUBLIC",
+    "pais_id": 53,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "DE",
+    "nombre": "GERMANY",
+    "pais_id": 1112,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "EC",
+    "nombre": "ECUADOR",
+    "pais_id": 1113,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "EE",
+    "nombre": "ESTONIA",
+    "pais_id": 61,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "EG",
+    "nombre": "EGYPT",
+    "pais_id": 62,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "ES",
+    "nombre": "ESPAÑA",
+    "pais_id": 64,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "FR",
+    "nombre": "FRANCE",
+    "pais_id": 71,
+    "id_acuerdo": 2
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "GE",
+    "nombre": "GEORGIA",
+    "pais_id": 74,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "HR",
+    "nombre": "CROATIA",
+    "pais_id": 92,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "IT",
+    "nombre": "ITALY",
+    "pais_id": 103,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "JP",
+    "nombre": "JAPAN",
+    "pais_id": 106,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "KG",
+    "nombre": "KYRGYZSTAN",
+    "pais_id": 108,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "KW",
+    "nombre": "KUWAIT",
+    "pais_id": 115,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "KZ",
+    "nombre": "KAZAKHSTAN",
+    "pais_id": 117,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "LT",
+    "nombre": "LITUANIA",
+    "pais_id": 71,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "LU",
+    "nombre": "LUXEMBOURG",
+    "pais_id": 126,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "LV",
+    "nombre": "LATVIA",
+    "pais_id": 126,
+    "id_acuerdo": 2
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "MY",
+    "nombre": "MALAYSIA",
+    "pais_id": 0,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "NI",
+    "nombre": "NICARAGUA",
+    "pais_id": 155,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "NL",
+    "nombre": "PAISES BAJOS",
+    "pais_id": 156,
+    "id_acuerdo": 8
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "NZ",
+    "nombre": "NEW ZEALAND",
+    "pais_id": 161,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "PA",
+    "nombre": "PANAMA",
+    "pais_id": 163,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "PE",
+    "nombre": "PERU",
+    "pais_id": 164,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "PL",
+    "nombre": "POLONIA",
+    "pais_id": 14,
+    "id_acuerdo": 2
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "PT",
+    "nombre": "PORTUGAL",
+    "pais_id": 173,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "RO",
+    "nombre": "RUMANIA",
+    "pais_id": 44,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "RU",
+    "nombre": "RUSSIAN FEDERATION",
+    "pais_id": 179,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "SE",
+    "nombre": "SWEDEN",
+    "pais_id": 185,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "TR",
+    "nombre": "TURKEY",
+    "pais_id": 16,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "UA",
+    "nombre": "UKRAINE",
+    "pais_id": 216,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "US",
+    "nombre": "UNITED STATES OF AMERICA",
+    "pais_id": 220,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "UY",
+    "nombre": "URUGUAY",
+    "pais_id": 221,
+    "id_acuerdo": 3
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "UZ",
+    "nombre": "UZBEKISTAN",
+    "pais_id": 16,
+    "id_acuerdo": 2
+}
+
+###
+POST http://localhost:3000/api/v1/paises HTTP/1.1
+Content-Type: application/json
+
+{
+    "siglas_pais": "VE",
+    "nombre": "VENEZUELA",
+    "pais_id": 225,
+    "id_acuerdo": 3
+}

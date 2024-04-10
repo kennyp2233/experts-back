@@ -1,23 +1,21 @@
 import express from 'express';
-import aerolinea from '../services/aerolineas.servicio';
-import { AerolineaCreationAttributesI } from '../../type';
+import { createAerolinea, deleteAerolinea, getAerolinea, getAerolineas, updateAerolinea } from '@services/aerolineas.servicio';
+import { Aerolinea, AerolineaCreationAttributes } from '@typesApp/entities/AerolineaTypes';
 
 
 const router = express.Router();
-const aero = new aerolinea();
 
 router.get('/aerolineas', async (req, res) => {
     if (req.query.id) {
-        const id = (req.query as { id: string }).id;
-        res.send(await aero.getAerolinea(Number.parseInt(id)));
+        res.send(await getAerolinea(Number.parseInt(req.query.id as string)));
     } else {
-        res.send(await aero.getAerolineas());
+        res.send(await getAerolineas());
     }
 });
 
 router.post('/aerolineas', async (req, res) => {
     try {
-        aero.createAerolinea(req.body);
+        createAerolinea(req.body as AerolineaCreationAttributes);
         res.status(201).json({
             ok: true,
             msg: 'Creando aerolinea',

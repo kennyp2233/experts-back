@@ -1,77 +1,105 @@
 
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../experts.db';
-import { AerolineaCreationAttributesI, AerolineaAttributesI } from '../../../type';
+import { AerolineaCreationAttributes, Aerolinea } from '@typesApp/entities/AerolineaTypes';
 
-const Aerolineas = sequelize.define<Model<AerolineaAttributesI, AerolineaCreationAttributesI>>('Aerolineas', {
+const Aerolineas = sequelize.define<Model<Aerolinea, AerolineaCreationAttributes>>('Aerolineas', {
     id_aerolinea: {
         type: DataTypes.INTEGER,
-        allowNull: false,
-        primaryKey: true,
         autoIncrement: true,
-    },
-    alias: {
-        type: DataTypes.STRING,
-        allowNull: true,
+        primaryKey: true,
     },
     nombre: {
         type: DataTypes.STRING,
-        allowNull: true,
     },
     ci_ruc: {
         type: DataTypes.STRING,
-        allowNull: true,
     },
     direccion: {
         type: DataTypes.STRING,
-        allowNull: true,
     },
     telefono: {
         type: DataTypes.STRING,
-        allowNull: true,
     },
     email: {
         type: DataTypes.STRING,
-        allowNull: true,
     },
     ciudad: {
         type: DataTypes.STRING,
-        allowNull: true,
     },
     pais: {
         type: DataTypes.STRING,
-        allowNull: true,
     },
     contacto: {
         type: DataTypes.STRING,
-        allowNull: true,
     },
     modo: {
         type: DataTypes.STRING,
-        allowNull: true,
     },
     maestra_guias_hijas: {
         type: DataTypes.BOOLEAN,
-        allowNull: true,
     },
     codigo: {
         type: DataTypes.STRING,
-        allowNull: true,
     },
     prefijo_awb: {
         type: DataTypes.STRING,
-        allowNull: true,
     },
     codigo_cae: {
         type: DataTypes.STRING,
-        allowNull: true,
     },
     estado_activo: {
         type: DataTypes.BOOLEAN,
-        allowNull: true,
-    }
-}, {
-    timestamps: false,
+    },
+    from1: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: 'origenes',
+            key: 'id_origen',
+        },
+    },
+    to1: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: 'destinos',
+            key: 'id_destino',
+        },
+    },
+    by1: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: 'aerolineas',
+            key: 'id_aerolinea',
+        },
+    },
+    to2: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: 'destinos',
+            key: 'id_destino',
+        },
+    },
+    by2: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: 'aerolineas',
+            key: 'id_aerolinea',
+        },
+    },
+    to3: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: 'destinos',
+            key: 'id_destino',
+        },
+    },
+    by3: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: 'aerolineas',
+            key: 'id_aerolinea',
+        },
+    },
 });
 
 export default Aerolineas;

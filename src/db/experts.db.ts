@@ -11,7 +11,10 @@ const sequelize = new Sequelize(
         database: process.env.DB_NAME,
         host: process.env.DB_HOST,
         dialect: "mysql",
-        logging: console.log,
+        logging: false, // Disable logging
+        define: {
+            timestamps: false, // Disable timestamps
+        },
     });
 
 export default sequelize;

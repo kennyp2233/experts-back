@@ -1,0 +1,119 @@
+// http://localhost:3000/api/v1/aduanas
+###
+POST http://localhost:3000/api/v1/aduanas
+Content-Type: application/json
+
+{
+    "codigo_aduana": 19,
+    "nombre": "GUAYAQUIL - AEREO"
+}
+
+###
+
+POST http://localhost:3000/api/v1/aduanas
+Content-Type: application/json
+
+{
+    "codigo_aduana": 28,
+    "nombre": "GUAYAQUIL - MARITIMO"
+}
+
+###
+
+POST http://localhost:3000/api/v1/aduanas
+Content-Type: application/json
+
+{
+    "codigo_aduana": 37,
+    "nombre": "MANTA"
+}
+
+###
+
+POST http://localhost:3000/api/v1/aduanas
+Content-Type: application/json
+
+{
+    "codigo_aduana": 46,
+    "nombre": "ESMERALDAS"
+}
+
+###
+
+POST http://localhost:3000/api/v1/aduanas
+Content-Type: application/json
+
+{
+    "codigo_aduana": 55,
+    "nombre": "QUITO"
+}
+
+###
+
+POST http://localhost:3000/api/v1/aduanas
+Content-Type: application/json
+
+{
+    "codigo_aduana": 64,
+    "nombre": "PUERTO BOLIVAR"
+}
+
+###
+
+POST http://localhost:3000/api/v1/aduanas
+Content-Type: application/json
+
+{
+    "codigo_aduana": 73,
+    "nombre": "TULCAN"
+}
+
+###
+
+POST http://localhost:3000/api/v1/aduanas
+Content-Type: application/json
+
+{
+    "codigo_aduana": 82,
+    "nombre": "HUAQUILLAS"
+}
+
+###
+
+POST http://localhost:3000/api/v1/aduanas
+Content-Type: application/json
+
+{
+    "codigo_aduana": 91,
+    "nombre": "CUENCA"
+}
+
+###
+
+POST http://localhost:3000/api/v1/aduanas
+Content-Type: application/json
+
+{
+    "codigo_aduana": 109,
+    "nombre": "LOJA - MACARA"
+}
+
+###
+
+POST http://localhost:3000/api/v1/aduanas
+Content-Type: application/json
+
+{
+    "codigo_aduana": 118,
+    "nombre": "SANTA ELENA"
+}
+
+###
+
+POST http://localhost:3000/api/v1/aduanas
+Content-Type: application/json
+
+{
+    "codigo_aduana": 127,
+    "nombre": "LATACUNGA"
+}
