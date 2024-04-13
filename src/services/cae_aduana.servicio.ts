@@ -3,12 +3,12 @@ import { CaeAduana, CaeAduanaCreationAttributes } from '@typesApp/entities/CaeAd
 
 export async function getAduanas() {
     const aduanasList = await cae_aduana.findAll();
-    return aduanasList.map((cae_aduana) => cae_aduana.toJSON()) as CaeAduanaCreationAttributes[];
+    return aduanasList.map((cae_aduana) => cae_aduana.toJSON()) as CaeAduana[];
 }
 
 export async function getAduana(id: number) {
     const aduana = await cae_aduana.findByPk(id);
-    return aduana ? aduana.toJSON() as CaeAduanaCreationAttributes : null;
+    return aduana ? aduana.toJSON() as CaeAduana : null;
 }
 
 export async function createAduana(aduana: CaeAduanaCreationAttributes) {
@@ -24,7 +24,7 @@ export async function updateAduana(id: number, aduana: CaeAduanaCreationAttribut
             }
         });
         const updatedAduana = await cae_aduana.findByPk(id);
-        return updatedAduana ? updatedAduana.toJSON() as CaeAduanaCreationAttributes : null;
+        return updatedAduana ? updatedAduana.toJSON() as CaeAduana : null;
     }
     return null;
 }
