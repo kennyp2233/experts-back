@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.33, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: experts_db
 -- ------------------------------------------------------
--- Server version	8.0.35
+-- Server version	8.0.36
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS `aerolineas`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `aerolineas` (
-  `id_aerolinea` varchar(50) NOT NULL,
+  `id_aerolinea` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(50) DEFAULT NULL,
   `ci_ruc` varchar(14) DEFAULT NULL,
   `direccion` text,
@@ -38,29 +38,29 @@ CREATE TABLE `aerolineas` (
   `prefijo_awb` varchar(45) DEFAULT NULL,
   `codigo_cae` varchar(45) DEFAULT NULL,
   `estado_activo` tinyint(1) DEFAULT NULL,
-  `from1` varchar(45) DEFAULT NULL,
-  `to1` varchar(45) DEFAULT NULL,
-  `by1` varchar(50) DEFAULT NULL,
-  `to2` varchar(45) DEFAULT NULL,
-  `by2` varchar(50) DEFAULT NULL,
-  `to3` varchar(45) DEFAULT NULL,
-  `by3` varchar(50) DEFAULT NULL,
+  `from1` int DEFAULT NULL,
+  `to1` int DEFAULT NULL,
+  `by1` int DEFAULT NULL,
+  `to2` int DEFAULT NULL,
+  `by2` int DEFAULT NULL,
+  `to3` int DEFAULT NULL,
+  `by3` int DEFAULT NULL,
   PRIMARY KEY (`id_aerolinea`),
   UNIQUE KEY `contacto_UNIQUE` (`contacto`),
+  KEY `fk_a_destino1_idx` (`to1`),
+  KEY `fk_a_destino2_idx` (`to2`),
+  KEY `fk_a_destino3_idx` (`to3`),
   KEY `fk_a_origenes_idx` (`from1`),
-  KEY `fk_a_destinos1_idx` (`to1`),
-  KEY `fk_a_destinos2_idx` (`to2`),
-  KEY `fk_a_destinos3_idx` (`to3`),
-  KEY `fk_a_aerolinea1_idx` (`by1`,`by2`),
+  KEY `fk_a_a1_idx` (`by1`),
   KEY `fk_a_a2_idx` (`by2`),
   KEY `fk_a_a3_idx` (`by3`),
   CONSTRAINT `fk_a_a1` FOREIGN KEY (`by1`) REFERENCES `aerolineas` (`id_aerolinea`),
   CONSTRAINT `fk_a_a2` FOREIGN KEY (`by2`) REFERENCES `aerolineas` (`id_aerolinea`),
   CONSTRAINT `fk_a_a3` FOREIGN KEY (`by3`) REFERENCES `aerolineas` (`id_aerolinea`),
-  CONSTRAINT `fk_a_destinos1` FOREIGN KEY (`to1`) REFERENCES `destinos` (`id_destino`),
-  CONSTRAINT `fk_a_destinos2` FOREIGN KEY (`to2`) REFERENCES `destinos` (`id_destino`),
-  CONSTRAINT `fk_a_destinos3` FOREIGN KEY (`to3`) REFERENCES `destinos` (`id_destino`),
-  CONSTRAINT `fk_a_origenes` FOREIGN KEY (`from1`) REFERENCES `origenes` (`id_origenes`)
+  CONSTRAINT `fk_a_destino1` FOREIGN KEY (`to1`) REFERENCES `destinos` (`id_destino`),
+  CONSTRAINT `fk_a_destino2` FOREIGN KEY (`to2`) REFERENCES `destinos` (`id_destino`),
+  CONSTRAINT `fk_a_destino3` FOREIGN KEY (`to3`) REFERENCES `destinos` (`id_destino`),
+  CONSTRAINT `fk_a_origenes` FOREIGN KEY (`from1`) REFERENCES `origenes` (`id_origen`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -81,7 +81,7 @@ DROP TABLE IF EXISTS `aerolineas_codigos_plantillas`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `aerolineas_codigos_plantillas` (
-  `id_aerolineas` varchar(50) NOT NULL,
+  `id_aerolinea` int NOT NULL,
   `costo_guia_abrv` varchar(45) DEFAULT NULL,
   `combustible_abrv` varchar(45) DEFAULT NULL,
   `seguridad_abrv` varchar(45) DEFAULT NULL,
@@ -90,17 +90,18 @@ CREATE TABLE `aerolineas_codigos_plantillas` (
   `otros_abrv` varchar(45) DEFAULT NULL,
   `aux1_abrv` varchar(45) DEFAULT NULL,
   `aux2_abrv` varchar(45) DEFAULT NULL,
-  `costo_guia_valor` decimal(10,0) DEFAULT NULL,
-  `combustible_valor` decimal(10,0) DEFAULT NULL,
-  `seguroidad_valor` decimal(10,0) DEFAULT NULL,
-  `aux_calculo_valor` decimal(10,0) DEFAULT NULL,
-  `otros_valor` decimal(10,0) DEFAULT NULL,
-  `aux1_valor` decimal(10,0) DEFAULT NULL,
-  `aux2_valor` decimal(10,0) DEFAULT NULL,
+  `costo_guia_valor` decimal(10,2) DEFAULT NULL,
+  `combustible_valor` decimal(10,2) DEFAULT NULL,
+  `seguroidad_valor` decimal(10,2) DEFAULT NULL,
+  `aux_calculo_valor` decimal(10,2) DEFAULT NULL,
+  `otros_valor` decimal(10,2) DEFAULT NULL,
+  `aux1_valor` decimal(10,2) DEFAULT NULL,
+  `aux2_valor` decimal(10,2) DEFAULT NULL,
   `plantilla_guia_madre` varchar(45) DEFAULT NULL,
   `plantilla_formato_aerolinea` varchar(45) DEFAULT NULL,
   `plantilla_reservas` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`id_aerolineas`)
+  PRIMARY KEY (`id_aerolinea`),
+  CONSTRAINT `fk_a_c_p` FOREIGN KEY (`id_aerolinea`) REFERENCES `aerolineas` (`id_aerolinea`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -131,7 +132,7 @@ CREATE TABLE `agencia_iata` (
   `registro_sesa` varchar(45) DEFAULT NULL,
   `codigo_operador_cae` varchar(45) DEFAULT NULL,
   `codigo_consolidador_cae` varchar(45) DEFAULT NULL,
-  `comision` decimal(10,0) DEFAULT NULL,
+  `comision` decimal(10,2) DEFAULT NULL,
   PRIMARY KEY (`id_agencia_iata`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -153,10 +154,11 @@ DROP TABLE IF EXISTS `agencias_iata_asignadas`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `agencias_iata_asignadas` (
+  `id_a_i_a` int NOT NULL AUTO_INCREMENT,
   `alias` varchar(45) NOT NULL,
   `id_shipper` int NOT NULL,
   `id_agencia_iata` int NOT NULL,
-  PRIMARY KEY (`alias`),
+  PRIMARY KEY (`id_a_i_a`),
   UNIQUE KEY `alias_UNIQUE` (`alias`),
   KEY `fk_a_iata_idx` (`id_agencia_iata`),
   KEY `fk_a_shipper_idx` (`id_shipper`),
@@ -182,11 +184,11 @@ DROP TABLE IF EXISTS `cae_aduana`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cae_aduana` (
-  `id_aduana` varchar(4) NOT NULL,
+  `id_cae_aduana` int NOT NULL AUTO_INCREMENT,
+  `codigo_aduana` int NOT NULL,
   `nombre` varchar(45) NOT NULL,
-  PRIMARY KEY (`id_aduana`),
-  UNIQUE KEY `id_aduana_UNIQUE` (`id_aduana`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`id_cae_aduana`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -195,7 +197,7 @@ CREATE TABLE `cae_aduana` (
 
 LOCK TABLES `cae_aduana` WRITE;
 /*!40000 ALTER TABLE `cae_aduana` DISABLE KEYS */;
-INSERT INTO `cae_aduana` VALUES ('019','GUAYAQUIL - AEREO'),('028','GUAYAQUIL - MARITIMO'),('037','MANTA'),('046','ESMERALDAS'),('055','QUITO'),('064','PUERTO BOLIVAR'),('073','TULCAN'),('082','HUAQUILLAS'),('091','CUENCA'),('109','LOJA - MACARA'),('118','SANTA ELENA'),('127','LATACUNGA');
+INSERT INTO `cae_aduana` VALUES (1,19,'GUAYAQUIL - AEREO'),(6,28,'GUAYAQUIL - MARITIMO'),(7,37,'MANTA'),(8,46,'ESMERALDAS'),(9,55,'QUITO'),(10,64,'PUERTO BOLIVAR'),(11,73,'TULCAN'),(12,82,'HUAQUILLAS'),(13,91,'CUENCA'),(14,109,'LOJA - MACARA'),(15,118,'SANTA ELENA'),(16,127,'LATACUNGA');
 /*!40000 ALTER TABLE `cae_aduana` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -408,7 +410,7 @@ DROP TABLE IF EXISTS `consignatario_guia_m`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `consignatario_guia_m` (
   `id_consignatario` int NOT NULL,
-  `id_destino_final` varchar(45) DEFAULT NULL,
+  `id_destino_final` int DEFAULT NULL,
   `guia_m_consignee` text,
   `guia_m_name_address` text,
   `guia_m_notify` text,
@@ -480,21 +482,21 @@ DROP TABLE IF EXISTS `coordinacion`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `coordinacion` (
   `id_coordinacion` int NOT NULL AUTO_INCREMENT,
-  `id_aerolinea` varchar(50) NOT NULL,
+  `id_aerolinea_coordinacion` int NOT NULL,
   `id_guia_madre` int NOT NULL,
-  `id_tipo_embarque` varchar(45) NOT NULL,
-  `id_iata_asignadas` varchar(45) NOT NULL,
+  `id_tipo_embarque` int NOT NULL,
+  `id_iata_asignadas` int NOT NULL,
   `pago` tinyint NOT NULL,
   `fecha_vuelo` date DEFAULT NULL,
   `referencia` varchar(45) DEFAULT NULL,
-  `cupo_maximo` decimal(10,0) DEFAULT NULL,
+  `cupo_maximo` decimal(10,2) DEFAULT NULL,
   PRIMARY KEY (`id_coordinacion`),
   KEY `fk_c_guia_m_idx` (`id_guia_madre`),
+  KEY `fk_c_aerolinea_idx` (`id_aerolinea_coordinacion`),
+  KEY `fk_c_a_i_a_idx` (`id_iata_asignadas`),
   KEY `fk_c_tipo_embarque_idx` (`id_tipo_embarque`),
-  KEY `fk_c_agencia_iata_idx` (`id_iata_asignadas`),
-  KEY `fk_c_guia_aerolinea_idx` (`id_aerolinea`),
-  CONSTRAINT `fk_c_agencia_iata` FOREIGN KEY (`id_iata_asignadas`) REFERENCES `agencias_iata_asignadas` (`alias`),
-  CONSTRAINT `fk_c_guia_aerolinea` FOREIGN KEY (`id_aerolinea`) REFERENCES `coordinacion_aerolinea` (`id_aerolinea`),
+  CONSTRAINT `fk_c_a_i_a` FOREIGN KEY (`id_iata_asignadas`) REFERENCES `agencias_iata_asignadas` (`id_a_i_a`),
+  CONSTRAINT `fk_c_aerolinea` FOREIGN KEY (`id_aerolinea_coordinacion`) REFERENCES `coordinacion_aerolinea` (`id_coordinacion`),
   CONSTRAINT `fk_c_guia_m` FOREIGN KEY (`id_guia_madre`) REFERENCES `guias_madre` (`id_guia_madre`),
   CONSTRAINT `fk_c_tipo_embarque` FOREIGN KEY (`id_tipo_embarque`) REFERENCES `tipo_embarque` (`id_tipo_embarque`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -517,7 +519,7 @@ DROP TABLE IF EXISTS `coordinacion_aerolinea`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `coordinacion_aerolinea` (
-  `id_aerolinea` varchar(50) NOT NULL,
+  `id_coordinacion` int NOT NULL,
   `nombre` varchar(50) DEFAULT NULL,
   `ci_ruc` varchar(14) DEFAULT NULL,
   `direccion` text,
@@ -532,28 +534,29 @@ CREATE TABLE `coordinacion_aerolinea` (
   `prefijo_awb` varchar(45) DEFAULT NULL,
   `codigo_cae` varchar(45) DEFAULT NULL,
   `estado_activo` tinyint(1) DEFAULT NULL,
-  `from1` varchar(45) DEFAULT NULL,
-  `to1` varchar(45) DEFAULT NULL,
-  `by1` varchar(50) DEFAULT NULL,
-  `to2` varchar(45) DEFAULT NULL,
-  `by2` varchar(50) DEFAULT NULL,
-  `to3` varchar(45) DEFAULT NULL,
-  `by3` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`id_aerolinea`),
+  `from1` int DEFAULT NULL,
+  `to1` int DEFAULT NULL,
+  `by1` int DEFAULT NULL,
+  `to2` int DEFAULT NULL,
+  `by2` int DEFAULT NULL,
+  `to3` int DEFAULT NULL,
+  `by3` int DEFAULT NULL,
+  PRIMARY KEY (`id_coordinacion`),
+  KEY `fk_c_a_destino1_idx` (`to1`),
+  KEY `fk_c_a_destino2_idx` (`to2`),
+  KEY `fk_c_a_destino1_idx1` (`to3`),
+  KEY `fk_c_a_orignenes_idx` (`from1`),
   KEY `fk_c_a_a1_idx` (`by1`),
   KEY `fk_c_a_a2_idx` (`by2`),
   KEY `fk_c_a_a3_idx` (`by3`),
-  KEY `fk_c_a_destinos1_idx` (`to1`),
-  KEY `fk_c_a_destinos2_idx` (`to2`),
-  KEY `fk_c_a_destinos3_idx` (`to3`),
-  KEY `fk_c_a_origenes_idx` (`from1`),
   CONSTRAINT `fk_c_a_a1` FOREIGN KEY (`by1`) REFERENCES `aerolineas` (`id_aerolinea`),
   CONSTRAINT `fk_c_a_a2` FOREIGN KEY (`by2`) REFERENCES `aerolineas` (`id_aerolinea`),
   CONSTRAINT `fk_c_a_a3` FOREIGN KEY (`by3`) REFERENCES `aerolineas` (`id_aerolinea`),
-  CONSTRAINT `fk_c_a_destinos1` FOREIGN KEY (`to1`) REFERENCES `destinos` (`id_destino`),
-  CONSTRAINT `fk_c_a_destinos2` FOREIGN KEY (`to2`) REFERENCES `destinos` (`id_destino`),
-  CONSTRAINT `fk_c_a_destinos3` FOREIGN KEY (`to3`) REFERENCES `destinos` (`id_destino`),
-  CONSTRAINT `fk_c_a_origenes` FOREIGN KEY (`from1`) REFERENCES `origenes` (`id_origenes`)
+  CONSTRAINT `fk_c_a_coordinacion` FOREIGN KEY (`id_coordinacion`) REFERENCES `coordinacion` (`id_coordinacion`),
+  CONSTRAINT `fk_c_a_destino1` FOREIGN KEY (`to1`) REFERENCES `destinos` (`id_destino`),
+  CONSTRAINT `fk_c_a_destino2` FOREIGN KEY (`to2`) REFERENCES `destinos` (`id_destino`),
+  CONSTRAINT `fk_c_a_destino3` FOREIGN KEY (`to3`) REFERENCES `destinos` (`id_destino`),
+  CONSTRAINT `fk_c_a_orignenes` FOREIGN KEY (`from1`) REFERENCES `origenes` (`id_origen`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -567,6 +570,46 @@ LOCK TABLES `coordinacion_aerolinea` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `coordinacion_aerolineas_c_p`
+--
+
+DROP TABLE IF EXISTS `coordinacion_aerolineas_c_p`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `coordinacion_aerolineas_c_p` (
+  `id_coordinacion` int NOT NULL,
+  `costo_guia_abrv` varchar(45) DEFAULT NULL,
+  `combustible_abrv` varchar(45) DEFAULT NULL,
+  `seguridad_abrv` varchar(45) DEFAULT NULL,
+  `aux_calculo_abrv` varchar(45) DEFAULT NULL,
+  `iva_abrv` varchar(45) DEFAULT NULL,
+  `otros_abrv` varchar(45) DEFAULT NULL,
+  `aux1_abrv` varchar(45) DEFAULT NULL,
+  `aux2_abrv` varchar(45) DEFAULT NULL,
+  `costo_guia_valor` decimal(10,2) DEFAULT NULL,
+  `combustible_valor` decimal(10,2) DEFAULT NULL,
+  `seguroidad_valor` decimal(10,2) DEFAULT NULL,
+  `aux_calculo_valor` decimal(10,2) DEFAULT NULL,
+  `otros_valor` decimal(10,2) DEFAULT NULL,
+  `aux1_valor` decimal(10,2) DEFAULT NULL,
+  `aux2_valor` decimal(10,2) DEFAULT NULL,
+  `plantilla_guia_madre` varchar(45) DEFAULT NULL,
+  `plantilla_formato_aerolinea` varchar(45) DEFAULT NULL,
+  `plantilla_reservas` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id_coordinacion`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `coordinacion_aerolineas_c_p`
+--
+
+LOCK TABLES `coordinacion_aerolineas_c_p` WRITE;
+/*!40000 ALTER TABLE `coordinacion_aerolineas_c_p` DISABLE KEYS */;
+/*!40000 ALTER TABLE `coordinacion_aerolineas_c_p` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `coordinacion_clientes`
 --
 
@@ -576,6 +619,7 @@ DROP TABLE IF EXISTS `coordinacion_clientes`;
 CREATE TABLE `coordinacion_clientes` (
   `id_coordinacion` int NOT NULL,
   `id_consignatario` int NOT NULL,
+  PRIMARY KEY (`id_coordinacion`),
   KEY `fk_g_m_consignatario_idx` (`id_consignatario`),
   KEY `fk_c_c_coordinacion_idx` (`id_coordinacion`),
   CONSTRAINT `fk_c_c_coordinacion` FOREIGN KEY (`id_coordinacion`) REFERENCES `coordinacion` (`id_coordinacion`),
@@ -600,7 +644,8 @@ DROP TABLE IF EXISTS `destinos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `destinos` (
-  `id_destino` varchar(45) NOT NULL,
+  `id_destino` int NOT NULL,
+  `codigo_destino` varchar(45) NOT NULL,
   `nombre` varchar(45) NOT NULL,
   `aeropuerto` varchar(45) DEFAULT NULL,
   `pais` varchar(45) DEFAULT NULL,
@@ -639,7 +684,7 @@ CREATE TABLE `embarcadores` (
   `provincia` varchar(45) DEFAULT NULL,
   `pais` varchar(45) DEFAULT NULL,
   `codigo_pais` varchar(45) DEFAULT NULL,
-  `handling` decimal(10,0) DEFAULT NULL,
+  `handling` decimal(10,2) DEFAULT NULL,
   PRIMARY KEY (`id_embarcadores`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -674,9 +719,9 @@ CREATE TABLE `fincas` (
   `i_general_pais` varchar(45) DEFAULT NULL,
   `i_general_cod_sesa` varchar(45) DEFAULT NULL,
   `i_general_cod_pais` varchar(45) DEFAULT NULL,
-  `dim_x` decimal(10,0) DEFAULT NULL,
-  `dim_y` decimal(10,0) DEFAULT NULL,
-  `dim_z` decimal(10,0) DEFAULT NULL,
+  `dim_x` decimal(10,2) DEFAULT NULL,
+  `dim_y` decimal(10,2) DEFAULT NULL,
+  `dim_z` decimal(10,2) DEFAULT NULL,
   `excel_plantilla` text,
   `a_nombre` text,
   `a_codigo` varchar(45) DEFAULT NULL,
@@ -754,12 +799,12 @@ DROP TABLE IF EXISTS `guias_inicio`;
 CREATE TABLE `guias_inicio` (
   `id_guia_inicio` int NOT NULL AUTO_INCREMENT,
   `fecha_ingreso` date NOT NULL,
-  `id_aerolinea` varchar(50) DEFAULT NULL,
+  `id_aerolinea` int DEFAULT NULL,
   `id_iata` int DEFAULT NULL,
   PRIMARY KEY (`id_guia_inicio`),
   KEY `fk_referencia_idx` (`id_iata`),
-  KEY `fk_g_i_aerolinea_idx` (`id_aerolinea`),
-  CONSTRAINT `fk_g_i_aerolinea` FOREIGN KEY (`id_aerolinea`) REFERENCES `aerolineas` (`id_aerolinea`),
+  KEY `fk_g_i_a_idx` (`id_aerolinea`),
+  CONSTRAINT `fk_g_i_a` FOREIGN KEY (`id_aerolinea`) REFERENCES `aerolineas` (`id_aerolinea`),
   CONSTRAINT `fk_iata` FOREIGN KEY (`id_iata`) REFERENCES `agencia_iata` (`id_agencia_iata`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -815,17 +860,18 @@ DROP TABLE IF EXISTS `origenes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `origenes` (
-  `id_origenes` varchar(45) NOT NULL,
+  `id_origen` int NOT NULL AUTO_INCREMENT,
+  `codigo_origen` varchar(45) NOT NULL,
   `nombre` varchar(45) NOT NULL,
-  `id_pais` varchar(45) NOT NULL,
-  `id_aduana` varchar(45) NOT NULL,
-  PRIMARY KEY (`id_origenes`),
-  UNIQUE KEY `id_origenes_UNIQUE` (`id_origenes`),
-  KEY `fk_paises_idx` (`id_pais`),
-  KEY `fk_id_aduana_idx` (`id_aduana`),
-  CONSTRAINT `fk_id_aduana` FOREIGN KEY (`id_aduana`) REFERENCES `cae_aduana` (`id_aduana`),
-  CONSTRAINT `fk_paises` FOREIGN KEY (`id_pais`) REFERENCES `paises` (`id_pais`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `aeropuerto` varchar(45) NOT NULL,
+  `id_pais` int NOT NULL,
+  `id_aduana` int NOT NULL,
+  PRIMARY KEY (`id_origen`),
+  KEY `fk_o_paises_idx` (`id_pais`),
+  KEY `fk_o_cae_aduana_idx` (`id_aduana`),
+  CONSTRAINT `fk_o_cae_aduana` FOREIGN KEY (`id_aduana`) REFERENCES `cae_aduana` (`id_cae_aduana`),
+  CONSTRAINT `fk_o_paises` FOREIGN KEY (`id_pais`) REFERENCES `paises` (`id_pais`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -834,7 +880,7 @@ CREATE TABLE `origenes` (
 
 LOCK TABLES `origenes` WRITE;
 /*!40000 ALTER TABLE `origenes` DISABLE KEYS */;
-INSERT INTO `origenes` VALUES ('GYE','GUAYAQUIL','EC','019'),('LTX','LATACUNGA','EC','127'),('UIO','QUITO','EC','055');
+INSERT INTO `origenes` VALUES (1,'GYE','GUAYAQUIL','JOSE JOAQUIN DE OLMEDO',58,1);
 /*!40000 ALTER TABLE `origenes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -846,13 +892,14 @@ DROP TABLE IF EXISTS `paises`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `paises` (
-  `id_pais` varchar(45) NOT NULL,
-  `nombre` varchar(45) DEFAULT NULL,
+  `id_pais` int NOT NULL AUTO_INCREMENT,
+  `siglas_pais` varchar(45) NOT NULL,
+  `nombre` varchar(45) NOT NULL,
   `pais_id` int DEFAULT NULL,
   `id_acuerdo` int DEFAULT NULL,
   PRIMARY KEY (`id_pais`),
-  UNIQUE KEY `id_pais_UNIQUE` (`id_pais`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  UNIQUE KEY `siglas_pais_UNIQUE` (`siglas_pais`)
+) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -861,7 +908,7 @@ CREATE TABLE `paises` (
 
 LOCK TABLES `paises` WRITE;
 /*!40000 ALTER TABLE `paises` DISABLE KEYS */;
-INSERT INTO `paises` VALUES ('EC','ECUADOR',1113,3);
+INSERT INTO `paises` VALUES (1,'POLONIA','POLONIA',14,2),(5,'AM','ARMENIA',14,3),(40,'AN','NETHERLANDS ANTILLES',8,3),(41,'AR','ARGENTINA',14,3),(42,'AU','AUSTRALIA',14,3),(43,'AZ','AZERBAIJAN',16,3),(44,'BA','BOSNIA AND HERZEGOVINA',17,3),(45,'BB','BARBADOS',18,3),(46,'BE','BELGICA',20,3),(47,'BO','BOLIVIA',28,3),(48,'BR','BRAZIL',29,3),(49,'BY','BELARUS',34,3),(50,'CA','CANADA',36,3),(51,'CH','SWITZERLAND',41,3),(52,'CL','REPUBLICA DE CHILE',44,3),(53,'CO','COLOMBIA',47,3),(54,'CR','COSTA RICA',48,3),(55,'CU','CUBA',49,3),(56,'CZ','CZECH REPUBLIC',53,3),(57,'DE','GERMANY',1112,3),(58,'EC','ECUADOR',1113,3),(59,'EE','ESTONIA',61,3),(60,'EG','EGYPT',62,3),(61,'ES','ESPAÑA',64,3),(62,'FR','FRANCE',71,2),(64,'GE','GEORGIA',74,3),(65,'HR','CROATIA',92,3),(66,'IT','ITALY',103,3),(67,'JP','JAPAN',106,3),(68,'KG','KYRGYZSTAN',108,3),(69,'KW','KUWAIT',115,3),(70,'KZ','KAZAKHSTAN',117,3),(71,'LT','LITUANIA',71,3),(74,'LU','LUXEMBOURG',126,3),(75,'LV','LATVIA',126,2),(76,'MY','MALAYSIA',0,3),(77,'NI','NICARAGUA',155,3),(78,'NL','PAISES BAJOS',156,8),(79,'NZ','NEW ZEALAND',161,3),(80,'PA','PANAMA',163,3),(81,'PE','PERU',164,3),(82,'PL','POLONIA',14,2),(83,'PT','PORTUGAL',173,3),(84,'RO','RUMANIA',44,3),(85,'RU','RUSSIAN FEDERATION',179,3),(86,'SE','SWEDEN',185,3),(87,'TR','TURKEY',16,3),(88,'UA','UKRAINE',216,3),(89,'US','UNITED STATES OF AMERICA',220,3),(90,'UY','URUGUAY',221,3),(91,'UZ','UZBEKISTAN',16,2),(92,'VE','VENEZUELA',225,3);
 /*!40000 ALTER TABLE `paises` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -901,7 +948,8 @@ DROP TABLE IF EXISTS `tipo_carga`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tipo_carga` (
-  `id_tipo_carga` varchar(45) NOT NULL,
+  `id_tipo_carga` int NOT NULL AUTO_INCREMENT,
+  `tipo_carga` varchar(45) NOT NULL,
   PRIMARY KEY (`id_tipo_carga`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -923,7 +971,8 @@ DROP TABLE IF EXISTS `tipo_embalaje`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tipo_embalaje` (
-  `id_tipo_embalaje` varchar(45) NOT NULL,
+  `id_tipo_embalaje` int NOT NULL AUTO_INCREMENT,
+  `tipo_embajale` varchar(45) NOT NULL,
   PRIMARY KEY (`id_tipo_embalaje`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -945,10 +994,11 @@ DROP TABLE IF EXISTS `tipo_embarque`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tipo_embarque` (
-  `id_tipo_embarque` varchar(45) NOT NULL,
+  `id_tipo_embarque` int NOT NULL AUTO_INCREMENT,
+  `codigo_embarque` varchar(45) NOT NULL,
   `descripcion` text,
-  `id_tipo_carga` varchar(45) NOT NULL,
-  `id_tipo_embalaje` varchar(45) NOT NULL,
+  `id_tipo_carga` int NOT NULL,
+  `id_tipo_embalaje` int NOT NULL,
   `regimen` varchar(45) DEFAULT NULL,
   `mercancia` varchar(45) DEFAULT NULL,
   `harmonised_comidity` varchar(45) DEFAULT NULL,
@@ -978,5 +1028,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-02-13 18:45:33
-
+-- Dump completed on 2024-04-13 10:12:52
