@@ -12,7 +12,7 @@ router.get('/origenes', async (req, res) => {
             res.send(await getOrigenes());
         }
     } catch (error: any) {
-        res.status(400).json({ error: true, message: error.message });
+        res.status(400).json({ ok: false, msg: error.message });
     }
 }
 );
@@ -21,7 +21,7 @@ router.post('/origenes', async (req, res) => {
     try {
         createOrigen(req.body as OrigenCreationAttributes);
     } catch (error: any) {
-        res.status(400).json({ error: true, message: error.message });
+        res.status(400).json({ ok: false, msg: error.message });
     }
 });
 

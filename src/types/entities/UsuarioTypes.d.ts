@@ -3,7 +3,7 @@ export type Usuario = {
     usuario: string;
     email: string | null;
     pass: string;
-
+    pic: string | null;
 }
 
 export type UsuarioCreationAttributes = Omit<Usuario, 'id_usuario'>;

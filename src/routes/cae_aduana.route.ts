@@ -13,7 +13,7 @@ router.get('/aduanas', async (req, res) => {
         }
 
     } catch (error: any) {
-        res.status(400).json({ error: true, message: error.message });
+        res.status(400).json({ ok: false, msg: error.message });
     }
 });
 
@@ -23,7 +23,7 @@ router.post('/aduanas', async (req, res) => {
         res.json(resultado);
     }
     catch (error: any) {
-        res.status(400).json({ error: true, message: error.message });
+        res.status(400).json({ ok: false, msg: error.message });
     }
 });
 

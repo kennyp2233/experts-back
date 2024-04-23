@@ -19,6 +19,9 @@ const Usuario = sequelize.define<Model<Usuario, UsuarioCreationAttributes>>('usu
     pass: {
         type: DataTypes.STRING,
     },
+    pic: {
+        type: DataTypes.BLOB('long'),
+    },
 });
 
 export default Usuario;

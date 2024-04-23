@@ -1,4 +1,6 @@
 import paises from '@dbModels/paises.model';
+import acuerdos from '@dbModels/acuerdos_arancelarios';
+import "@db/assosiations/paises_acuerdos.as"
 import { Pais, PaisCreationAttributes } from '@typesApp/entities/PaisTypes';
 
 export async function getPaises() {
@@ -16,15 +18,15 @@ export async function createPais(pais: PaisCreationAttributes) {
 }
 
 
-export async function updatePais(id: number, pais: PaisCreationAttributes) {
-    const paisToUpdate = await paises.findByPk(id);
+export async function updatePais(pais: Pais) {
+    const paisToUpdate = await paises.findByPk(pais.id_pais);
     if (paisToUpdate) {
         await paises.update(pais, {
             where: {
-                id_pais: id
+                id_pais: pais.id_pais
             }
         });
-        const updatedPais = await paises.findByPk(id);
+        const updatedPais = await paises.findByPk(pais.id_pais);
         return updatedPais ? updatedPais.toJSON() as Pais : null;
     }
     return null;
@@ -41,4 +43,16 @@ export async function deletePais(id: number) {
         return paisToDelete.toJSON() as Pais;
     }
     return null;
+}
+
+export async function paisesJoinAcuerdos() {
+    const paisesList = await paises.findAll({
+        include: [{
+            model: acuerdos,
+            required: false,
+
+        }]
+    });
+
+    return paisesList.map((pais) => pais.dataValues);
 }

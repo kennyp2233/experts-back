@@ -1,39 +1,66 @@
 import express from 'express';
-import { login, register } from '@services/auth.servicio';
+import { login, register, verifyToken, isAdminToken } from '@services/auth.servicio';
 
 const router = express.Router();
 
-
 router.post('/login', async (req, res) => {
-    try {
-        const token = await login(req.body.usuario, req.body.password, req.body.recordar);
-        if (token) {
-            res.status(200).json({
-                ok: true,
-                msg: 'Login exitoso',
-                token
-            });
-        } else {
-            res.status(401).json({
-                ok: false,
-                msg: 'Usuario o contraseña incorrectos'
-            });
-        }
-    } catch (error: any) {
-        res.status(400).json({ error: true, message: error.message });
+    const result = await login(req.body.usuario, req.body.pass, req.body.recordar);
+    if ('error' in (result as any)) {
+        res.status(400).json({ ok: false, msg: (result as any).error });
+    } else {
+        res.status(200).json({
+            ok: true,
+            msg: 'Login exitoso',
+            token: result.token
+        });
     }
 });
 
 router.post('/register', async (req, res) => {
-    try {
-        const user = await register(req.body);
-        res.status(201).json({
+    const result = await register(req.body);
+    if ('error' in (result as any)) {
+        res.status(400).json({ ok: false, msg: (result as any).error });
+        console.log(result);
+    } else {
+        res.status(200).json({
             ok: true,
-            msg: 'Usuario creado exitosamente',
-            user
+            msg: 'Registro exitoso',
         });
-    } catch (error: any) {
-        res.status(400).json({ error: true, message: error.message });
+    }
+});
+
+router.post('/verify', async (req, res) => {
+    const token = req.body.token;
+    if (!token) {
+        res.status(400).json({ ok: false, msg: 'Token no provisto' });
+        return;
+    }
+    const result = await verifyToken(token);
+    if ('error' in (result as any)) {
+        res.status(400).json({ ok: false, msg: (result as any).error });
+    } else {
+        res.status(200).json({
+            ok: true,
+            msg: 'Token válido',
+        });
+    }
+});
+
+router.post('/isAdmin', async (req, res) => {
+    const token = req.body.token;
+    if (!token) {
+        res.status(400).json({ ok: false, msg: 'Token no provisto' });
+        return;
+    }
+    const result = await isAdminToken(token);
+    if ('error' in (result as any)) {
+        res.status(400).json({ ok: false, msg: (result as any).error });
+    } else {
+        res.status(200).json({
+            ok: true,
+            msg: 'Token válido',
+            isAdmin: (result as any).isAdmin
+        });
     }
 });
 

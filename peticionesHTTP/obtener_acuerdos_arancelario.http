@@ -1,0 +1,5 @@
+###
+GET http://localhost:3001/api/v1/acuerdos_arancelarios HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJhZG1pbiI6dHJ1ZSwiaWF0IjoxNzEzODI2MjA4LCJleHAiOjE3MTM4Mjk4MDh9.Xwu9ncxHCIYxFRgDjzIzH1BkAPnwc6ifGqUhzaMBjcg
+
