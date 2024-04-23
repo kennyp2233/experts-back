@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.33, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: experts_db
 -- ------------------------------------------------------
--- Server version	8.0.35
+-- Server version	8.0.36
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -14,6 +14,54 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `acuerdos_arancelarios`
+--
+
+DROP TABLE IF EXISTS `acuerdos_arancelarios`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `acuerdos_arancelarios` (
+  `id_acuerdo` int NOT NULL AUTO_INCREMENT,
+  `nombre` text NOT NULL,
+  PRIMARY KEY (`id_acuerdo`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `acuerdos_arancelarios`
+--
+
+LOCK TABLES `acuerdos_arancelarios` WRITE;
+/*!40000 ALTER TABLE `acuerdos_arancelarios` DISABLE KEYS */;
+INSERT INTO `acuerdos_arancelarios` VALUES (1,'ATPDEA '),(2,'EUR1'),(3,'GSTP'),(4,'SGP-CA (CANADA) '),(5,'SGP-FR (FEDERACION RUSA) '),(6,'SGP-UE (UNION EUROPEA) '),(7,'SGP-US (ESTADOS UNIDOS) ');
+/*!40000 ALTER TABLE `acuerdos_arancelarios` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `admins`
+--
+
+DROP TABLE IF EXISTS `admins`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `admins` (
+  `id_usuario` int NOT NULL,
+  PRIMARY KEY (`id_usuario`),
+  CONSTRAINT `a_pk_usuarios` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `admins`
+--
+
+LOCK TABLES `admins` WRITE;
+/*!40000 ALTER TABLE `admins` DISABLE KEYS */;
+INSERT INTO `admins` VALUES (1);
+/*!40000 ALTER TABLE `admins` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `aerolineas`
@@ -898,7 +946,9 @@ CREATE TABLE `paises` (
   `pais_id` int DEFAULT NULL,
   `id_acuerdo` int DEFAULT NULL,
   PRIMARY KEY (`id_pais`),
-  UNIQUE KEY `siglas_pais_UNIQUE` (`siglas_pais`)
+  UNIQUE KEY `siglas_pais_UNIQUE` (`siglas_pais`),
+  KEY `fk_p_acuerdo_idx` (`id_acuerdo`),
+  CONSTRAINT `fk_p_acuerdo` FOREIGN KEY (`id_acuerdo`) REFERENCES `acuerdos_arancelarios` (`id_acuerdo`)
 ) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -908,7 +958,7 @@ CREATE TABLE `paises` (
 
 LOCK TABLES `paises` WRITE;
 /*!40000 ALTER TABLE `paises` DISABLE KEYS */;
-INSERT INTO `paises` VALUES (1,'POLONIA','POLONIA',14,2),(5,'AM','ARMENIA',14,3),(40,'AN','NETHERLANDS ANTILLES',8,3),(41,'AR','ARGENTINA',14,3),(42,'AU','AUSTRALIA',14,3),(43,'AZ','AZERBAIJAN',16,3),(44,'BA','BOSNIA AND HERZEGOVINA',17,3),(45,'BB','BARBADOS',18,3),(46,'BE','BELGICA',20,3),(47,'BO','BOLIVIA',28,3),(48,'BR','BRAZIL',29,3),(49,'BY','BELARUS',34,3),(50,'CA','CANADA',36,3),(51,'CH','SWITZERLAND',41,3),(52,'CL','REPUBLICA DE CHILE',44,3),(53,'CO','COLOMBIA',47,3),(54,'CR','COSTA RICA',48,3),(55,'CU','CUBA',49,3),(56,'CZ','CZECH REPUBLIC',53,3),(57,'DE','GERMANY',1112,3),(58,'EC','ECUADOR',1113,3),(59,'EE','ESTONIA',61,3),(60,'EG','EGYPT',62,3),(61,'ES','ESPAÑA',64,3),(62,'FR','FRANCE',71,2),(64,'GE','GEORGIA',74,3),(65,'HR','CROATIA',92,3),(66,'IT','ITALY',103,3),(67,'JP','JAPAN',106,3),(68,'KG','KYRGYZSTAN',108,3),(69,'KW','KUWAIT',115,3),(70,'KZ','KAZAKHSTAN',117,3),(71,'LT','LITUANIA',71,3),(74,'LU','LUXEMBOURG',126,3),(75,'LV','LATVIA',126,2),(76,'MY','MALAYSIA',0,3),(77,'NI','NICARAGUA',155,3),(78,'NL','PAISES BAJOS',156,8),(79,'NZ','NEW ZEALAND',161,3),(80,'PA','PANAMA',163,3),(81,'PE','PERU',164,3),(82,'PL','POLONIA',14,2),(83,'PT','PORTUGAL',173,3),(84,'RO','RUMANIA',44,3),(85,'RU','RUSSIAN FEDERATION',179,3),(86,'SE','SWEDEN',185,3),(87,'TR','TURKEY',16,3),(88,'UA','UKRAINE',216,3),(89,'US','UNITED STATES OF AMERICA',220,3),(90,'UY','URUGUAY',221,3),(91,'UZ','UZBEKISTAN',16,2),(92,'VE','VENEZUELA',225,3);
+INSERT INTO `paises` VALUES (1,'POLONIA','POLONIA',14,5),(5,'AM','ARMENIA',14,5),(40,'AN','NETHERLANDS ANTILLES',8,5),(41,'AR','ARGENTINA',14,5),(42,'AU','AUSTRALIA',14,5),(43,'AZ','AZERBAIJAN',16,5),(44,'BA','BOSNIA AND HERZEGOVINA',17,5),(45,'BB','BARBADOS',18,5),(46,'BE','BELGICA',20,5),(47,'BO','BOLIVIA',28,5),(48,'BR','BRAZIL',29,5),(49,'BY','BELARUS',34,5),(50,'CA','CANADA',36,5),(51,'CH','SWITZERLAND',41,5),(52,'CL','REPUBLICA DE CHILE',44,5),(53,'CO','COLOMBIA',47,5),(54,'CR','COSTA RICA',48,5),(55,'CU','CUBA',49,5),(56,'CZ','CZECH REPUBLIC',53,5),(57,'DE','GERMANY',1112,5),(58,'EC','ECUADOR',1113,5),(59,'EE','ESTONIA',61,5),(60,'EG','EGYPT',62,5),(61,'ES','ESPAÑA',64,5),(62,'FR','FRANCE',71,6),(64,'GE','GEORGIA',74,5),(65,'HR','CROATIA',92,5),(66,'IT','ITALY',103,5),(67,'JP','JAPAN',106,5),(68,'KG','KYRGYZSTAN',108,5),(69,'KW','KUWAIT',115,5),(70,'KZ','KAZAKHSTAN',117,5),(71,'LT','LITUANIA',71,5),(74,'LU','LUXEMBOURG',126,5),(75,'LV','LATVIA',126,6),(76,'MY','MALAYSIA',0,5),(77,'NI','NICARAGUA',155,5),(78,'NL','PAISES BAJOS',156,2),(79,'NZ','NEW ZEALAND',161,5),(80,'PA','PANAMA',163,5),(81,'PE','PERU',164,5),(82,'PL','POLONIA',14,6),(83,'PT','PORTUGAL',173,5),(84,'RO','RUMANIA',44,5),(85,'RU','RUSSIAN FEDERATION',179,5),(86,'SE','SWEDEN',185,5),(87,'TR','TURKEY',16,5),(88,'UA','UKRAINE',216,5),(89,'US','UNITED STATES OF AMERICA',220,5),(90,'UY','URUGUAY',221,5),(91,'UZ','UZBEKISTAN',16,6),(92,'VE','VENEZUELA',225,5);
 /*!40000 ALTER TABLE `paises` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1030,9 +1080,10 @@ CREATE TABLE `usuarios` (
   `id_usuario` int NOT NULL AUTO_INCREMENT,
   `usuario` varchar(45) NOT NULL,
   `email` varchar(100) DEFAULT NULL,
-  `pass` varchar(45) NOT NULL,
+  `pass` varchar(60) NOT NULL,
+  `pic` blob,
   PRIMARY KEY (`id_usuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1041,6 +1092,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
+INSERT INTO `usuarios` VALUES (1,'kennyp2233','kenny.pinchao@epn.edu.ec','$2b$10$BVhU9F4Ha/mxoRjuHkNMR.r2he6DcIDdKjR.jgpZ5THuLVGq35.te',NULL),(2,'jorgeluis','jorgeluis41234@gmail.com','$2b$10$phSw1B1CJBbI1eO2zWdwSO.q1ufDpkmhinemz9NUcsAhoJny622Iq',NULL);
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -1053,4 +1105,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-20 19:27:56
+-- Dump completed on 2024-04-22 23:33:43
