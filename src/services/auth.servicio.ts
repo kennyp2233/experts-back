@@ -23,7 +23,7 @@ export async function login(usuario: string, pass: string, mantenerSesion: boole
             if (isPasswordCorrect) {
                 if (SECRET_KEY) {
 
-                    const expiresIn = mantenerSesion ? '7d' : 5;
+                    const expiresIn = mantenerSesion ? '7d' : '1h';
                     const token = jwt.sign({ id_usuario: user.id_usuario, admin: await isUserAdmin(user.id_usuario || 0) }, SECRET_KEY, { expiresIn });
                     //console.log(jwt.verify(token, SECRET_KEY) as any);
                     return { token };
