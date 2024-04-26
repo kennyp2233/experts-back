@@ -1,6 +1,6 @@
 import express from 'express';
-import { createAduana, deleteAduana, getAduana, getAduanas, updateAduana } from '@services/cae_aduana.servicio';
-import { CaeAduanaCreationAttributes } from '@typesApp/entities/CaeAduanaTypes';
+import { createAduana, deleteAduana, getAduana, getAduanas, updateAduana, deleteAduanas } from '@services/cae_aduana.servicio';
+import { CaeAduanaCreationAttributes, CaeAduana } from '@typesApp/entities/CaeAduanaTypes';
 
 const router = express.Router();
 
@@ -20,19 +20,33 @@ router.get('/aduanas', async (req, res) => {
 router.post('/aduanas', async (req, res) => {
     try {
         const resultado = createAduana(req.body as CaeAduanaCreationAttributes);
-        res.json(resultado);
+        res.status(201).json({ ok: true, msg: 'Aduana creada', resultado });
     }
     catch (error: any) {
         res.status(400).json({ ok: false, msg: error.message });
     }
 });
 
-router.put('/aduanas', (_, res) => {
-    res.send('Creando aduana');
+router.put('/aduanas', async (req, res) => {
+    try {
+        await updateAduana(req.body as CaeAduana);
+        res.status(200).json({ ok: true, msg: 'Aduana actualizada' });
+    }
+    catch (error: any) {
+        res.status(400).json({ ok: false, msg: error.message });
+    }
 });
 
-router.delete('/aduanas', (_, res) => {
-    res.send('Creando aduana');
+router.delete('/aduanas', async (req, res) => {
+    try {
+        if (req.query.id) {
+            res.send(await deleteAduana(Number.parseInt(req.query.id as string)));
+        } else {
+            res.send(await deleteAduanas(req.body as number[]));
+        }
+    } catch (error: any) {
+        res.status(400).json({ ok: false, msg: error.message });
+    }
 });
 
 export default router;

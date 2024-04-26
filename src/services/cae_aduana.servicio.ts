@@ -15,15 +15,15 @@ export async function createAduana(aduana: CaeAduanaCreationAttributes) {
     return await cae_aduana.create(aduana);
 }
 
-export async function updateAduana(id: number, aduana: CaeAduanaCreationAttributes) {
-    const aduanaToUpdate = await cae_aduana.findByPk(id);
+export async function updateAduana(aduana: CaeAduana) {
+    const aduanaToUpdate = await cae_aduana.findByPk(aduana.id_cae_aduana);
     if (aduanaToUpdate) {
         await cae_aduana.update(aduana, {
             where: {
-                id_cae_aduana: id
+                id_cae_aduana: aduana.id_cae_aduana
             }
         });
-        const updatedAduana = await cae_aduana.findByPk(id);
+        const updatedAduana = await cae_aduana.findByPk(aduana.id_cae_aduana);
         return updatedAduana ? updatedAduana.toJSON() as CaeAduana : null;
     }
     return null;
@@ -40,4 +40,12 @@ export async function deleteAduana(id: number) {
         return aduanaToDelete.toJSON() as CaeAduana;
     }
     return null;
+}
+
+export async function deleteAduanas(aduanasDelete: number[]) {
+    return await cae_aduana.destroy({
+        where: {
+            id_cae_aduana: aduanasDelete
+        }
+    });
 }

@@ -1,7 +1,8 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../experts.db';
 import { OrigenCreationAttributes, Origen } from '@typesApp/entities/OrigenTypes';
-
+import CaeAduanas from './cae_aduana.model';
+import Paises from './paises.model';
 const Origenes = sequelize.define<Model<Origen, OrigenCreationAttributes>>('origenes', {
     id_origen: {
         type: DataTypes.INTEGER,
@@ -20,14 +21,14 @@ const Origenes = sequelize.define<Model<Origen, OrigenCreationAttributes>>('orig
     id_pais: {
         type: DataTypes.INTEGER,
         references: {
-            model: 'paises',
+            model: Paises,
             key: 'id_pais',
         },
     },
     id_aduana: {
         type: DataTypes.INTEGER,
         references: {
-            model: 'cae_aduana',
+            model: CaeAduanas,
             key: 'id_cae_aduana',
         },
     }

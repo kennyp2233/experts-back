@@ -25,22 +25,25 @@ router.get('/paises-acuerdos', async (_, res) => {
 });
 
 router.post('/paises', async (req, res) => {
-    // si req.body.pais_id no es int retornar error
-
     if (!Number.isInteger(Number(req.body.pais_id))) {
         res.status(400).json({ ok: false, msg: 'El id del pais debe ser un número' });
         return;
     }
 
+    if (!req.body.id_acuerdo) {
+        res.status(400).json({ ok: false, msg: 'El id del acuerdo es requerido' });
+        return;
+    }
+
     try {
         const pais = await createPais(req.body);
-        res.json(pais);
+        res.status(201).json({ ok: true, msg: 'Pais creado', pais });
     } catch (error: any) {
         res.status(400).json({ ok: false, msg: error.message });
     }
 });
 
-router.put('/paises', (req, res) => {
+router.put('/paises', async (req, res) => {
 
     if (!Number.isInteger(Number(req.body.pais_id))) {
         res.status(400).json({ ok: false, msg: 'El id del pais debe ser un número' });
@@ -48,20 +51,18 @@ router.put('/paises', (req, res) => {
     }
     try {
         //haz el update con la funcion updatePais(req.body as Pais);
-        updatePais(req.body as Pais);
+        await updatePais(req.body as Pais);
         res.status(200).json({ ok: true, msg: 'Pais actualizado' });
     } catch (error: any) {
         res.status(400).json({ ok: false, msg: error.message });
     }
 });
 
-router.delete('/paises', (req, res) => {
+router.delete('/paises', async (req, res) => {
 
     try {
-        //deletePais(Number.parseInt((req.body as Pais).id_pais.toString()));
-        console.log(req.body);
         const paises = req.body as any[];
-        deletePaises(paises.map(Number));
+        await deletePaises(paises.map(Number));
         res.status(200).json({ ok: true, msg: 'Pais eliminado' });
     } catch (error: any) {
         res.status(400).json({ ok: false, msg: error.message });
