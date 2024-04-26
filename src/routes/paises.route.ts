@@ -1,5 +1,5 @@
 import express from 'express';
-import { createPais, deletePais, getPais, getPaises, updatePais, paisesJoinAcuerdos } from '@services/paises.servicio';
+import { createPais, deletePais, getPais, getPaises, updatePais, paisesJoinAcuerdos, deletePaises } from '@services/paises.servicio';
 import { Pais, PaisCreationAttributes } from '@typesApp/entities/PaisTypes';
 
 const router = express.Router();
@@ -25,6 +25,13 @@ router.get('/paises-acuerdos', async (_, res) => {
 });
 
 router.post('/paises', async (req, res) => {
+    // si req.body.pais_id no es int retornar error
+
+    if (!Number.isInteger(Number(req.body.pais_id))) {
+        res.status(400).json({ ok: false, msg: 'El id del pais debe ser un número' });
+        return;
+    }
+
     try {
         const pais = await createPais(req.body);
         res.json(pais);
@@ -33,12 +40,32 @@ router.post('/paises', async (req, res) => {
     }
 });
 
-router.put('/paises', (_, res) => {
-    res.send('Creando pais');
+router.put('/paises', (req, res) => {
+
+    if (!Number.isInteger(Number(req.body.pais_id))) {
+        res.status(400).json({ ok: false, msg: 'El id del pais debe ser un número' });
+        return;
+    }
+    try {
+        //haz el update con la funcion updatePais(req.body as Pais);
+        updatePais(req.body as Pais);
+        res.status(200).json({ ok: true, msg: 'Pais actualizado' });
+    } catch (error: any) {
+        res.status(400).json({ ok: false, msg: error.message });
+    }
 });
 
-router.delete('/paises', (_, res) => {
-    res.send('Creando pais');
+router.delete('/paises', (req, res) => {
+
+    try {
+        //deletePais(Number.parseInt((req.body as Pais).id_pais.toString()));
+        console.log(req.body);
+        const paises = req.body as any[];
+        deletePaises(paises.map(Number));
+        res.status(200).json({ ok: true, msg: 'Pais eliminado' });
+    } catch (error: any) {
+        res.status(400).json({ ok: false, msg: error.message });
+    }
 });
 
 

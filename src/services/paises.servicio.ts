@@ -14,6 +14,7 @@ export async function getPais(id: number) {
 }
 
 export async function createPais(pais: PaisCreationAttributes) {
+    
     return await paises.create(pais);
 }
 
@@ -45,6 +46,22 @@ export async function deletePais(id: number) {
     return null;
 }
 
+export async function deletePaises(paisesDelete: number[]) {
+    const paisesToDelete = await paises.findAll({
+        where: {
+            id_pais: paisesDelete // Fix: Use paisesDelete instead of paises
+        }
+    });
+    if (paisesToDelete) {
+        await paises.destroy({
+            where: {
+                id_pais: paisesDelete // Fix: Use paisesDelete instead of paises
+            }
+        });
+        return paisesToDelete.map((pais) => pais.toJSON()) as Pais[];
+    }
+    return null;
+}
 export async function paisesJoinAcuerdos() {
     const paisesList = await paises.findAll({
         include: [{
