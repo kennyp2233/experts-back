@@ -3,13 +3,13 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import { expressjwt } from 'express-jwt';
 
-import aerolineasRouter from '@routes/aerolineas.route';
-import paisesRouter from '@routes/paises.route';
-import origenesRouter from '@routes/origenes.route';
-import caeAduanaRouter from '@routes/cae_aduana.route';
-import auth from '@routes/auth.route';
-import acuerdosArancelariosRoute from "@routes/acuerdo_arancelario.route"
-
+import aerolineasRouter from '@routes/mantenimiento/aerolineas.route';
+import paisesRouter from '@routes/mantenimiento/paises.route';
+import origenesRouter from '@routes/mantenimiento/origenes.route';
+import caeAduanaRouter from '@routes/mantenimiento/cae_aduana.route';
+import auth from '@routes/usuarios/auth.route';
+import acuerdosArancelariosRoute from "@routes/mantenimiento/acuerdo_arancelario.route"
+import destinos from '@routes/mantenimiento/destinos.route';
 
 
 const app = express();
@@ -32,7 +32,8 @@ app.use('/api/v1',
     origenesRouter,
     caeAduanaRouter,
     auth,
-    acuerdosArancelariosRoute
+    acuerdosArancelariosRoute,
+    destinos
 );
 
 

@@ -3,3 +3,7 @@ GET http://localhost:3001/api/v1/acuerdos_arancelarios HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJhZG1pbiI6dHJ1ZSwiaWF0IjoxNzEzODI2MjA4LCJleHAiOjE3MTM4Mjk4MDh9.Xwu9ncxHCIYxFRgDjzIzH1BkAPnwc6ifGqUhzaMBjcg
 
+###
+GET http://localhost:3001/api/v1/destinos/paises HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJhZG1pbiI6dHJ1ZSwiaWF0IjoxNzE0MzEzMzY1LCJleHAiOjE3MTQ5MTgxNjV9.hnC7u7jimgXKLsb563K1kqo658Xy-Ac7L81nq5s8wMY
