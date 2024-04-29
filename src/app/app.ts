@@ -17,6 +17,7 @@ const path = [
     '/api/v1/login',
     '/api/v1/register',
 ];
+
 app.use(cors());
 app.use(expressjwt({ secret: process.env.SECRET_KEY || "", algorithms: ['HS256'] }).unless({ path: path }));
 app.get('/', (_, res) => {

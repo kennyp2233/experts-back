@@ -23,5 +23,5 @@ Aerolineas.hasMany(Aerolineas, { foreignKey: 'by2', as: 'aerolineas2' });
 Destinos.hasMany(Aerolineas, { foreignKey: 'to3', as: 'aerolineas3' });
 Aerolineas.hasMany(Aerolineas, { foreignKey: 'by3', as: 'aerolineas3' });
 
-Aerolineas.hasOne(AerolineasPlantillas, { foreignKey: 'aerolineaId', as: 'plantilla' });
-AerolineasPlantillas.belongsTo(Aerolineas, { foreignKey: 'aerolineaId', as: 'aerolinea' });
+Aerolineas.hasOne(AerolineasPlantillas, { foreignKey: 'id_aerolinea', as: 'plantilla' });
+AerolineasPlantillas.belongsTo(Aerolineas, { foreignKey: 'id_aerolinea', as: 'aerolinea' });
