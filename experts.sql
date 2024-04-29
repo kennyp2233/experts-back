@@ -80,12 +80,12 @@ CREATE TABLE `aerolineas` (
   `ciudad` varchar(45) DEFAULT NULL,
   `pais` varchar(45) DEFAULT NULL,
   `contacto` varchar(45) DEFAULT NULL,
-  `modo` varchar(45) DEFAULT NULL,
-  `maestra_guias_hijas` tinyint(1) DEFAULT NULL,
+  `modo` tinyint NOT NULL,
+  `maestra_guias_hijas` tinyint(1) NOT NULL,
   `codigo` varchar(45) DEFAULT NULL,
   `prefijo_awb` varchar(45) DEFAULT NULL,
   `codigo_cae` varchar(45) DEFAULT NULL,
-  `estado_activo` tinyint(1) DEFAULT NULL,
+  `estado_activo` tinyint(1) NOT NULL,
   `from1` int DEFAULT NULL,
   `to1` int DEFAULT NULL,
   `by1` int DEFAULT NULL,
@@ -93,15 +93,17 @@ CREATE TABLE `aerolineas` (
   `by2` int DEFAULT NULL,
   `to3` int DEFAULT NULL,
   `by3` int DEFAULT NULL,
+  `afiliado_cass` tinyint(1) NOT NULL,
+  `guias_virtuales` tinyint(1) NOT NULL,
   PRIMARY KEY (`id_aerolinea`),
   UNIQUE KEY `contacto_UNIQUE` (`contacto`),
-  KEY `fk_a_destino1_idx` (`to1`),
-  KEY `fk_a_destino2_idx` (`to2`),
-  KEY `fk_a_destino3_idx` (`to3`),
   KEY `fk_a_origenes_idx` (`from1`),
   KEY `fk_a_a1_idx` (`by1`),
   KEY `fk_a_a2_idx` (`by2`),
   KEY `fk_a_a3_idx` (`by3`),
+  KEY `fk_a_destino1_idx` (`to1`),
+  KEY `fk_a_destino2_idx` (`to2`),
+  KEY `fk_a_destino3_idx` (`to3`),
   CONSTRAINT `fk_a_a1` FOREIGN KEY (`by1`) REFERENCES `aerolineas` (`id_aerolinea`),
   CONSTRAINT `fk_a_a2` FOREIGN KEY (`by2`) REFERENCES `aerolineas` (`id_aerolinea`),
   CONSTRAINT `fk_a_a3` FOREIGN KEY (`by3`) REFERENCES `aerolineas` (`id_aerolinea`),
@@ -109,7 +111,7 @@ CREATE TABLE `aerolineas` (
   CONSTRAINT `fk_a_destino2` FOREIGN KEY (`to2`) REFERENCES `destinos` (`id_destino`),
   CONSTRAINT `fk_a_destino3` FOREIGN KEY (`to3`) REFERENCES `destinos` (`id_destino`),
   CONSTRAINT `fk_a_origenes` FOREIGN KEY (`from1`) REFERENCES `origenes` (`id_origen`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -118,6 +120,7 @@ CREATE TABLE `aerolineas` (
 
 LOCK TABLES `aerolineas` WRITE;
 /*!40000 ALTER TABLE `aerolineas` DISABLE KEYS */;
+INSERT INTO `aerolineas` VALUES (1,'ACG AIR CARGO GERMANY','1792402956001','GEBÄUDE 1335||D-55483 HAHN AIRPORT||GERMANY||','496543508462',NULL,NULL,'GERMANY',NULL,1,1,'6U','730','6807',1,9,NULL,NULL,NULL,NULL,NULL,NULL,0,0);
 /*!40000 ALTER TABLE `aerolineas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -148,6 +151,11 @@ CREATE TABLE `aerolineas_codigos_plantillas` (
   `plantilla_guia_madre` varchar(45) DEFAULT NULL,
   `plantilla_formato_aerolinea` varchar(45) DEFAULT NULL,
   `plantilla_reservas` varchar(45) DEFAULT NULL,
+  `tarifa_rate` decimal(10,2) DEFAULT NULL,
+  `pca` decimal(10,4) DEFAULT NULL,
+  `combustible_mult` tinyint DEFAULT NULL,
+  `seguridad_mult` tinyint DEFAULT NULL,
+  `aux_calc_mult` tinyint DEFAULT NULL,
   PRIMARY KEY (`id_aerolinea`),
   CONSTRAINT `fk_a_c_p` FOREIGN KEY (`id_aerolinea`) REFERENCES `aerolineas` (`id_aerolinea`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -159,6 +167,7 @@ CREATE TABLE `aerolineas_codigos_plantillas` (
 
 LOCK TABLES `aerolineas_codigos_plantillas` WRITE;
 /*!40000 ALTER TABLE `aerolineas_codigos_plantillas` DISABLE KEYS */;
+INSERT INTO `aerolineas_codigos_plantillas` VALUES (1,'AWC','FSC','SCC',NULL,NULL,NULL,NULL,NULL,15.00,1.28,NULL,NULL,NULL,NULL,NULL,'GMFFF730',NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `aerolineas_codigos_plantillas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -458,15 +467,15 @@ DROP TABLE IF EXISTS `consignatario_guia_m`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `consignatario_guia_m` (
   `id_consignatario` int NOT NULL,
-  `id_destino_final` int DEFAULT NULL,
+  `id_destino` int DEFAULT NULL,
   `guia_m_consignee` text,
   `guia_m_name_address` text,
   `guia_m_notify` text,
   PRIMARY KEY (`id_consignatario`),
   KEY `fk_c_m_consignatario_idx` (`id_consignatario`),
-  KEY `fk_c_m_destino_idx` (`id_destino_final`),
+  KEY `fk_c_m_destino_idx` (`id_destino`),
   CONSTRAINT `fk_c_m_consignatario` FOREIGN KEY (`id_consignatario`) REFERENCES `consignatario` (`id_consignatario`),
-  CONSTRAINT `fk_c_m_destino` FOREIGN KEY (`id_destino_final`) REFERENCES `destinos` (`id_destino`)
+  CONSTRAINT `fk_c_m_destino` FOREIGN KEY (`id_destino`) REFERENCES `destinos` (`id_destino`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -590,13 +599,13 @@ CREATE TABLE `coordinacion_aerolinea` (
   `to3` int DEFAULT NULL,
   `by3` int DEFAULT NULL,
   PRIMARY KEY (`id_coordinacion`),
-  KEY `fk_c_a_destino1_idx` (`to1`),
-  KEY `fk_c_a_destino2_idx` (`to2`),
-  KEY `fk_c_a_destino1_idx1` (`to3`),
   KEY `fk_c_a_orignenes_idx` (`from1`),
   KEY `fk_c_a_a1_idx` (`by1`),
   KEY `fk_c_a_a2_idx` (`by2`),
   KEY `fk_c_a_a3_idx` (`by3`),
+  KEY `fk_c_a_destino3_idx` (`to3`),
+  KEY `fk_c_a_destino2_idx` (`to2`),
+  KEY `fk_c_a_destino1_idx` (`to1`),
   CONSTRAINT `fk_c_a_a1` FOREIGN KEY (`by1`) REFERENCES `aerolineas` (`id_aerolinea`),
   CONSTRAINT `fk_c_a_a2` FOREIGN KEY (`by2`) REFERENCES `aerolineas` (`id_aerolinea`),
   CONSTRAINT `fk_c_a_a3` FOREIGN KEY (`by3`) REFERENCES `aerolineas` (`id_aerolinea`),
@@ -692,16 +701,18 @@ DROP TABLE IF EXISTS `destinos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `destinos` (
-  `id_destino` int NOT NULL,
+  `id_destino` int NOT NULL AUTO_INCREMENT,
   `codigo_destino` varchar(45) NOT NULL,
   `nombre` varchar(45) NOT NULL,
   `aeropuerto` varchar(45) DEFAULT NULL,
-  `pais` varchar(45) DEFAULT NULL,
-  `id_sesa` varchar(45) DEFAULT NULL,
+  `id_pais` int NOT NULL,
+  `sesa_id` varchar(45) DEFAULT NULL,
   `leyenda_fito` text,
   `cobro_fitos` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id_destino`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`id_destino`),
+  KEY `fk_d_pais_idx` (`id_pais`),
+  CONSTRAINT `fk_d_pais` FOREIGN KEY (`id_pais`) REFERENCES `paises` (`id_pais`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -710,6 +721,7 @@ CREATE TABLE `destinos` (
 
 LOCK TABLES `destinos` WRITE;
 /*!40000 ALTER TABLE `destinos` DISABLE KEYS */;
+INSERT INTO `destinos` VALUES (1,'EZE','EZE','AEROPUERTO INTERNACIONAL MINISTRO PISTARINI',41,'1008',NULL,0),(2,'ABQ','ALBUQUERQUE','ALBUQUERQUE',89,'0','NINGUNA',0),(3,'ALC','ALICANTE','ALICANTE',61,'0','\"IMMEDIATELY PRIOR TO THEIR EXPORT, HAVE BEEN OFFICIALLY INSPECTED AND FOUND FREE FROM BEMISIA TABACI GENN AND LIRIOMYZA SATIVAE (BLANCHARD); AMAUROMYZA MACULOZA (MALLOCH)\"',0),(4,'ALK','AUCKLAND','AUCKLAND',79,'1008','NINGUNA',0),(5,'ALA','ALAMATY','ALAMATY (ALA)',70,'1358','\"IMMEDIATELY PRIOR TO THEIR EXPORT, HAVE BEEN OFFICIALLY INSPECTED AND FOUND FREE FROM BEMISIA TABACI GENN\"',0),(6,'AMS','AMSTERDAM','AMSTERDAM HOLLAND',78,'1104','CONSIGNMENT COMPLIES WITH ANNEX VII, POINT 28 B, OF REGULATION (EU) 2019/2072, IMMEDIATELY PRIOR TO THEIR EXPORT, HAVE BEEN OFFICIALLY INSPECTED AND FOUND FREE FROM LIRIOMYZA SATIVAE (BLANCHARD) AND AMAUROMYZA MACULOSA (MALLOCH).CONSIGNMENT COMPLIES WITH ANNEX VII, POINT 25 B, OF REGULATION (EU) 2019/2072, NO SIGNS OF SPODOPTERA ERIDANIA (CRAMER), SPODOPTERA FRUGIPERDA SMITH, OR SPODOPTERA LITURA (FABRICIUS) HAVE BEEN OBSERVED AT THE PLACE OF PRODUCTION SINCE THE BEGINNING OF THE LAST COMPLETE CYCLE OF VEGETATION\n ',0),(7,'ARN','ARLANDA','ARLANDA',86,'0','\"IMMEDIATELY PRIOR TO THEIR EXPORT, HAVE BEEN OFFICIALLY INSPECTED AND FOUND FREE FROM BEMISIA TABACI GENN AND LIRIOMYZA SATIVAE (BLANCHARD); AMAUROMYZA MACULOZA (MALLOCH)\"',0),(8,'ATL','ATLANTA','ATLANTA',89,'956','NINGUNA',0),(9,'AVN','YEREVAN','YEREVAN',5,'0','NINGUNA',1);
 /*!40000 ALTER TABLE `destinos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -913,13 +925,13 @@ CREATE TABLE `origenes` (
   `nombre` varchar(45) NOT NULL,
   `aeropuerto` varchar(45) NOT NULL,
   `id_pais` int NOT NULL,
-  `id_aduana` int NOT NULL,
+  `id_cae_aduana` int NOT NULL,
   PRIMARY KEY (`id_origen`),
   KEY `fk_o_paises_idx` (`id_pais`),
-  KEY `fk_o_cae_aduana_idx` (`id_aduana`),
-  CONSTRAINT `fk_o_cae_aduana` FOREIGN KEY (`id_aduana`) REFERENCES `cae_aduana` (`id_cae_aduana`),
+  KEY `fk_o_cae_aduana_idx` (`id_cae_aduana`),
+  CONSTRAINT `fk_o_cae_aduana` FOREIGN KEY (`id_cae_aduana`) REFERENCES `cae_aduana` (`id_cae_aduana`),
   CONSTRAINT `fk_o_paises` FOREIGN KEY (`id_pais`) REFERENCES `paises` (`id_pais`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -928,7 +940,7 @@ CREATE TABLE `origenes` (
 
 LOCK TABLES `origenes` WRITE;
 /*!40000 ALTER TABLE `origenes` DISABLE KEYS */;
-INSERT INTO `origenes` VALUES (1,'GYE','GUAYAQUIL','JOSE JOAQUIN DE OLMEDO',58,1);
+INSERT INTO `origenes` VALUES (1,'GYE','GUAYAQUIL','JOSE JOAQUIN DE OLMEDO',58,1),(8,'LTX','LATACUNGA','AEROPUERTO INT\'L COTOPAXI EC',58,16),(9,'UIO','QUITO','MARISCAL SUCRE QUITO',58,9);
 /*!40000 ALTER TABLE `origenes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -949,7 +961,7 @@ CREATE TABLE `paises` (
   UNIQUE KEY `siglas_pais_UNIQUE` (`siglas_pais`),
   KEY `fk_p_acuerdo_idx` (`id_acuerdo`),
   CONSTRAINT `fk_p_acuerdo` FOREIGN KEY (`id_acuerdo`) REFERENCES `acuerdos_arancelarios` (`id_acuerdo`)
-) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=115 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -958,7 +970,7 @@ CREATE TABLE `paises` (
 
 LOCK TABLES `paises` WRITE;
 /*!40000 ALTER TABLE `paises` DISABLE KEYS */;
-INSERT INTO `paises` VALUES (1,'POLONIA','POLONIA',14,5),(5,'AM','ARMENIA',14,5),(40,'AN','NETHERLANDS ANTILLES',8,5),(41,'AR','ARGENTINA',14,5),(42,'AU','AUSTRALIA',14,5),(43,'AZ','AZERBAIJAN',16,5),(44,'BA','BOSNIA AND HERZEGOVINA',17,5),(45,'BB','BARBADOS',18,5),(46,'BE','BELGICA',20,5),(47,'BO','BOLIVIA',28,5),(48,'BR','BRAZIL',29,5),(49,'BY','BELARUS',34,5),(50,'CA','CANADA',36,5),(51,'CH','SWITZERLAND',41,5),(52,'CL','REPUBLICA DE CHILE',44,5),(53,'CO','COLOMBIA',47,5),(54,'CR','COSTA RICA',48,5),(55,'CU','CUBA',49,5),(56,'CZ','CZECH REPUBLIC',53,5),(57,'DE','GERMANY',1112,5),(58,'EC','ECUADOR',1113,5),(59,'EE','ESTONIA',61,5),(60,'EG','EGYPT',62,5),(61,'ES','ESPAÑA',64,5),(62,'FR','FRANCE',71,6),(64,'GE','GEORGIA',74,5),(65,'HR','CROATIA',92,5),(66,'IT','ITALY',103,5),(67,'JP','JAPAN',106,5),(68,'KG','KYRGYZSTAN',108,5),(69,'KW','KUWAIT',115,5),(70,'KZ','KAZAKHSTAN',117,5),(71,'LT','LITUANIA',71,5),(74,'LU','LUXEMBOURG',126,5),(75,'LV','LATVIA',126,6),(76,'MY','MALAYSIA',0,5),(77,'NI','NICARAGUA',155,5),(78,'NL','PAISES BAJOS',156,2),(79,'NZ','NEW ZEALAND',161,5),(80,'PA','PANAMA',163,5),(81,'PE','PERU',164,5),(82,'PL','POLONIA',14,6),(83,'PT','PORTUGAL',173,5),(84,'RO','RUMANIA',44,5),(85,'RU','RUSSIAN FEDERATION',179,5),(86,'SE','SWEDEN',185,5),(87,'TR','TURKEY',16,5),(88,'UA','UKRAINE',216,5),(89,'US','UNITED STATES OF AMERICA',220,5),(90,'UY','URUGUAY',221,5),(91,'UZ','UZBEKISTAN',16,6),(92,'VE','VENEZUELA',225,5);
+INSERT INTO `paises` VALUES (5,'AM','ARMENIA',14,5),(40,'AN','NETHERLANDS ANTILLES',8,5),(41,'AR','ARGENTINA',14,5),(42,'AU','AUSTRALIA',14,5),(43,'AZ','AZERBAIJAN',16,5),(44,'BA','BOSNIA AND HERZEGOVINA',17,5),(45,'BB','BARBADOS',18,5),(46,'BE','BELGICA',20,5),(47,'BO','BOLIVIA',28,5),(48,'BR','BRAZIL',29,5),(49,'BY','BELARUS',34,5),(50,'CA','CANADA',36,5),(51,'CH','SWITZERLAND',41,5),(52,'CL','REPUBLICA DE CHILE',44,5),(53,'CO','COLOMBIA',47,5),(54,'CR','COSTA RICA',48,5),(55,'CU','CUBA',49,5),(56,'CZ','CZECH REPUBLIC',53,5),(57,'DE','GERMANY',1112,5),(58,'EC','ECUADOR',1113,5),(59,'EE','ESTONIA',61,5),(60,'EG','EGYPT',62,5),(61,'ES','ESPAÑA',64,5),(62,'FR','FRANCE',71,6),(64,'GE','GEORGIA',74,5),(65,'HR','CROATIA',92,5),(66,'IT','ITALY',103,5),(67,'JP','JAPAN',106,5),(68,'KG','KYRGYZSTAN',108,5),(69,'KW','KUWAIT',115,5),(70,'KZ','KAZAKHSTAN',117,5),(71,'LT','LITUANIA',71,5),(74,'LU','LUXEMBOURG',126,5),(75,'LV','LATVIA',126,6),(76,'MY','MALAYSIA',0,5),(77,'NI','NICARAGUA',155,5),(78,'NL','PAISES BAJOS',156,2),(79,'NZ','NEW ZEALAND',161,5),(80,'PA','PANAMA',163,5),(81,'PE','PERU',164,5),(82,'PL','POLONIA',14,6),(83,'PT','PORTUGAL',173,5),(84,'RO','RUMANIA',44,5),(85,'RU','RUSSIAN FEDERATION',179,5),(86,'SE','SWEDEN',185,5),(87,'TR','TURKEY',16,5),(88,'UA','UKRAINE',216,5),(89,'US','UNITED STATES OF AMERICA',220,5),(90,'UY','URUGUAY',221,5),(91,'UZ','UZBEKISTAN',16,6),(92,'VE','VENEZUELA',225,5);
 /*!40000 ALTER TABLE `paises` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1105,4 +1117,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-22 23:33:43
+-- Dump completed on 2024-04-28 20:24:53
