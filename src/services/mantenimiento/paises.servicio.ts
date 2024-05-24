@@ -14,7 +14,7 @@ export async function getPais(id: number) {
 }
 
 export async function createPais(pais: PaisCreationAttributes) {
-    
+
     return await paises.create(pais);
 }
 
@@ -73,3 +73,5 @@ export async function paisesJoinAcuerdos() {
 
     return paisesList.map((pais) => pais.dataValues);
 }
+
+//getPaises().then(console.log);
