@@ -27,7 +27,7 @@ router.get('/acuerdos_arancelarios', async (req, res) => {
 
 router.post('/acuerdos_arancelarios', async (req, res) => {
     try {
-        createAcuerdoArancelario(req.body as AcuerdoArancelarioCreationAttributes);
+        await createAcuerdoArancelario(req.body as AcuerdoArancelarioCreationAttributes);
         res.status(201).json({
             ok: true,
             msg: 'Creando acuerdo arancelario',

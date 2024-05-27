@@ -3,7 +3,7 @@ import { Model, DataTypes } from 'sequelize';
 import sequelize from '../../experts.db';
 import { AerolineaCreationAttributes, Aerolinea } from '@typesApp/entities/mantenimiento/AerolineaTypes';
 
-const Aerolineas = sequelize.define<Model<Aerolinea, AerolineaCreationAttributes>>('Aerolineas', {
+const Aerolineas = sequelize.define<Model<Aerolinea, AerolineaCreationAttributes>>('aerolineas', {
     id_aerolinea: {
         type: DataTypes.INTEGER,
         autoIncrement: true,

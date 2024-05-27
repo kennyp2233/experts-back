@@ -19,7 +19,7 @@ router.get('/aduanas', async (req, res) => {
 
 router.post('/aduanas', async (req, res) => {
     try {
-        const resultado = createAduana(req.body as CaeAduanaCreationAttributes);
+        const resultado = await createAduana(req.body as CaeAduanaCreationAttributes);
         res.status(201).json({ ok: true, msg: 'Aduana creada', resultado });
     }
     catch (error: any) {

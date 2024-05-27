@@ -20,7 +20,7 @@ router.get('/aerolineas', async (req, res) => {
 
 router.post('/aerolineas', async (req, res) => {
     try {
-        createAerolinea(req.body as AerolineaCreationAttributes);
+        await createAerolinea(req.body as AerolineaCreationAttributes);
         res.status(201).json({
             ok: true,
             msg: 'Creando aerolinea',
@@ -33,7 +33,7 @@ router.post('/aerolineas', async (req, res) => {
 
 router.put('/aerolineas', async (req, res) => {
     try {
-        updateAerolinea(req.body as Aerolinea);
+        await updateAerolinea(req.body as Aerolinea);
         res.status(200).json({
             ok: true,
             msg: 'Actualizando aerolinea',
