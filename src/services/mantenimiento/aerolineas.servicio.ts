@@ -4,6 +4,8 @@ import Origenes from "@dbModels/mantenimiento/origenes.model";
 import Destinos from "@dbModels/mantenimiento/destinos.model";
 import AerolineasPlantillas from "@dbModels/mantenimiento/aerolineas_plantillas.model"
 import "@db/assosiations/mantenimiento/aerolineas_all_assosiation.as"
+import sequelize from "@db/experts.db";
+import { AerolineasPlantilla, AerolineasPlantillaCreationAttributes } from "@typesApp/entities/mantenimiento/AerolineaPlantillaTypes";
 
 export async function getAerolineas(): Promise<Aerolinea[]> {
     const aerolineasList = await Aerolineas.findAll();
@@ -102,6 +104,33 @@ export async function aerolineaJoinAll() {
         ]
     });
     return respuesta.map((aerolinea) => aerolinea.dataValues);
+}
+
+export async function createAerolineaAndPlantilla(aerolinea: AerolineaCreationAttributes, plantilla: AerolineasPlantillaCreationAttributes) {
+    const transaction = await sequelize.transaction();
+
+    try {
+        // Crear registro en Aerolineas
+        const newAerolinea = await Aerolineas.create(aerolinea, { transaction }) as any;
+
+        // Crear registro en AerolineasPlantillas con la relación 1 a 1
+        const newAerolineaPlantilla = await AerolineasPlantillas.create({
+            id_aerolinea: newAerolinea.id_aerolinea, // Usar el ID generado de `Aerolineas`
+            ...plantilla
+        }, { transaction });
+
+        // Confirmar la transacción
+        await transaction.commit();
+
+        return {
+            aerolinea: newAerolinea.toJSON(),
+            aerolineaPlantilla: newAerolineaPlantilla.toJSON()
+        };
+    } catch (error: any) {
+        // Revertir la transacción en caso de error
+        await transaction.rollback();
+        return { error: error.message };
+    }
 }
 
 //aerolineaJoinAll().then(console.log)

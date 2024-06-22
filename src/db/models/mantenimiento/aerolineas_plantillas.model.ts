@@ -3,10 +3,9 @@ import { DataTypes, Model } from "sequelize";
 import { AerolineasPlantilla, AerolineasPlantillaCreationAttributes } from "@typesApp/entities/mantenimiento/AerolineaPlantillaTypes";
 import Aerolineas from "./aerolineas.model";
 
-const AerolineasPlantillas = sequelize.define<Model<AerolineasPlantilla, AerolineasPlantillaCreationAttributes>>('aerolineas_codigos_plantillas', {
+const AerolineasPlantillas = sequelize.define<Model<AerolineasPlantilla>>('aerolineas_codigos_plantillas', {
     id_aerolinea: {
         type: DataTypes.INTEGER,
-        autoIncrement: true,
         primaryKey: true,
         references: {
             model: Aerolineas,

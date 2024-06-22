@@ -1,5 +1,5 @@
 import express from 'express';
-import { createAerolinea, deleteAerolineas, getAerolinea, getAerolineas, updateAerolinea, aerolineaJoinAll } from '@services/mantenimiento/aerolineas.servicio';
+import { createAerolinea, deleteAerolineas, getAerolinea, getAerolineas, updateAerolinea, aerolineaJoinAll, createAerolineaAndPlantilla } from '@services/mantenimiento/aerolineas.servicio';
 import { Aerolinea, AerolineaCreationAttributes } from '@typesApp/entities/mantenimiento/AerolineaTypes';
 
 
@@ -29,6 +29,27 @@ router.post('/aerolineas', async (req, res) => {
     catch (error: any) {
         res.status(400).json({ ok: false, msg: error.message });
     }
+});
+
+router.post('/aerolineas/aerolineasAndPlantillas', async (req, res) => {
+    try {
+        const { aerolinea, plantilla } = req.body;
+
+        const respuesta = await createAerolineaAndPlantilla(aerolinea, plantilla);
+        // si respuesta contiene error, contexto de posible retorno {error: 'mensaje de error'}
+        if (respuesta.error) {
+            res.status(400).json({ ok: false, msg: respuesta.error });
+        } else {
+            res.status(201).json({
+                ok: true,
+                msg: 'Creando aerolinea y plantilla',
+            });
+        }
+    }
+    catch (error: any) {
+        res.status(400).json({ ok: false, msg: error.message });
+    }
+
 });
 
 router.put('/aerolineas', async (req, res) => {
