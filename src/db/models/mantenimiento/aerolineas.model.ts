@@ -35,6 +35,7 @@ const Aerolineas = sequelize.define<Model<Aerolinea, AerolineaCreationAttributes
     },
     modo: {
         type: DataTypes.STRING,
+        defaultValue: 0,
     },
     maestra_guias_hijas: {
         type: DataTypes.BOOLEAN,
@@ -50,6 +51,7 @@ const Aerolineas = sequelize.define<Model<Aerolinea, AerolineaCreationAttributes
     },
     estado_activo: {
         type: DataTypes.BOOLEAN,
+        defaultValue: true,
     },
     from1: {
         type: DataTypes.INTEGER,
