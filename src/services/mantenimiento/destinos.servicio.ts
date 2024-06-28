@@ -14,13 +14,15 @@ export async function getDestino(id: number) {
 }
 
 export async function createDestino(destino: DestinoCreationAttributes) {
-    return await destinos.create(destino);
+    const destinoData = extraerDestinoDeData(destino);
+    return await destinos.create(destinoData);
 }
 
 export async function updateDestino(destino: Destino) {
     const destinoToUpdate = await destinos.findByPk(destino.id_destino);
+    const destinoData = extraerDestinoDeData(destino);
     if (destinoToUpdate) {
-        await destinos.update(destino, {
+        await destinos.update(destinoData, {
             where: {
                 id_destino: destino.id_destino
             }
@@ -57,8 +59,20 @@ export async function getDestinosJoinPais() {
         include: [
             {
                 model: pais,
-                required: true
+                required: false
             }
         ]
     });
+}
+
+function extraerDestinoDeData(data: any) {
+    return {
+        codigo_destino: data?.codigo_destino,
+        nombre: data?.nombre,
+        aeropuerto: data.aeropuerto,
+        id_pais: data?.paise?.id_pais,
+        sesa_id: data?.sesa_id,
+        leyenda_fito: data?.leyenda_fito,
+        cobro_fitos: data?.cobro_fitos
+    }
 }

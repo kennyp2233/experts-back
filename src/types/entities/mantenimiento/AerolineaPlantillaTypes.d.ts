@@ -10,7 +10,7 @@ export type AerolineasPlantilla = {
     aux2_abrv?: string;
     costo_guia_valor?: number;
     combustible_valor?: number;
-    seguroidad_valor?: number;
+    seguridad_valor?: number;
     aux_calculo_valor?: number;
     otros_valor?: number;
     aux1_valor?: number;
@@ -23,6 +23,7 @@ export type AerolineasPlantilla = {
     combustible_mult?: number;
     seguridad_mult?: number;
     aux_calc_mult?: number;
+    iva_valor?: number;
 };
 
 export type AerolineasPlantillaCreationAttributes = Omit<AerolineasPlantilla, 'id_aerolinea'>;

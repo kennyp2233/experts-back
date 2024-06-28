@@ -10,7 +10,10 @@ import caeAduanaRouter from '@routes/mantenimiento/cae_aduana.route';
 import auth from '@routes/usuarios/auth.route';
 import acuerdosArancelariosRoute from "@routes/mantenimiento/acuerdo_arancelario.route"
 import destinos from '@routes/mantenimiento/destinos.route';
-
+import producto from '@routes/mantenimiento/productos.route';
+import catalogos from '@routes/catalogos/catalogos.route';
+import unidades_medida from '@routes/mantenimiento/unidades_medida.route';
+import tipos_embarque from '@routes/mantenimiento/tipos_embarque.route';
 
 const app = express();
 
@@ -38,7 +41,11 @@ app.use('/api/v1',
     caeAduanaRouter,
     auth,
     acuerdosArancelariosRoute,
-    destinos
+    destinos,
+    producto,
+    catalogos,
+    unidades_medida,
+    tipos_embarque
 );
 
 

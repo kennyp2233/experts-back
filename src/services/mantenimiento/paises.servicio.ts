@@ -14,15 +14,16 @@ export async function getPais(id: number) {
 }
 
 export async function createPais(pais: PaisCreationAttributes) {
-
-    return await paises.create(pais);
+    const paisData = extraerPaisDeData(pais);
+    return await paises.create(paisData);
 }
 
 
 export async function updatePais(pais: Pais) {
     const paisToUpdate = await paises.findByPk(pais.id_pais);
+    const paisData = extraerPaisDeData(pais);
     if (paisToUpdate) {
-        await paises.update(pais, {
+        await paises.update(paisData, {
             where: {
                 id_pais: pais.id_pais
             }
@@ -74,4 +75,11 @@ export async function paisesJoinAcuerdos() {
     return paisesList.map((pais) => pais.dataValues);
 }
 
-//getPaises().then(console.log);
+function extraerPaisDeData(pais: any) {
+    return {
+        nombre: pais?.nombre,
+        siglas_pais: pais?.siglas_pais,
+        pais_id: pais?.pais_id,
+        id_acuerdo: pais?.acuerdos_arancelario?.id_acuerdo
+    };
+}

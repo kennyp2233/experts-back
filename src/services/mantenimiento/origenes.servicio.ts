@@ -16,13 +16,15 @@ export async function getOrigen(id: number) {
 }
 
 export async function createOrigen(origen: OrigenCreationAttributes) {
-    return await origenes.create(origen);
+    const origenData = extraerOrigenDeData(origen);
+    return await origenes.create(origenData as any);
 }
 
 export async function updateOrigen(origen: Origen) {
     const origenToUpdate = await origenes.findByPk(origen.id_origen);
+    const origenData = extraerOrigenDeData(origen);
     if (origenToUpdate) {
-        await origenes.update(origen, {
+        await origenes.update(origenData, {
             where: {
                 id_origen: origen.id_origen
             }
@@ -59,12 +61,22 @@ export async function origenJoinPaisesAduanas() {
         include: [
             {
                 model: paises,
-                required: true
+                required: false
             },
             {
                 model: cae_aduanas,
-                required: true
+                required: false
             }
         ]
     });
+}
+
+function extraerOrigenDeData(data: any) {
+    return {
+        codigo_origen: data?.codigo_origen,
+        nombre: data?.nombre,
+        aeropuerto: data?.aeropuerto,
+        id_pais: data?.paise?.id_pais,
+        id_cae_aduana: data?.cae_aduana?.id_cae_aduana
+    }
 }

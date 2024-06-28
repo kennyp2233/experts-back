@@ -42,7 +42,7 @@ const AerolineasPlantillas = sequelize.define<Model<AerolineasPlantilla>>('aerol
     combustible_valor: {
         type: DataTypes.FLOAT
     },
-    seguroidad_valor: {
+    seguridad_valor: {
         type: DataTypes.FLOAT
     },
     aux_calculo_valor: {
@@ -73,14 +73,31 @@ const AerolineasPlantillas = sequelize.define<Model<AerolineasPlantilla>>('aerol
         type: DataTypes.FLOAT
     },
     combustible_mult: {
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
+        references: {
+            model: 'catalogo_multiplicador_aerolinea',
+            key: 'id_multiplicador'
+        }
     },
     seguridad_mult: {
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
+        references: {
+            model: 'catalogo_multiplicador_aerolinea',
+            key: 'id_multiplicador'
+        }
     },
     aux_calc_mult: {
-        type: DataTypes.INTEGER
-    }
+        type: DataTypes.INTEGER,
+        references: {
+            model: 'catalogo_multiplicador_aerolinea',
+            key: 'id_multiplicador'
+        }
+    },
+
+    iva_valor: {
+        type: DataTypes.FLOAT
+    },
+
 
 });
 

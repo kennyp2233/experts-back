@@ -8,7 +8,7 @@ export type Aerolinea = {
     ciudad?: string;
     pais?: string;
     contacto?: string;
-    modo?: string;
+    id_modo?: number;
     maestra_guias_hijas?: boolean;
     codigo?: string;
     prefijo_awb?: string;
@@ -21,8 +21,9 @@ export type Aerolinea = {
     by2?: number;
     to3?: number;
     by3?: number;
-    afiliado_cass: boolean;
-    guias_virtuales: boolean;
+    afiliado_cass?: boolean;
+    guias_virtuales?: boolean;
+    maestras_guias_hijas?: boolean;
 }
 
 export type AerolineaCreationAttributes = Omit<Aerolinea, 'id_aerolinea'>;

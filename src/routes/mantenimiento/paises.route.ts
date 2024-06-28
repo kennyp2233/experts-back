@@ -25,16 +25,6 @@ router.get('/paises-acuerdos', async (_, res) => {
 });
 
 router.post('/paises', async (req, res) => {
-    if (!Number.isInteger(Number(req.body.pais_id))) {
-        res.status(400).json({ ok: false, msg: 'El id del pais debe ser un número' });
-        return;
-    }
-
-    if (!req.body.id_acuerdo) {
-        res.status(400).json({ ok: false, msg: 'El id del acuerdo es requerido' });
-        return;
-    }
-
     try {
         const pais = await createPais(req.body);
         res.status(201).json({ ok: true, msg: 'Pais creado', pais });
@@ -45,10 +35,6 @@ router.post('/paises', async (req, res) => {
 
 router.put('/paises', async (req, res) => {
 
-    if (!Number.isInteger(Number(req.body.pais_id))) {
-        res.status(400).json({ ok: false, msg: 'El id del pais debe ser un número' });
-        return;
-    }
     try {
         //haz el update con la funcion updatePais(req.body as Pais);
         await updatePais(req.body as Pais);

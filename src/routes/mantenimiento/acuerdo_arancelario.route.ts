@@ -11,7 +11,6 @@ router.get('/acuerdos_arancelarios', async (req, res) => {
     const token = auth?.split(' ')[1];
     const decoded = jwt.decode(token as string) as any;
     if (decoded.admin) {
-        console.log('es admin');
         try {
             if (req.query.id) {
                 res.send(await getAcuerdoArancelario(Number.parseInt(req.query.id as string)));

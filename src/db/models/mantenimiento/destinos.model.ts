@@ -11,9 +11,11 @@ const Destinos = sequelize.define<Model<Destino, DestinoCreationAttributes>>('de
     },
     codigo_destino: {
         type: DataTypes.STRING,
+        defaultValue: null,
     },
     nombre: {
         type: DataTypes.STRING,
+        defaultValue: null,
     },
     aeropuerto: {
         type: DataTypes.STRING,
@@ -24,6 +26,7 @@ const Destinos = sequelize.define<Model<Destino, DestinoCreationAttributes>>('de
             model: Paises,
             key: 'id_pais',
         },
+        defaultValue: null,
     },
     sesa_id: {
         type: DataTypes.STRING,

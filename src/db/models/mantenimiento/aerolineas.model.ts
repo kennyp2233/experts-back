@@ -33,9 +33,12 @@ const Aerolineas = sequelize.define<Model<Aerolinea, AerolineaCreationAttributes
     contacto: {
         type: DataTypes.STRING,
     },
-    modo: {
-        type: DataTypes.STRING,
-        defaultValue: 0,
+    id_modo: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: 'catalogo_modo_aerolinea',
+            key: 'id_modo',
+        },
     },
     maestra_guias_hijas: {
         type: DataTypes.BOOLEAN,
@@ -104,10 +107,13 @@ const Aerolineas = sequelize.define<Model<Aerolinea, AerolineaCreationAttributes
     },
     afiliado_cass: {
         type: DataTypes.BOOLEAN,
+        defaultValue: false,
     },
     guias_virtuales: {
         type: DataTypes.BOOLEAN,
+        defaultValue: false,
     },
+
 });
 
 export default Aerolineas;
