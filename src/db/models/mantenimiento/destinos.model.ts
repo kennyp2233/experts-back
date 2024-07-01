@@ -32,7 +32,7 @@ const Destinos = sequelize.define<Model<Destino, DestinoCreationAttributes>>('de
         type: DataTypes.STRING,
     },
     leyenda_fito: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
     },
     cobro_fitos: {
         type: DataTypes.BOOLEAN,

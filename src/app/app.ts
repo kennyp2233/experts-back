@@ -14,6 +14,8 @@ import producto from '@routes/mantenimiento/productos.route';
 import catalogos from '@routes/catalogos/catalogos.route';
 import unidades_medida from '@routes/mantenimiento/unidades_medida.route';
 import tipos_embarque from '@routes/mantenimiento/tipos_embarque.route';
+import embarcadores from '@routes/mantenimiento/embarcadores.route';
+import consignatario from '@routes/mantenimiento/consignatario.route';
 
 const app = express();
 
@@ -45,7 +47,9 @@ app.use('/api/v1',
     producto,
     catalogos,
     unidades_medida,
-    tipos_embarque
+    tipos_embarque,
+    embarcadores,
+    consignatario
 );
 
 
