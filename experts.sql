@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.33, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: experts_db
 -- ------------------------------------------------------
--- Server version	8.0.36
+-- Server version	8.0.35
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -122,7 +122,7 @@ CREATE TABLE `aerolineas` (
 
 LOCK TABLES `aerolineas` WRITE;
 /*!40000 ALTER TABLE `aerolineas` DISABLE KEYS */;
-INSERT INTO `aerolineas` VALUES (1,'ACG AIR CARGO GERMANY','1792402956001','GEBÄUDE 1335||D-55483 HAHN AIRPORT||GERMANY||','496543508462',NULL,NULL,'GERMANY',NULL,1,1,'6U','730','6807',1,1,1,1,1,1,1,1,0,0);
+INSERT INTO `aerolineas` VALUES (1,'ACG AIR CARGO GERMANY','1792402956001','GEBÄUDE 1335||D-55483 HAHN AIRPORT||GERMANY||','496543508462','',NULL,'GERMANY',NULL,1,1,'6U','730','6807',1,1,1,1,1,1,1,1,0,0);
 /*!40000 ALTER TABLE `aerolineas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -389,7 +389,7 @@ CREATE TABLE `clientes` (
   `cuenta_contable` varchar(45) DEFAULT NULL,
   `nombre_factura` varchar(45) DEFAULT NULL,
   `ruc_factura` varchar(45) DEFAULT NULL,
-  `direccion_fatura` varchar(45) DEFAULT NULL,
+  `direccion_factura` varchar(45) DEFAULT NULL,
   `telefono_factura` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id_clientes`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -1264,4 +1264,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-06-30 20:08:17
+-- Dump completed on 2024-07-01 19:33:18

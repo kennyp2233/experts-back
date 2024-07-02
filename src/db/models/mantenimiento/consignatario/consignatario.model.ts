@@ -2,7 +2,7 @@ import { Model, DataTypes } from 'sequelize';
 import sequelize from '@db/experts.db';
 import { Consignatario, ConsignatarioCreationAttributes } from '@typesApp/entities/mantenimiento/consignatario/ConsignatarioTypes';
 
-const Consignatarios = sequelize.define<Model<Consignatario, ConsignatarioCreationAttributes>>('consignatarios', {
+const Consignatarios = sequelize.define<Model<Consignatario, ConsignatarioCreationAttributes>>('consignatario', {
     id_consignatario: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -54,7 +54,7 @@ const Consignatarios = sequelize.define<Model<Consignatario, ConsignatarioCreati
     },
 
 }, {
-    tableName: 'consignatarios',
+    tableName: 'consignatario',
     freezeTableName: true,
 });
 

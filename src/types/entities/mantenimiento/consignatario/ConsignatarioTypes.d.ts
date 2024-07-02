@@ -51,7 +51,7 @@ export type ConsignatarioFito = {
 export type ConsignatarioGuiaH = {
     id_consignatario: number;
     guia_h_consignee?: string;
-    guia_h_consignee_address?: string;
+    guia_h_name_adress?: string;
     guia_h_notify?: string;
 }
 
@@ -59,7 +59,7 @@ export type ConsignatarioGuiaM = {
     id_consignatario: number;
     id_destino?: number;
     guia_m_consignee?: string;
-    guia_m_name_adress?: string;
+    guia_m_name_address?: string;
     guia_m_notify?: string;
 }
 

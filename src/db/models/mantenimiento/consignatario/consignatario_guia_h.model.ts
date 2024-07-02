@@ -16,7 +16,7 @@ const ConsignatarioGuiaHs = sequelize.define<Model<ConsignatarioGuiaH>>('consign
         type: DataTypes.STRING,
         allowNull: true,
     },
-    guia_h_consignee_address: {
+    guia_h_name_adress: {
         type: DataTypes.STRING,
         allowNull: true,
     },

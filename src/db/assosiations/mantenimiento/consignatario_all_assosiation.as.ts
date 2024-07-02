@@ -5,7 +5,9 @@ import ConsignatarioFito from "@dbModels/mantenimiento/consignatario/consignatar
 import ConsignatarioGuiaHs from "@dbModels/mantenimiento/consignatario/consignatario_guia_h.model";
 import ConsignatarioGuiaMs from "@dbModels/mantenimiento/consignatario/consignatario_guia_m.model";
 import ConsignatarioTransmisions from "@dbModels/mantenimiento/consignatario/consignatario_transmision.model";
-
+import Destinos from "@dbModels/mantenimiento/destinos.model";
+import Embarcadores from "@dbModels/mantenimiento/embarcadores.model";
+import Clientes from "@dbModels/mantenimiento/clientes.model";
 // consignatario es la tabla madre de todas las tablas de consignatario
 // todo es relacion 1 a 1
 
@@ -39,6 +41,18 @@ Consignatarios.hasOne(ConsignatarioTransmisions, {
     as: 'transmision',
 });
 
+Consignatarios.hasOne(Embarcadores, {
+    foreignKey: 'id_embarcador',
+    as: 'embarcador',
+});
+
+Consignatarios.hasOne(Clientes, {
+    foreignKey: 'id_clientes',
+    as: 'cliente',
+});
+
+
+
 // belongsTo
 ConsignatarioCaeSices.belongsTo(Consignatarios, {
     foreignKey: 'id_consignatario',
@@ -70,3 +84,24 @@ ConsignatarioTransmisions.belongsTo(Consignatarios, {
     as: 'consignatario',
 });
 
+Embarcadores.belongsTo(Consignatarios, {
+    foreignKey: 'id_embarcador',
+    as: 'consignatario',
+});
+
+Clientes.belongsTo(Consignatarios, {
+    foreignKey: 'id_clientes',
+    as: 'consignatario',
+});
+
+//
+
+ConsignatarioGuiaMs.hasOne(Destinos, {
+    foreignKey: 'id_destino',
+    as: 'destino',
+});
+
+Destinos.belongsTo(ConsignatarioGuiaMs, {
+    foreignKey: 'id_destino',
+    as: 'guia_m',
+});
