@@ -47,3 +47,5 @@ router.delete('/clientes', async (req, res) => {
         res.status(400).json({ ok: false, msg: error.message });
     }
 });
+
+export default router;

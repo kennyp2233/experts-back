@@ -5,7 +5,7 @@ import ConsignatarioFito from "@dbModels/mantenimiento/consignatario/consignatar
 import ConsignatarioGuiaHs from "@dbModels/mantenimiento/consignatario/consignatario_guia_h.model";
 import ConsignatarioGuiaMs from "@dbModels/mantenimiento/consignatario/consignatario_guia_m.model";
 import ConsignatarioTransmisions from "@dbModels/mantenimiento/consignatario/consignatario_transmision.model";
-
+import TipoDocumento from "@dbModels/catalogos/consignatario/consignatario_tipo_documento.model";
 import Embarcadores from "@dbModels/mantenimiento/embarcadores.model";
 import Clientes from "@dbModels/mantenimiento/clientes.model";
 import Destinos from "@dbModels/mantenimiento/destinos.model";
@@ -20,6 +20,13 @@ export async function getConsignatariosJoinAll() {
             {
                 model: ConsignatarioCaeSices,
                 as: 'cae_sice',
+                include: [
+                    {
+                        model: TipoDocumento,
+                        as: 'tipo_documento',
+                        required: false,
+                    },
+                ]
             },
             {
                 model: ConsignatarioFacturaciones,
@@ -60,18 +67,19 @@ export async function getConsignatariosJoinAll() {
 
     })
 
+
     // mezclar todos los atributos de cada include en un solo objeto
     return respuesta.map((consignatario: any) => {
         return {
-            ...consignatario.dataValues,
-            ...consignatario.cae_sice.dataValues,
-            ...consignatario.facturacion.dataValues,
-            ...consignatario.fito.dataValues,
-            ...consignatario.guia_h.dataValues,
-            ...consignatario.guia_m.dataValues,
-            ...consignatario.transmision.dataValues,
-            ...consignatario.embarcador.dataValues,
-            ...consignatario.cliente.dataValues,
+            ...consignatario?.dataValues,
+            ...consignatario?.cae_sice?.dataValues,
+            ...consignatario?.facturacion?.dataValues,
+            ...consignatario?.fito?.dataValues,
+            ...consignatario?.guia_h?.dataValues,
+            ...consignatario?.guia_m?.dataValues,
+            ...consignatario?.transmision?.dataValues,
+            ...consignatario?.embarcador?.dataValues,
+            ...consignatario?.cliente?.dataValues,
         };
     });
 }

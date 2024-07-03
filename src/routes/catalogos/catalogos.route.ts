@@ -5,6 +5,7 @@ import { getCatalogoProductoOpciones, getCatalogoProductosOpciones } from '@serv
 import { getCatalogoProductoUnidad, getCatalogoProductosUnidad } from '@services/catalogos/productos/catalogo_productos_unidad.servicio';
 import { getTiposCarga } from '@services/catalogos/tipos_embarque/tipos_carga.servicio';
 import { getTiposEmbalaje } from '@services/catalogos/tipos_embarque/tipos_embajale.servicio';
+import { getTiposDocumento } from '@services/catalogos/consignatario/consignatario_tipo_documento.servicio';
 
 const router = express.Router();
 
@@ -72,6 +73,15 @@ router.get('/catalogos/tipos-embarque/carga', async (req, res) => {
 router.get('/catalogos/tipos-embarque/embalaje', async (req, res) => {
     try {
         res.send(await getTiposEmbalaje());
+    }
+    catch (error: any) {
+        res.status(400).json({ ok: false, msg: error.message });
+    }
+});
+
+router.get('/catalogos/tipo-documento', async (req, res) => {
+    try {
+        res.send(await getTiposDocumento());
     }
     catch (error: any) {
         res.status(400).json({ ok: false, msg: error.message });

@@ -16,6 +16,7 @@ import unidades_medida from '@routes/mantenimiento/unidades_medida.route';
 import tipos_embarque from '@routes/mantenimiento/tipos_embarque.route';
 import embarcadores from '@routes/mantenimiento/embarcadores.route';
 import consignatario from '@routes/mantenimiento/consignatario.route';
+import clientes from '@routes/mantenimiento/clientes.route';
 
 const app = express();
 
@@ -49,7 +50,8 @@ app.use('/api/v1',
     unidades_medida,
     tipos_embarque,
     embarcadores,
-    consignatario
+    consignatario,
+    clientes
 );
 
 

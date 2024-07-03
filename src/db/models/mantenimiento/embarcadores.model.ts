@@ -39,7 +39,7 @@ const Embarcadores = sequelize.define<Model<Embarcador, EmbarcadorCreationAttrib
         type: DataTypes.STRING,
         allowNull: true,
     },
-    codigo_pais: {
+    embarcador_codigo_pais: {
         type: DataTypes.STRING,
         allowNull: true,
     },

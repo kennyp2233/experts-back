@@ -8,7 +8,7 @@ export type Embarcador = {
     ciudad?: string,
     provincia?: string,
     pais?: string,
-    codigo_pais?: string,
+    embarcador_codigo_pais?: string,
     handling?: number,
     estado?: boolean,
 }

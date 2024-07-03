@@ -20,15 +20,11 @@ const ConsignatarioCaeSices = sequelize.define<Model<ConsignatarioCaeSice>>('con
         type: DataTypes.STRING,
         allowNull: true,
     },
-    consignee_ciudad: {
+    consignee_documento: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    consignee_provincia: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
-    consignee_pais: {
+    consignee_siglas_pais: {
         type: DataTypes.STRING,
         allowNull: true,
     },
@@ -40,15 +36,11 @@ const ConsignatarioCaeSices = sequelize.define<Model<ConsignatarioCaeSice>>('con
         type: DataTypes.STRING,
         allowNull: true,
     },
-    notify_ciudad: {
+    notify_documento: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    notify_provincia: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
-    notify_pais: {
+    notify_siglas_pais: {
         type: DataTypes.STRING,
         allowNull: true,
     },
@@ -60,17 +52,37 @@ const ConsignatarioCaeSices = sequelize.define<Model<ConsignatarioCaeSice>>('con
         type: DataTypes.STRING,
         allowNull: true,
     },
-    hawb_ciudad: {
+    hawb_documento: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    hawb_provincia: {
+    hawb_siglas_pais: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    hawb_pais: {
-        type: DataTypes.STRING,
+    consignee_tipo_documento: {
+        type: DataTypes.INTEGER,
         allowNull: true,
+        references: {
+            model: 'tipo_documento',
+            key: 'id_tipo_documento',
+        }
+    },
+    notify_tipo_documento: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+            model: 'tipo_documento',
+            key: 'id_tipo_documento',
+        }
+    },
+    hawb_tipo_documento: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+            model: 'tipo_documento',
+            key: 'id_tipo_documento',
+        }
     },
 }, {
     tableName: 'consignatario_cae_sice',

@@ -17,19 +17,19 @@ export type ConsignatarioCaeSice = {
     id_consignatario: number;
     consignee_nombre?: string;
     consignee_direccion?: string;
-    consignee_ciudad?: string;
-    consignee_provincia?: string;
-    consignee_pais?: string;
+    consignee_documento?: string;
+    consignee_siglas_pais?: string;
     notify_nombre?: string;
     notify_direccion?: string;
-    notify_ciudad?: string;
-    notify_provincia?: string;
-    notify_pais?: string;
+    notify_documento?: string;
+    notify_siglas_pais?: string;
     hawb_nombre?: string;
     hawb_direccion?: string;
-    hawb_ciudad?: string;
-    hawb_provincia?: string;
-    hawb_pais?: string;
+    hawb_documento?: string;
+    hawb_siglas_pais?: string;
+    consignee_tipo_documento?: number;
+    notify_tipo_documento?: number;
+    hawb_tipo_documento?: number;
 }
 
 export type ConsignatarioFacturacion = {

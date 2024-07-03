@@ -37,7 +37,7 @@ const Clientes = sequelize.define<Model<Cliente, ClienteCreationAttributes>>('cl
         type: DataTypes.STRING,
         allowNull: true,
     },
-    codigo_pais: {
+    cliente_codigo_pais: {
         type: DataTypes.STRING,
         allowNull: true,
     },

@@ -8,6 +8,7 @@ import ConsignatarioTransmisions from "@dbModels/mantenimiento/consignatario/con
 import Destinos from "@dbModels/mantenimiento/destinos.model";
 import Embarcadores from "@dbModels/mantenimiento/embarcadores.model";
 import Clientes from "@dbModels/mantenimiento/clientes.model";
+import TipoDocumento from "@dbModels/catalogos/consignatario/consignatario_tipo_documento.model";
 // consignatario es la tabla madre de todas las tablas de consignatario
 // todo es relacion 1 a 1
 
@@ -104,4 +105,14 @@ ConsignatarioGuiaMs.hasOne(Destinos, {
 Destinos.belongsTo(ConsignatarioGuiaMs, {
     foreignKey: 'id_destino',
     as: 'guia_m',
+});
+
+ConsignatarioCaeSices.hasOne(TipoDocumento, {
+    foreignKey: 'id_tipo_documento',
+    as: 'tipo_documento',
+});
+
+TipoDocumento.belongsTo(ConsignatarioCaeSices, {
+    foreignKey: 'id_tipo_documento',
+    as: 'cae_sice',
 });

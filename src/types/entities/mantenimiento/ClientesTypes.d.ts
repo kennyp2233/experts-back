@@ -7,7 +7,7 @@ export type Cliente = {
     email?: string;
     ciudad?: string;
     pais?: string;
-    codigo_pais?: string;
+    cliente_codigo_pais?: string;
     fitos_valor?: number;
     form_a?: number;
     transport?: number;
