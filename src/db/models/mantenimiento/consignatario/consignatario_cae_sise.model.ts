@@ -64,7 +64,7 @@ const ConsignatarioCaeSices = sequelize.define<Model<ConsignatarioCaeSice>>('con
         type: DataTypes.INTEGER,
         allowNull: true,
         references: {
-            model: 'tipo_documento',
+            model: 'catalogo_tipo_documento',
             key: 'id_tipo_documento',
         }
     },
@@ -72,7 +72,7 @@ const ConsignatarioCaeSices = sequelize.define<Model<ConsignatarioCaeSice>>('con
         type: DataTypes.INTEGER,
         allowNull: true,
         references: {
-            model: 'tipo_documento',
+            model: 'catalogo_tipo_documento',
             key: 'id_tipo_documento',
         }
     },
@@ -80,7 +80,7 @@ const ConsignatarioCaeSices = sequelize.define<Model<ConsignatarioCaeSice>>('con
         type: DataTypes.INTEGER,
         allowNull: true,
         references: {
-            model: 'tipo_documento',
+            model: 'catalogo_ tipo_documento',
             key: 'id_tipo_documento',
         }
     },

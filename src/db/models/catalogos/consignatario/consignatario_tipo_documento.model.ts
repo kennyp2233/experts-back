@@ -3,7 +3,7 @@ import sequelize from '@db/experts.db';
 
 import { TipoDocumento, TipoDocumentoCreationAttributes } from '@typesApp/entities/catalogos/consignatario/TipoDocumentoTypes';
 
-const TipoDocumento = sequelize.define<Model<TipoDocumento, TipoDocumentoCreationAttributes>>('tipo_documento', {
+const TipoDocumento = sequelize.define<Model<TipoDocumento, TipoDocumentoCreationAttributes>>('catalogo_tipo_documento', {
     id_tipo_documento: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -15,7 +15,7 @@ const TipoDocumento = sequelize.define<Model<TipoDocumento, TipoDocumentoCreatio
     },
 },
     {
-        tableName: 'tipo_documento',  // especifica explícitamente el nombre de la tabla
+        tableName: 'catalogo_tipo_documento',  // especifica explícitamente el nombre de la tabla
         freezeTableName: true,  // desactiva la pluralización automática
     });
 
