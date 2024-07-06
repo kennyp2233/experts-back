@@ -364,6 +364,30 @@ INSERT INTO `catalogo_productos_unidad_medida` VALUES (1,'BUNCHES'),(2,'KG'),(3,
 UNLOCK TABLES;
 
 --
+-- Table structure for table `catalogo_tipo_documento`
+--
+
+DROP TABLE IF EXISTS `catalogo_tipo_documento`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `catalogo_tipo_documento` (
+  `id_tipo_documento` int NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(45) NOT NULL,
+  PRIMARY KEY (`id_tipo_documento`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `catalogo_tipo_documento`
+--
+
+LOCK TABLES `catalogo_tipo_documento` WRITE;
+/*!40000 ALTER TABLE `catalogo_tipo_documento` DISABLE KEYS */;
+INSERT INTO `catalogo_tipo_documento` VALUES (1,'RUC'),(2,'CEDULA'),(3,'PASAPORTE'),(4,'CATASTRO'),(5,'OTROS');
+/*!40000 ALTER TABLE `catalogo_tipo_documento` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `clientes`
 --
 
@@ -379,7 +403,7 @@ CREATE TABLE `clientes` (
   `email` varchar(45) DEFAULT NULL,
   `ciudad` varchar(45) DEFAULT NULL,
   `pais` varchar(45) DEFAULT NULL,
-  `codigo_pais` varchar(45) DEFAULT NULL,
+  `cliente_codigo_pais` varchar(45) DEFAULT NULL,
   `fitos_valor` decimal(10,2) DEFAULT NULL,
   `form_a` decimal(10,2) DEFAULT NULL,
   `transport` decimal(10,2) DEFAULT NULL,
@@ -392,7 +416,7 @@ CREATE TABLE `clientes` (
   `direccion_factura` varchar(45) DEFAULT NULL,
   `telefono_factura` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id_clientes`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -401,6 +425,7 @@ CREATE TABLE `clientes` (
 
 LOCK TABLES `clientes` WRITE;
 /*!40000 ALTER TABLE `clientes` DISABLE KEYS */;
+INSERT INTO `clientes` VALUES (1,'ABBU FLOWER','9999999999999',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'ALEKCEY',NULL,'MOSCOW RUSIA',NULL);
 /*!40000 ALTER TABLE `clientes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -427,7 +452,7 @@ CREATE TABLE `consignatario` (
   KEY `fk_c_embarcador_idx` (`id_embarcador`),
   CONSTRAINT `fk_c_cliente` FOREIGN KEY (`id_cliente`) REFERENCES `clientes` (`id_clientes`),
   CONSTRAINT `fk_c_embarcador` FOREIGN KEY (`id_embarcador`) REFERENCES `embarcadores` (`id_embarcador`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -436,6 +461,7 @@ CREATE TABLE `consignatario` (
 
 LOCK TABLES `consignatario` WRITE;
 /*!40000 ALTER TABLE `consignatario` DISABLE KEYS */;
+INSERT INTO `consignatario` VALUES (1,'A4',NULL,NULL,1,1,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `consignatario` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -450,21 +476,27 @@ CREATE TABLE `consignatario_cae_sice` (
   `id_consignatario` int NOT NULL,
   `consignee_nombre` varchar(45) DEFAULT NULL,
   `consignee_direccion` varchar(45) DEFAULT NULL,
-  `consignee_ciudad` varchar(45) DEFAULT NULL,
-  `consignee_provincia` varchar(45) DEFAULT NULL,
-  `consignee_pais` varchar(45) DEFAULT NULL,
+  `consignee_documento` varchar(45) DEFAULT NULL,
+  `consignee_siglas_pais` varchar(45) DEFAULT NULL,
   `notify_nombre` varchar(45) DEFAULT NULL,
   `notify_direccion` varchar(45) DEFAULT NULL,
-  `notify_ciudad` varchar(45) DEFAULT NULL,
-  `notify_provincia` varchar(45) DEFAULT NULL,
-  `notify_pais` varchar(45) DEFAULT NULL,
+  `notify_documento` varchar(45) DEFAULT NULL,
+  `notify_siglas_pais` varchar(45) DEFAULT NULL,
   `hawb_nombre` varchar(45) DEFAULT NULL,
   `hawb_direccion` varchar(45) DEFAULT NULL,
-  `hawb_ciudad` varchar(45) DEFAULT NULL,
-  `hawb_provincia` varchar(45) DEFAULT NULL,
-  `hawb_pais` varchar(45) DEFAULT NULL,
+  `hawb_documento` varchar(45) DEFAULT NULL,
+  `hawb_siglas_pais` varchar(45) DEFAULT NULL,
+  `consignee_tipo_documento` int DEFAULT NULL,
+  `notify_tipo_documento` int DEFAULT NULL,
+  `hawb_tipo_documento` int DEFAULT NULL,
   PRIMARY KEY (`id_consignatario`),
   KEY `fk_cae_sice_consignatrio_idx` (`id_consignatario`),
+  KEY `fk_c_s_doc1_idx` (`consignee_tipo_documento`),
+  KEY `fk_c_s_doc2_idx` (`notify_tipo_documento`),
+  KEY `fk_c_s_doc3_idx` (`hawb_tipo_documento`),
+  CONSTRAINT `fk_c_s_doc1` FOREIGN KEY (`consignee_tipo_documento`) REFERENCES `catalogo_tipo_documento` (`id_tipo_documento`),
+  CONSTRAINT `fk_c_s_doc2` FOREIGN KEY (`notify_tipo_documento`) REFERENCES `catalogo_tipo_documento` (`id_tipo_documento`),
+  CONSTRAINT `fk_c_s_doc3` FOREIGN KEY (`hawb_tipo_documento`) REFERENCES `catalogo_tipo_documento` (`id_tipo_documento`),
   CONSTRAINT `fk_cae_sice_consignatrio` FOREIGN KEY (`id_consignatario`) REFERENCES `consignatario` (`id_consignatario`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -558,6 +590,7 @@ CREATE TABLE `consignatario_guia_h` (
 
 LOCK TABLES `consignatario_guia_h` WRITE;
 /*!40000 ALTER TABLE `consignatario_guia_h` DISABLE KEYS */;
+INSERT INTO `consignatario_guia_h` VALUES (1,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `consignatario_guia_h` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -589,6 +622,29 @@ CREATE TABLE `consignatario_guia_m` (
 LOCK TABLES `consignatario_guia_m` WRITE;
 /*!40000 ALTER TABLE `consignatario_guia_m` DISABLE KEYS */;
 /*!40000 ALTER TABLE `consignatario_guia_m` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `consignatario_tipo_documento`
+--
+
+DROP TABLE IF EXISTS `consignatario_tipo_documento`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `consignatario_tipo_documento` (
+  `id_tipo_documento` int NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(45) NOT NULL,
+  PRIMARY KEY (`id_tipo_documento`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `consignatario_tipo_documento`
+--
+
+LOCK TABLES `consignatario_tipo_documento` WRITE;
+/*!40000 ALTER TABLE `consignatario_tipo_documento` DISABLE KEYS */;
+/*!40000 ALTER TABLE `consignatario_tipo_documento` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -845,7 +901,7 @@ CREATE TABLE `embarcadores` (
   `ciudad` varchar(45) DEFAULT NULL,
   `provincia` varchar(45) DEFAULT NULL,
   `pais` varchar(45) DEFAULT NULL,
-  `codigo_pais` varchar(45) DEFAULT NULL,
+  `embarcador_codigo_pais` varchar(45) DEFAULT NULL,
   `handling` decimal(10,2) DEFAULT NULL,
   `estado` tinyint DEFAULT '1',
   PRIMARY KEY (`id_embarcador`)
@@ -1264,4 +1320,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-07-01 19:33:18
+-- Dump completed on 2024-07-06 14:51:04
