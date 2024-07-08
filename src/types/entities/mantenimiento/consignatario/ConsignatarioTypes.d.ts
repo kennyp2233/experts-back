@@ -34,9 +34,10 @@ export type ConsignatarioCaeSice = {
 
 export type ConsignatarioFacturacion = {
     id_consignatario: number;
-    nombre?: string;
-    ruc?: string;
-    direccion?: string;
+    factura_nombre?: string;
+    factura_ruc?: string;
+    factura_direccion?: string;
+    factura_telefono?: string;
 }
 
 export type ConsignatarioFito = {
@@ -65,23 +66,23 @@ export type ConsignatarioGuiaM = {
 
 export type ConsignatarioTransmision = {
     id_consignatario: number;
-    consignee_nombre?: string;
-    consignee_direccion?: string;
-    consignee_ciudad?: string;
-    consignee_provincia?: string;
-    consignee_pais?: string;
-    consignee_eueori?: string;
-    notify_nombre?: string;
-    notify_direccion?: string;
-    notify_ciudad?: string;
-    notify_provincia?: string;
-    notify_pais?: string;
-    notify_eueori?: string;
-    hawb_nombre?: string;
-    hawb_direccion?: string;
-    hawb_ciudad?: string;
-    hawb_provincia?: string;
-    hawb_pais?: string;
-    hawb_eueori?: string;
+    consignee_nombre_trans?: string;
+    consignee_direccion_trans?: string;
+    consignee_ciudad_trans?: string;
+    consignee_provincia_trans?: string;
+    consignee_pais_trans?: string;
+    consignee_eueori_trans?: string;
+    notify_nombre_trans?: string;
+    notify_direccion_trans?: string;
+    notify_ciudad_trans?: string;
+    notify_provincia_trans?: string;
+    notify_pais_trans?: string;
+    notify_eueori_trans?: string;
+    hawb_nombre_trans?: string;
+    hawb_direccion_trans?: string;
+    hawb_ciudad_trans?: string;
+    hawb_provincia_trans?: string;
+    hawb_pais_trans?: string;
+    hawb_eueori_trans?: string;
 }
 

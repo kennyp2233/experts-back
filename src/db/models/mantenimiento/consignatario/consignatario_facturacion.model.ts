@@ -12,15 +12,19 @@ const ConsignatarioFacturaciones = sequelize.define<Model<ConsignatarioFacturaci
             key: 'id_consignatario',
         },
     },
-    nombre: {
+    factura_nombre: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    ruc: {
+    factura_ruc: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    direccion: {
+    factura_direccion: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    factura_telefono: {
         type: DataTypes.STRING,
         allowNull: true,
     },

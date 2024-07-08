@@ -12,75 +12,75 @@ const ConsignatarioTransmisions = sequelize.define<Model<ConsignatarioTransmisio
             key: 'id_consignatario',
         },
     },
-    consignee_nombre: {
+    consignee_nombre_trans: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    consignee_direccion: {
+    consignee_direccion_trans: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    consignee_ciudad: {
+    consignee_ciudad_trans: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    consignee_provincia: {
+    consignee_provincia_trans: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    consignee_pais: {
+    consignee_pais_trans: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    consignee_eueori: {
+    consignee_eueori_trans: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    notify_nombre: {
+    notify_nombre_trans: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    notify_direccion: {
+    notify_direccion_trans: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    notify_ciudad: {
+    notify_ciudad_trans: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    notify_provincia: {
+    notify_provincia_trans: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    notify_pais: {
+    notify_pais_trans: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    notify_eueori: {
+    notify_eueori_trans: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    hawb_nombre: {
+    hawb_nombre_trans: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    hawb_direccion: {
+    hawb_direccion_trans: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    hawb_ciudad: {
+    hawb_ciudad_trans: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    hawb_provincia: {
+    hawb_provincia_trans: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    hawb_pais: {
+    hawb_pais_trans: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    hawb_eueori: {
+    hawb_eueori_trans: {
         type: DataTypes.STRING,
         allowNull: true,
     },

@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.33, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: experts_db
 -- ------------------------------------------------------
--- Server version	8.0.35
+-- Server version	8.0.38
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -452,7 +452,7 @@ CREATE TABLE `consignatario` (
   KEY `fk_c_embarcador_idx` (`id_embarcador`),
   CONSTRAINT `fk_c_cliente` FOREIGN KEY (`id_cliente`) REFERENCES `clientes` (`id_clientes`),
   CONSTRAINT `fk_c_embarcador` FOREIGN KEY (`id_embarcador`) REFERENCES `embarcadores` (`id_embarcador`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -461,7 +461,6 @@ CREATE TABLE `consignatario` (
 
 LOCK TABLES `consignatario` WRITE;
 /*!40000 ALTER TABLE `consignatario` DISABLE KEYS */;
-INSERT INTO `consignatario` VALUES (1,'A4',NULL,NULL,1,1,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `consignatario` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -519,9 +518,10 @@ DROP TABLE IF EXISTS `consignatario_facturacion`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `consignatario_facturacion` (
   `id_consignatario` int NOT NULL,
-  `nombre` varchar(45) DEFAULT NULL,
-  `ruc` varchar(45) DEFAULT NULL,
-  `direccion` text,
+  `factura_nombre` varchar(45) DEFAULT NULL,
+  `factura_ruc` varchar(45) DEFAULT NULL,
+  `factura_direccion` text,
+  `factura_telefono` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id_consignatario`),
   KEY `fk_c_f_consignatario_idx` (`id_consignatario`),
   CONSTRAINT `fk_c_f_consignatario_a` FOREIGN KEY (`id_consignatario`) REFERENCES `consignatario` (`id_consignatario`)
@@ -590,7 +590,6 @@ CREATE TABLE `consignatario_guia_h` (
 
 LOCK TABLES `consignatario_guia_h` WRITE;
 /*!40000 ALTER TABLE `consignatario_guia_h` DISABLE KEYS */;
-INSERT INTO `consignatario_guia_h` VALUES (1,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `consignatario_guia_h` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -656,24 +655,24 @@ DROP TABLE IF EXISTS `consignatario_transmision`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `consignatario_transmision` (
   `id_consignatario` int NOT NULL,
-  `consignee_nombre` varchar(45) DEFAULT NULL,
-  `consignee_direccion` varchar(45) DEFAULT NULL,
-  `consignee_ciudad` varchar(45) DEFAULT NULL,
-  `consignee_provincia` varchar(45) DEFAULT NULL,
-  `consignee_pais` varchar(45) DEFAULT NULL,
-  `consignee_eueori` varchar(45) DEFAULT NULL,
-  `notify_nombre` varchar(45) DEFAULT NULL,
-  `notify_direccion` varchar(45) DEFAULT NULL,
-  `notify_ciudad` varchar(45) DEFAULT NULL,
-  `notify_provincia` varchar(45) DEFAULT NULL,
-  `notify_pais` varchar(45) DEFAULT NULL,
-  `notify_eueori` varchar(45) DEFAULT NULL,
-  `hawb_nombre` varchar(45) DEFAULT NULL,
-  `hawb_direccion` varchar(45) DEFAULT NULL,
-  `hawb_ciudad` varchar(45) DEFAULT NULL,
-  `hawb_provincia` varchar(45) DEFAULT NULL,
-  `hawb_pais` varchar(45) DEFAULT NULL,
-  `hawb_eueori` varchar(45) DEFAULT NULL,
+  `consignee_nombre_trans` varchar(45) DEFAULT NULL,
+  `consignee_direccion_trans` varchar(45) DEFAULT NULL,
+  `consignee_ciudad_trans` varchar(45) DEFAULT NULL,
+  `consignee_provincia_trans` varchar(45) DEFAULT NULL,
+  `consignee_pais_trans` varchar(45) DEFAULT NULL,
+  `consignee_eueori_trans` varchar(45) DEFAULT NULL,
+  `notify_nombre_trans` varchar(45) DEFAULT NULL,
+  `notify_direccion_trans` varchar(45) DEFAULT NULL,
+  `notify_ciudad_trans` varchar(45) DEFAULT NULL,
+  `notify_provincia_trans` varchar(45) DEFAULT NULL,
+  `notify_pais_trans` varchar(45) DEFAULT NULL,
+  `notify_eueori_trans` varchar(45) DEFAULT NULL,
+  `hawb_nombre_trans` varchar(45) DEFAULT NULL,
+  `hawb_direccion_trans` varchar(45) DEFAULT NULL,
+  `hawb_ciudad_trans` varchar(45) DEFAULT NULL,
+  `hawb_provincia_trans` varchar(45) DEFAULT NULL,
+  `hawb_pais_trans` varchar(45) DEFAULT NULL,
+  `hawb_eueori_trans` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id_consignatario`),
   KEY `fk_c_t_consignatario_idx` (`id_consignatario`),
   CONSTRAINT `fk_c_t_consignatario` FOREIGN KEY (`id_consignatario`) REFERENCES `consignatario` (`id_consignatario`)
@@ -1320,4 +1319,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-07-06 14:51:04
+-- Dump completed on 2024-07-08  7:44:31
