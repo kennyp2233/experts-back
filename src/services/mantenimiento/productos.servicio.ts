@@ -1,6 +1,11 @@
 import productos from '@db/models/mantenimiento/productos.model';
+import ProductosMiPro from '@dbModels/mantenimiento/productos/productos_mi_pro.model';
+import ProductosAranceles from '@dbModels/mantenimiento/productos/productos_aranceles.model';
 import { ProductoCreationAttributes, Producto } from '@typesApp/entities/mantenimiento/ProductosTypes';
+import ProductosCompuesto from '@dbModels/mantenimiento/productos/productos_producto_compuesto.model';
 import "@db/assosiations/mantenimiento/productos.as";
+import sequelize from "@db/experts.db";
+import { crearRegistrosConSeries } from '@utils/custom_data_utils';
 export async function getProductos() {
     const productosList = await productos.findAll();
     return productosList.map((producto) => producto.toJSON()) as Producto[];
@@ -12,54 +17,142 @@ export async function getProducto(id: number) {
 }
 
 export async function createProducto(producto: ProductoCreationAttributes) {
-    const productoData = extraerProductoDeData(producto);
-    return await productos.create(productoData);
+    const transaction = await sequelize.transaction();
+
+    try {
+        const productoData = extraerProductoDeData(producto);
+        const miProData = extraerMiProData(producto) as any[];
+        const arancelesData = extraerArancelesData(producto) as any[];
+        const productoCompuestoData = extraerProductoCompuestoData(producto) as any[];
+
+        const newProducto: any = await productos.create(productoData, { transaction });
+
+        await crearRegistrosConSeries(newProducto.id_producto, miProData, ['mipro_acuerdo', 'mipro_djocode', 'mipro_tariffcode'], ProductosMiPro, transaction, 'id_producto');
+        await crearRegistrosConSeries(newProducto.id_producto, arancelesData, ['aranceles_destino', 'aranceles_codigo'], ProductosAranceles, transaction, 'id_producto');
+        await crearRegistrosConSeries(newProducto.id_producto, productoCompuestoData, ['producto_compuesto_destino', 'producto_compuesto_declaracion'], ProductosCompuesto, transaction, 'id_producto');
+
+        await transaction.commit();
+        return await productos.findByPk(newProducto.id_producto);
+
+    } catch (error: any) {
+        console.error('Error en createProducto:', error);
+        await transaction.rollback();
+        return { error: error.message };
+    }
 }
 
 export async function updateProducto(producto: Producto) {
-    const productoToUpdate = await productos.findByPk(producto.id_producto);
-    const productoData = extraerProductoDeData(producto);
-    if (productoToUpdate) {
+    const transaction = await sequelize.transaction();
+
+    try {
+        const productoToUpdate = await productos.findByPk(producto.id_producto, { transaction });
+        if (!productoToUpdate) {
+            throw new Error('Producto no encontrado');
+        }
+
+        const productoData = extraerProductoDeData(producto);
+        const miProData = extraerMiProData(producto) as any[];
+        const arancelesData = extraerArancelesData(producto) as any[];
+        const productoCompuestoData = extraerProductoCompuestoData(producto) as any[];
+
+        await ProductosMiPro.destroy({ where: { id_producto: producto.id_producto }, transaction });
+        await ProductosAranceles.destroy({ where: { id_producto: producto.id_producto }, transaction });
+        await ProductosCompuesto.destroy({ where: { id_producto: producto.id_producto }, transaction });
+
         await productos.update(productoData, {
-            where: {
-                id_producto: producto.id_producto
-            }
+            where: { id_producto: producto.id_producto },
+            transaction
         });
+
+        await crearRegistrosConSeries(producto.id_producto, miProData, ['mipro_acuerdo', 'mipro_djocode', 'mipro_tariffcode'], ProductosMiPro, transaction, 'id_producto');
+        await crearRegistrosConSeries(producto.id_producto, arancelesData, ['aranceles_destino', 'aranceles_codigo'], ProductosAranceles, transaction, 'id_producto');
+        await crearRegistrosConSeries(producto.id_producto, productoCompuestoData, ['producto_compuesto_destino', 'producto_compuesto_declaracion'], ProductosCompuesto, transaction, 'id_producto');
+
+        await transaction.commit();
+
         const updatedProducto = await productos.findByPk(producto.id_producto);
         return updatedProducto ? updatedProducto.toJSON() as Producto : null;
+
+    } catch (error: any) {
+        await transaction.rollback();
+        return { error: error.message };
     }
-    return null;
 }
+
+
 
 export async function deleteProducto(id: number) {
-    const productoToDelete = await productos.findByPk(id);
-    if (productoToDelete) {
-        await productos.destroy({
-            where: {
-                id_producto: id
-            }
-        });
+    const transaction = await sequelize.transaction();
+
+    try {
+        // Buscar el producto que se desea eliminar
+        const productoToDelete = await productos.findByPk(id, { transaction });
+        if (!productoToDelete) {
+            throw new Error('Producto no encontrado');
+        }
+
+        // Eliminar registros relacionados en otras tablas
+        await ProductosMiPro.destroy({ where: { id_producto: id }, transaction });
+        await ProductosAranceles.destroy({ where: { id_producto: id }, transaction });
+        await ProductosCompuesto.destroy({ where: { id_producto: id }, transaction });
+
+        // Eliminar el producto principal
+        await productos.destroy({ where: { id_producto: id }, transaction });
+
+        // Confirmar la transacción
+        await transaction.commit();
+
         return productoToDelete.toJSON() as Producto;
+    } catch (error: any) {
+        // Revertir la transacción en caso de error
+        await transaction.rollback();
+        return { error: error.message };
     }
-    return null;
 }
 
+
 export async function deleteProductos(productosDelete: number[]) {
-    const productosToDelete = await productos.findAll({
-        where: {
-            id_producto: productosDelete
+    const transaction = await sequelize.transaction();
+
+    try {
+        // Buscar los productos que se desean eliminar
+        const productosToDelete = await productos.findAll({
+            where: {
+                id_producto: productosDelete
+            },
+            transaction
+        });
+
+        if (!productosToDelete.length) {
+            throw new Error('No se encontraron productos para eliminar');
         }
-    });
-    if (productosToDelete) {
+
+        // Eliminar registros relacionados en otras tablas
+        await Promise.all([
+            ProductosMiPro.destroy({ where: { id_producto: productosDelete }, transaction }),
+            ProductosAranceles.destroy({ where: { id_producto: productosDelete }, transaction }),
+            ProductosCompuesto.destroy({ where: { id_producto: productosDelete }, transaction }),
+        ]);
+
+        // Eliminar los productos principales
         await productos.destroy({
             where: {
                 id_producto: productosDelete
-            }
+            },
+            transaction
         });
+
+        // Confirmar la transacción
+        await transaction.commit();
+
         return productosToDelete.map((producto) => producto.toJSON()) as Producto[];
+    } catch (error: any) {
+        // Revertir la transacción en caso de error
+        await transaction.rollback();
+        return { error: error.message };
     }
-    return null;
 }
+
 
 export async function getProductoJoinAll() {
     return await productos.findAll({
@@ -70,6 +163,21 @@ export async function getProductoJoinAll() {
             },
             {
                 association: 'medida',
+                required: false
+            },
+            {
+                model: ProductosMiPro,
+                as: 'mipro',
+                required: false
+            },
+            {
+                model: ProductosAranceles,
+                as: 'aranceles',
+                required: false
+            },
+            {
+                model: ProductosCompuesto,
+                as: 'producto_compuesto',
                 required: false
             }
         ]
@@ -92,6 +200,20 @@ function extraerProductoDeData(data: any) {
         estado: data?.estado,
         id_opcion: data?.opcion?.id_opcion,
         stems_por_full: data?.stems_por_full,
-        id_sesa: data?.id_sesa
+        id_sesa: data?.id_sesa,
     }
 }
+
+function extraerMiProData(data: any) {
+    return data?.mipro
+}
+
+function extraerArancelesData(data: any) {
+    return data?.aranceles
+}
+
+function extraerProductoCompuestoData(data: any) {
+    return data?.producto_compuesto
+}
+
+

@@ -23,7 +23,17 @@ export async function getConsignatariosJoinAll() {
                 include: [
                     {
                         model: TipoDocumento,
-                        as: 'tipo_documento',
+                        as: 'tipo_documento_consignee',
+                        required: false,
+                    },
+                    {
+                        model: TipoDocumento,
+                        as: 'tipo_documento_notify',
+                        required: false,
+                    },
+                    {
+                        model: TipoDocumento,
+                        as: 'tipo_documento_hawb',
                         required: false,
                     },
                 ]
@@ -145,7 +155,16 @@ export async function updateConsignatarioJoinAll(data: any): Promise<any> {
     const fito = extractFitoFromData(data);
     const facturacion = extractFacturacionFromData(data);
     const caeSice = extractCaeSiceFromData(data);
-    console.log("FACTURACION", facturacion);
+    /*
+        console.log("FACTURACION", facturacion);
+        console.log("CAE SOCE", caeSice);
+        console.log("FITO", fito);
+        console.log("GUIA H", guiaH);
+        console.log("GUIA M", guiaM);
+        console.log("TRANSMISION", transmision);
+        console.log("CONSIGNATARIO", consignatario);
+        */
+
     try {
         await Consignatarios.update(consignatario, {
             where: { id_consignatario: data.id_consignatario },
@@ -240,7 +259,7 @@ export async function deleteConsignatarioJoinAll(ids: number[]): Promise<any> {
 
 function extractConsignatarioFromData(data: any) {
     return {
-        nombre: data?.nombre,
+        nombre_consignatario: data?.nombre_consignatario,
         ruc: data?.ruc,
         direccion: data?.direccion,
         id_embarcador: data?.embarcador?.id_embarcador,
@@ -325,8 +344,9 @@ function extractCaeSiceFromData(data: any) {
         hawb_direccion: data?.hawb_direccion,
         hawb_documento: data?.hawb_documento,
         hawb_siglas_pais: data?.hawb_siglas_pais,
-        consignee_tipo_documento: data?.consignee_tipo_documento?.id_tipo_documento,
-        notify_tipo_documento: data?.notify_tipo_documento?.id_tipo_documento,
+        consignee_tipo_documento: data?.tipo_documento_consignee?.id_tipo_documento,
+        notify_tipo_documento: data?.tipo_documento_notify?.id_tipo_documento,
+        hawb_tipo_documento: data?.tipo_documento_hawb?.id_tipo_documento,
     }
 }
 

@@ -1,6 +1,6 @@
 export type Consignatario = {
     id_consignatario: number;
-    nombre: string;
+    nombre_consignatario: string;
     ruc?: string;
     direccion?: string;
     id_embarcador: number;

@@ -39,6 +39,9 @@
       "@routes/*": [
         "src/routes/*"
       ],
+      "@utils/*": [
+        "src/utils/*"
+      ],
       "@db/*": [
         "src/db/*"
       ],

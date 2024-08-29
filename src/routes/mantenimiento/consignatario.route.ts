@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.get('/consignatariosJoinAll', async (_, res) => {
     try {
+        console.log('getConsignatariosJoinAll', await getConsignatariosJoinAll());
         res.send(await getConsignatariosJoinAll());
     } catch (error: any) {
         res.status(400).json({ ok: false, msg: error.message });

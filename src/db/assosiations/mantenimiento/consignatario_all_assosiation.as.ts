@@ -42,15 +42,7 @@ Consignatarios.hasOne(ConsignatarioTransmisions, {
     as: 'transmision',
 });
 
-Consignatarios.hasOne(Embarcadores, {
-    foreignKey: 'id_embarcador',
-    as: 'embarcador',
-});
 
-Consignatarios.hasOne(Clientes, {
-    foreignKey: 'id_clientes',
-    as: 'cliente',
-});
 
 
 
@@ -85,34 +77,39 @@ ConsignatarioTransmisions.belongsTo(Consignatarios, {
     as: 'consignatario',
 });
 
-Embarcadores.belongsTo(Consignatarios, {
+Consignatarios.belongsTo(Embarcadores, {
     foreignKey: 'id_embarcador',
-    as: 'consignatario',
+    as: 'embarcador',
 });
 
-Clientes.belongsTo(Consignatarios, {
-    foreignKey: 'id_clientes',
-    as: 'consignatario',
+Consignatarios.belongsTo(Clientes, {
+    foreignKey: 'id_cliente',
+    as: 'cliente',
 });
+
 
 //
 
-ConsignatarioGuiaMs.hasOne(Destinos, {
+ConsignatarioGuiaMs.belongsTo(Destinos, {
     foreignKey: 'id_destino',
     as: 'destino',
 });
 
-Destinos.belongsTo(ConsignatarioGuiaMs, {
-    foreignKey: 'id_destino',
-    as: 'guia_m',
+
+// cae sice
+// Definir las asociaciones
+ConsignatarioCaeSices.belongsTo(TipoDocumento, {
+    foreignKey: 'consignee_tipo_documento',
+    as: 'tipo_documento_consignee',
 });
 
-ConsignatarioCaeSices.hasOne(TipoDocumento, {
-    foreignKey: 'id_tipo_documento',
-    as: 'tipo_documento',
+ConsignatarioCaeSices.belongsTo(TipoDocumento, {
+    foreignKey: 'notify_tipo_documento',
+    as: 'tipo_documento_notify',
 });
 
-TipoDocumento.belongsTo(ConsignatarioCaeSices, {
-    foreignKey: 'id_tipo_documento',
-    as: 'cae_sice',
+ConsignatarioCaeSices.belongsTo(TipoDocumento, {
+    foreignKey: 'hawb_tipo_documento',
+    as: 'tipo_documento_hawb',
 });
+

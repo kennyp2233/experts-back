@@ -8,7 +8,7 @@ const Consignatarios = sequelize.define<Model<Consignatario, ConsignatarioCreati
         autoIncrement: true,
         primaryKey: true,
     },
-    nombre: {
+    nombre_consignatario: {
         type: DataTypes.STRING,
         allowNull: false,
     },

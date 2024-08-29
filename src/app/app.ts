@@ -17,7 +17,8 @@ import tipos_embarque from '@routes/mantenimiento/tipos_embarque.route';
 import embarcadores from '@routes/mantenimiento/embarcadores.route';
 import consignatario from '@routes/mantenimiento/consignatario.route';
 import clientes from '@routes/mantenimiento/clientes.route';
-
+import fincas from '@routes/mantenimiento/fincas.route';
+import choferes from '@routes/mantenimiento/choferes.route';
 const app = express();
 
 const path = [
@@ -26,6 +27,8 @@ const path = [
 ];
 
 app.use(cors());
+
+app.use(bodyParser.json());
 
 app.use(expressjwt({ secret: process.env.SECRET_KEY || "", algorithms: ['HS256'] })
     .unless({ path: path }));
@@ -36,7 +39,6 @@ app.get('/', (_, res) => {
 
 
 
-app.use(bodyParser.json());
 app.use('/api/v1',
     aerolineasRouter,
     paisesRouter,
@@ -51,7 +53,9 @@ app.use('/api/v1',
     tipos_embarque,
     embarcadores,
     consignatario,
-    clientes
+    clientes,
+    fincas,
+    choferes
 );
 
 
