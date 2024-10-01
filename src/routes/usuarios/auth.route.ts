@@ -3,7 +3,7 @@ import express, { Request, Response, NextFunction } from 'express';
 // Extend the Request interface to include the user property
 interface CustomRequest extends Request {
     auth?: {
-        id_usuario: string;
+        id_usuario: UUID;
         admin: boolean;
         iat: number;
         exp: number;
@@ -13,6 +13,7 @@ interface CustomRequest extends Request {
 import { login, register, refreshToken } from '@services/usuarios/auth.servicio';
 import validationMiddleware from '@middlewares/validationMiddleware';
 import { body, query } from 'express-validator';
+import { UUID } from 'crypto';
 const router = express.Router();
 
 router.post('/login',
