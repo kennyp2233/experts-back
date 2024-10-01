@@ -1,75 +1,67 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
+import { body } from 'express-validator';
+import validationMiddleware from '@middlewares/validationMiddleware';
 import { getConsignatariosJoinAll, createConsignatarioJoinAll, updateConsignatarioJoinAll, deleteConsignatarioJoinAll } from '@services/mantenimiento/consignatario/consignatario.servicio';
 
 const router = express.Router();
 
-router.get('/consignatariosJoinAll', async (_, res) => {
+// GET /consignatariosJoinAll
+router.get('/consignatariosJoinAll', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        console.log('getConsignatariosJoinAll', await getConsignatariosJoinAll());
-        res.send(await getConsignatariosJoinAll());
-    } catch (error: any) {
-        res.status(400).json({ ok: false, msg: error.message });
+        const consignatarios = await getConsignatariosJoinAll();
+        res.json(consignatarios);
+    } catch (error) {
+        next(error); // Todos los errores deben ser manejados por el middleware global
     }
 });
 
-
-router.post('/consignatariosJoinAll', async (req, res) => {
-    try {
-        const data = req.body;
-        const respuesta = await createConsignatarioJoinAll(data);
-        //si respuesta contiene error, contexto de posible retorno {error: 'mensaje de error'}
-        if (respuesta?.error) {
-            res.status(400).json({ ok: false, msg: respuesta.error });
-        } else {
-            res.status(201).json({
-                ok: true,
-                msg: 'Creando consignatario y plantilla',
-            });
+// POST /consignatariosJoinAll
+router.post('/consignatariosJoinAll',
+    [
+        // Añadir más validaciones según la estructura esperada del cuerpo de la solicitud
+    ],
+    validationMiddleware,
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const respuesta = await createConsignatarioJoinAll(req.body);
+            res.status(201).json({ ok: true, msg: 'Consignatario y plantilla creados con éxito' });
+        } catch (error) {
+            next(error); // Todos los errores deben ser manejados por el middleware global
         }
     }
-    catch (error: any) {
-        res.status(400).json({ ok: false, msg: error.message });
-    }
+);
 
-});
-
-router.put('/consignatariosJoinAll/', async (req, res) => {
-    try {
-        const data = req.body;
-        const respuesta = await updateConsignatarioJoinAll(data);
-        //si respuesta contiene error, contexto de posible retorno {error: 'mensaje de error'}
-        if (respuesta?.error) {
-            res.status(400).json({ ok: false, msg: respuesta.error });
-        } else {
-            res.status(201).json({
-                ok: true,
-                msg: 'Actualizando consignatario y plantilla',
-            });
+// PUT /consignatariosJoinAll
+router.put('/consignatariosJoinAll',
+    [
+    ],
+    validationMiddleware,
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const respuesta = await updateConsignatarioJoinAll(req.body);
+            res.status(200).json({ ok: true, msg: 'Consignatario y plantilla actualizados con éxito' });
+        } catch (error) {
+            next(error); // Todos los errores deben ser manejados por el middleware global
         }
     }
-    catch (error: any) {
-        res.status(400).json({ ok: false, msg: error.message });
-    }
-});
+);
 
-router.delete('/consignatariosJoinAll/', async (req, res) => {
-    try {
-        const consignatarios = req.body as any[];
-        const respuesta = await deleteConsignatarioJoinAll(consignatarios);
-        //si respuesta contiene error, contexto de posible retorno {error: 'mensaje de error'}
-        if (respuesta?.error) {
-            res.status(400).json({ ok: false, msg: respuesta.error });
-        } else {
-            res.status(201).json({
-                ok: true,
-                msg: 'Eliminando consignatario y plantilla',
-            });
+// DELETE /consignatariosJoinAll
+router.delete('/consignatariosJoinAll',
+    [
+        body('ids').optional().isArray().withMessage('El cuerpo debe ser un array de IDs'),
+        body('ids.*').optional().isInt({ min: 1 }).withMessage('Cada ID debe ser un número entero positivo'),
+        // Añadir validaciones adicionales si es necesario
+    ],
+    validationMiddleware,
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const respuesta = await deleteConsignatarioJoinAll(req.body.consignatarios);
+            res.status(200).json({ ok: true, msg: 'Consignatarios y plantilla eliminados con éxito' });
+        } catch (error) {
+            next(error); // Todos los errores deben ser manejados por el middleware global
         }
     }
-    catch (error: any) {
-        res.status(400).json({ ok: false, msg: error.message });
-    }
-});
+);
 
 export default router;
-

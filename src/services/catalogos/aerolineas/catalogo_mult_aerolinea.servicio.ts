@@ -1,6 +1,6 @@
-import CatalogoMultiplicadorAerolinea from "@dbModels/catalogos/aerolineas/catalogo_multiplicador_aerolinea.model";
+import CatalogoMultiplicadorAerolinea from "@models/catalogos/aerolineas/catalogo_multiplicador_aerolinea.model";
 
-import { CatalogoMultiplicador, CatalogoMultiplicadorCreationAttributes } from "@typesApp/entities/catalogos/aerolineas/CatalogoMultiplicadorTypes";
+import { CatalogoMultiplicador, CatalogoMultiplicadorCreationAttributes } from "@typesApp/catalogos/aerolineas/catalogo_multiplicador.type";
 
 
 

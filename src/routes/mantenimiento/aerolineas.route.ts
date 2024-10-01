@@ -1,4 +1,6 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
+import { body, query } from 'express-validator';
+import validationMiddleware from '@middlewares/validationMiddleware';
 import {
     createAerolinea,
     deleteAerolineas,
@@ -10,132 +12,124 @@ import {
     updateAerolineaAndPlantilla,
     deleteAerolineaAndPlantilla
 } from '@services/mantenimiento/aerolineas.servicio';
-import { Aerolinea, AerolineaCreationAttributes } from '@typesApp/entities/mantenimiento/AerolineaTypes';
-
+import { Aerolinea, AerolineaCreationAttributes } from '@typesApp/mantenimiento/aerolinea.type';
 
 const router = express.Router();
 
-router.get('/aerolineas', async (req, res) => {
-    try {
-        if (req.query.id) {
-            res.send(await getAerolinea(Number.parseInt(req.query.id as string)));
-        } else {
-            res.send(await getAerolineas());
+// GET /aerolineas
+router.get('/aerolineas',
+    [
+        query('id').optional().isInt({ min: 1 }).withMessage('El ID debe ser un número entero positivo')
+    ],
+    validationMiddleware,
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const id = req.query.id ? Number.parseInt(req.query.id as string) : undefined;
+            const response = id ? await getAerolinea(id) : await getAerolineas();
+            res.json(response);
+        } catch (error) {
+            next(error);
         }
     }
-    catch (error: any) {
-        res.status(400).json({ ok: false, msg: error.message });
-    }
-});
+);
 
-router.post('/aerolineas', async (req, res) => {
-    try {
-        await createAerolinea(req.body as AerolineaCreationAttributes);
-        res.status(201).json({
-            ok: true,
-            msg: 'Creando aerolinea',
-        });
-    }
-    catch (error: any) {
-        res.status(400).json({ ok: false, msg: error.message });
-    }
-});
-
-router.post('/aerolineas/joinAll', async (req, res) => {
-    try {
-        const data = req.body;
-        const respuesta = await createAerolineaAndPlantilla(data);
-        // si respuesta contiene error, contexto de posible retorno {error: 'mensaje de error'}
-        if (respuesta.error) {
-            res.status(400).json({ ok: false, msg: respuesta.error });
-        } else {
-
-            res.status(201).json({
-                ok: true,
-                msg: 'Creando aerolinea y plantilla',
-            });
+// POST /aerolineas
+router.post('/aerolineas',
+    [
+    ],
+    validationMiddleware,
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            await createAerolinea(req.body as AerolineaCreationAttributes);
+            res.status(201).json({ ok: true, msg: 'Creando aerolinea' });
+        } catch (error) {
+            next(error);
         }
     }
-    catch (error: any) {
-        res.status(400).json({ ok: false, msg: error.message });
-    }
+);
 
-});
-
-
-router.put('/aerolineas', async (req, res) => {
-    try {
-        await updateAerolinea(req.body as Aerolinea);
-        res.status(200).json({
-            ok: true,
-            msg: 'Actualizando aerolinea',
-        });
-    }
-    catch (error: any) {
-        res.status(400).json({ ok: false, msg: error.message });
-    }
-});
-
-router.put('/aerolineas/joinAll', async (req, res) => {
-    try {
-        const respuesta = await updateAerolineaAndPlantilla(req.body as any);
-        if (respuesta.error) {
-            res.status(400).json({ ok: false, msg: respuesta.error });
-        } else {
-
-            res.status(201).json({
-                ok: true,
-                msg: 'Actualizando aerolinea y plantilla',
-            });
-        }
-
-    }
-    catch (error: any) {
-        res.status(400).json({ ok: false, msg: error.message });
-    }
-});
-
-router.delete('/aerolineas', async (req, res) => {
-    try {
-        const aerolineas = req.body as any[];
-        await deleteAerolineas(aerolineas.map(Number));
-        res.status(200).json({
-            ok: true,
-            msg: 'Eliminando aerolinea',
-        });
-    }
-    catch (error: any) {
-        res.status(400).json({ ok: false, msg: error.message });
-    }
-});
-
-router.delete('/aerolineas/joinAll', async (req, res) => {
-    try {
-        const aerolineas = req.body as any[];
-
-        const respuesta = await deleteAerolineaAndPlantilla(aerolineas.map(Number));
-        if (respuesta.error) {
-            res.status(400).json({ ok: false, msg: respuesta.error });
-        } else {
-            res.status(200).json({
-                ok: true,
-                msg: 'Eliminando aerolinea y plantilla',
-            });
+// POST /aerolineas/joinAll
+router.post('/aerolineas/joinAll',
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const data = req.body;
+            await createAerolineaAndPlantilla(data);
+            res.status(201).json({ ok: true, msg: 'Creando aerolinea y plantilla' });
+        } catch (error) {
+            next(error);
         }
     }
-    catch (error: any) {
-        res.status(400).json({ ok: false, msg: error.message });
+);
+
+// PUT /aerolineas
+router.put('/aerolineas',
+    [
+        body('id').isInt({ min: 1 }).withMessage('El ID debe ser un número entero positivo'),
+        // Añadir más validaciones según sea necesario
+    ],
+    validationMiddleware,
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            await updateAerolinea(req.body as Aerolinea);
+            res.status(200).json({ ok: true, msg: 'Actualizando aerolinea' });
+        } catch (error) {
+            next(error);
+        }
     }
-});
+);
 
-router.get('/aerolineas/joinAll', async (req, res) => {
-    try {
-        res.send(await aerolineaJoinAll());
-    } catch (error: any) {
-        res.status(400).json({ ok: false, msg: error.message });
+// PUT /aerolineas/joinAll
+router.put('/aerolineas/joinAll',
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            await updateAerolineaAndPlantilla(req.body as any);
+            res.status(201).json({ ok: true, msg: 'Actualizando aerolinea y plantilla' });
+        } catch (error) {
+            next(error);
+        }
     }
-});
+);
 
+// DELETE /aerolineas
+router.delete('/aerolineas',
+    [
+        body('aerolineas').isArray().withMessage('El cuerpo debe ser un array de IDs').custom(arr => arr.every((id: any) => typeof id === 'number'))
+    ],
+    validationMiddleware,
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const aerolineas = req.body as number[];
+            await deleteAerolineas(aerolineas);
+            res.status(200).json({ ok: true, msg: 'Eliminando aerolinea' });
+        } catch (error) {
+            next(error);
+        }
+    }
+);
 
+// DELETE /aerolineas/joinAll
+router.delete('/aerolineas/joinAll',
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const aerolineas = req.body as number[];
+            await deleteAerolineaAndPlantilla(aerolineas);
+            res.status(200).json({ ok: true, msg: 'Eliminando aerolinea y plantilla' });
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
+// GET /aerolineas/joinAll
+router.get('/aerolineas/joinAll',
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const response = await aerolineaJoinAll();
+            res.json(response);
+        } catch (error) {
+            next(error);
+        }
+    }
+);
 
 export default router;

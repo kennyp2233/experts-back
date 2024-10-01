@@ -1,59 +1,64 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import { createPais, deletePais, getPais, getPaises, updatePais, paisesJoinAcuerdos, deletePaises } from '@services/mantenimiento/paises.servicio';
-import { Pais, PaisCreationAttributes } from '@typesApp/entities/mantenimiento/PaisTypes';
+import { Pais, PaisAtributosCreacion } from '@typesApp/mantenimiento/pais.type';
 
 const router = express.Router();
 
-router.get('/paises', async (req, res) => {
-    try {
-        if (req.query.id) {
-            res.send(await getPais(Number.parseInt(req.query.id as string)));
-        } else {
-            res.send(await getPaises());
+router.get('/paises',
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            if (req.query.id) {
+                res.send(await getPais(Number.parseInt(req.query.id as string)));
+            } else {
+                res.send(await getPaises());
+            }
+        } catch (error: any) {
+            next(error);
         }
-    } catch (error: any) {
-        res.status(400).json({ ok: false, msg: error.message });
-    }
-});
+    });
 
-router.get('/paises-acuerdos', async (_, res) => {
-    try {
-        res.send(await paisesJoinAcuerdos());
-    } catch (error: any) {
-        res.status(400).json({ ok: false, msg: error.message });
-    }
-});
+router.get('/paises-acuerdos',
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            res.send(await paisesJoinAcuerdos());
+        } catch (error: any) {
+            next(error);
+        }
+    });
 
-router.post('/paises', async (req, res) => {
-    try {
-        const pais = await createPais(req.body);
-        res.status(201).json({ ok: true, msg: 'Pais creado', pais });
-    } catch (error: any) {
-        res.status(400).json({ ok: false, msg: error.message });
-    }
-});
+router.post('/paises',
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const pais = await createPais(req.body);
+            res.status(201).json({ ok: true, msg: 'Pais creado', pais });
+        } catch (error: any) {
+            next(error);
+        }
+    });
 
-router.put('/paises', async (req, res) => {
+router.put('/paises',
+    async (req: Request, res: Response, next: NextFunction) => {
 
-    try {
-        //haz el update con la funcion updatePais(req.body as Pais);
-        await updatePais(req.body as Pais);
-        res.status(200).json({ ok: true, msg: 'Pais actualizado' });
-    } catch (error: any) {
-        res.status(400).json({ ok: false, msg: error.message });
-    }
-});
+        try {
+            //haz el update con la funcion updatePais(req.body as Pais);
+            await updatePais(req.body as Pais);
+            res.status(200).json({ ok: true, msg: 'Pais actualizado' });
+        } catch (error: any) {
+            next(error);
+        }
+    });
 
-router.delete('/paises', async (req, res) => {
+router.delete('/paises',
+    async (req: Request, res: Response, next: NextFunction) => {
 
-    try {
-        const paises = req.body as any[];
-        await deletePaises(paises.map(Number));
-        res.status(200).json({ ok: true, msg: 'Pais eliminado' });
-    } catch (error: any) {
-        res.status(400).json({ ok: false, msg: error.message });
-    }
-});
+        try {
+            const paises = req.body as any[];
+            await deletePaises(paises.map(Number));
+            res.status(200).json({ ok: true, msg: 'Pais eliminado' });
+        } catch (error: any) {
+            next(error);
+        }
+    });
 
 
 export default router;

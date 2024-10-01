@@ -1,17 +1,17 @@
-import Consignatarios from "@dbModels/mantenimiento/consignatario/consignatario.model";
-import ConsignatarioCaeSices from "@dbModels/mantenimiento/consignatario/consignatario_cae_sise.model";
-import ConsignatarioFacturaciones from "@dbModels/mantenimiento/consignatario/consignatario_facturacion.model";
-import ConsignatarioFito from "@dbModels/mantenimiento/consignatario/consignatario_fito.model";
-import ConsignatarioGuiaHs from "@dbModels/mantenimiento/consignatario/consignatario_guia_h.model";
-import ConsignatarioGuiaMs from "@dbModels/mantenimiento/consignatario/consignatario_guia_m.model";
-import ConsignatarioTransmisions from "@dbModels/mantenimiento/consignatario/consignatario_transmision.model";
-import TipoDocumento from "@dbModels/catalogos/consignatario/consignatario_tipo_documento.model";
-import Embarcadores from "@dbModels/mantenimiento/embarcadores.model";
-import Clientes from "@dbModels/mantenimiento/clientes.model";
-import Destinos from "@dbModels/mantenimiento/destinos.model";
+import Consignatarios from "@models/mantenimiento/consignatario/consignatario.model";
+import ConsignatarioCaeSices from "@models/mantenimiento/consignatario/consignatario_cae_sise.model";
+import ConsignatarioFacturaciones from "@models/mantenimiento/consignatario/consignatario_facturacion.model";
+import ConsignatarioFito from "@models/mantenimiento/consignatario/consignatario_fito.model";
+import ConsignatarioGuiaHs from "@models/mantenimiento/consignatario/consignatario_guia_h.model";
+import ConsignatarioGuiaMs from "@models/mantenimiento/consignatario/consignatario_guia_m.model";
+import ConsignatarioTransmisions from "@models/mantenimiento/consignatario/consignatario_transmision.model";
+import TipoDocumento from "@models/catalogos/consignatario/consignatario_tipo_documento.model";
+import Embarcadores from "@models/mantenimiento/embarcador.model";
+import Clientes from "@models/mantenimiento/cliente.model";
+import Destinos from "@models/mantenimiento/destino.model";
 
-import "@db/assosiations/mantenimiento/consignatario_all_assosiation.as";
-import sequelize from "@db/experts.db";
+import "src/config/assosiations/mantenimiento/consignatario_all_assosiation.as";
+import sequelize from "src/config/experts.db";
 
 
 export async function getConsignatariosJoinAll() {
@@ -138,10 +138,9 @@ export async function createConsignatarioJoinAll(data: any): Promise<any> {
         }, { transaction });
 
         await transaction.commit();
-    } catch (error: any) {
-        // Revertir la transacción en caso de error
+    } catch (error) {
         await transaction.rollback();
-        return { error: error.message };
+        throw error
     }
 }
 
@@ -202,10 +201,9 @@ export async function updateConsignatarioJoinAll(data: any): Promise<any> {
         });
 
         await transaction.commit();
-    } catch (error: any) {
-        // Revertir la transacción en caso de error
+    } catch (error) {
         await transaction.rollback();
-        return { error: error.message };
+        throw error
     }
 
 }
@@ -250,10 +248,9 @@ export async function deleteConsignatarioJoinAll(ids: number[]): Promise<any> {
         });
 
         await transaction.commit();
-    } catch (error: any) {
-        // Revertir la transacción en caso de error
+    } catch (error) {
         await transaction.rollback();
-        return { error: error.message };
+        throw error
     }
 }
 

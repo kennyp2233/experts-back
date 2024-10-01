@@ -1,10 +1,10 @@
-import Fincas from "@dbModels/mantenimiento/finca.model";
-import FincaChoferes from "@dbModels/mantenimiento/fincas/fincas_choferes.model";
-import FincaProductos from "@dbModels/mantenimiento/fincas/fincas_productos.model";
-import Productos from "@dbModels/mantenimiento/productos.model";
-import Choferes from "@dbModels/mantenimiento/chofer.model";
-import "@db/assosiations/mantenimiento/fincas_all_assosiation.as";
-import sequelize from "@db/experts.db";
+import Fincas from "@models/mantenimiento/finca.model";
+import FincaChoferes from "@models/mantenimiento/fincas/fincas_choferes.model";
+import FincaProductos from "@models/mantenimiento/fincas/fincas_productos.model";
+import Productos from "@models/mantenimiento/producto.model";
+import Choferes from "@models/mantenimiento/chofer.model";
+import "src/config/assosiations/mantenimiento/fincas_all_assosiation.as";
+import sequelize from "src/config/experts.db";
 
 import { crearRegistrosConSeries } from "@utils/custom_data_utils";
 
@@ -58,10 +58,9 @@ export async function createFincaWithAllData(finca: any) {
         await transaction.commit();
         return await Fincas.findByPk(newFinca.id_finca);
 
-    } catch (error: any) {
-        console.error('Error en createFincaWithAllData:', error);
+    } catch (error) {
         await transaction.rollback();
-        return { error: error.message };
+        throw error
     }
 }
 
@@ -92,10 +91,9 @@ export async function updateFincaWithAllData(finca: any) {
         await transaction.commit();
         return await Fincas.findByPk(finca.id_finca);
 
-    } catch (error: any) {
-        console.error('Error en updateFincaWithAllData:', error);
+    } catch (error) {
         await transaction.rollback();
-        return { error: error.message };
+        throw error
     }
 }
 
@@ -109,10 +107,9 @@ export async function deleteFincas(fincas: number[]) {
 
         await transaction.commit();
         return { ok: true };
-    } catch (error: any) {
-        console.error('Error en deleteFincas:', error);
+    } catch (error) {
         await transaction.rollback();
-        return { error: error.message };
+        throw error
     }
 }
 

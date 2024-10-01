@@ -1,48 +1,45 @@
-import express from 'express';
-import { createAcuerdoArancelario, deleteAcuerdoArancelario, getAcuerdoArancelario, getAcuerdosArancelarios, updateAcuerdoArancelario } from '@services/mantenimiento/acuerdos_arancelarios.servicio';
-import { AcuerdoArancelarioCreationAttributes } from '@typesApp/entities/mantenimiento/AcuerdosArancelariosTypes';
-import jwt from 'jsonwebtoken';
+import { Router, Request, Response, NextFunction } from 'express';
+import { query, body } from 'express-validator';
+import validationMiddleware from '@middlewares/validationMiddleware';
+import { createAcuerdoArancelario, getAcuerdoArancelario, getAcuerdosArancelarios } from '@services/mantenimiento/acuerdos_arancelarios.servicio';
+import { AcuerdoArancelarioAtributosCreacion } from '@typesApp/mantenimiento/acuerdo_arancelario.type';
 
-const router = express.Router();
+const router = Router();
 
-router.get('/acuerdos_arancelarios', async (req, res) => {
-    // es bearer + token
-    const auth = req.headers.authorization;
-    const token = auth?.split(' ')[1];
-    const decoded = jwt.decode(token as string) as any;
-    if (decoded.admin) {
+// Obtener acuerdos arancelarios
+router.get('/acuerdos_arancelarios',
+    [
+    ],
+    validationMiddleware,
+    async (req: Request, res: Response, next: NextFunction) => {
         try {
             if (req.query.id) {
-                res.send(await getAcuerdoArancelario(Number.parseInt(req.query.id as string)));
+                const acuerdo = await getAcuerdoArancelario(Number(req.query.id));
+                res.json(acuerdo);
             } else {
-                res.send(await getAcuerdosArancelarios());
+                const acuerdos = await getAcuerdosArancelarios();
+                res.json(acuerdos);
             }
+        } catch (error) {
+            next(error);
         }
-        catch (error: any) {
-            res.status(400).json({ ok: false, msg: error.message });
+    }
+);
+
+// Crear acuerdo arancelario
+router.post('/acuerdos_arancelarios',
+    [
+        // Añade más validaciones según la estructura de AcuerdoArancelarioAtributosCreacion
+    ],
+    validationMiddleware,
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            await createAcuerdoArancelario(req.body as AcuerdoArancelarioAtributosCreacion);
+            res.status(201).json({ message: 'Acuerdo arancelario creado con éxito' });
+        } catch (error) {
+            next(error);
         }
     }
-});
-
-router.post('/acuerdos_arancelarios', async (req, res) => {
-    try {
-        await createAcuerdoArancelario(req.body as AcuerdoArancelarioCreationAttributes);
-        res.status(201).json({
-            ok: true,
-            msg: 'Creando acuerdo arancelario',
-        });
-    }
-    catch (error: any) {
-        res.status(400).json({ ok: false, msg: error.message });
-    }
-});
-
-router.put('/acuerdos_arancelarios', (_, res) => {
-    res.send('Creando acuerdo arancelario');
-});
-
-router.delete('/acuerdos_arancelarios', (_, res) => {
-    res.send('Creando acuerdo arancelario');
-});
+);
 
 export default router;

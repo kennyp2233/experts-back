@@ -1,44 +1,44 @@
-import tipos_embarque from "@dbModels/mantenimiento/tipos_embarque.model";
-import TipoCarga from "@dbModels/catalogos/tipo_embarque/tipo_carga.model";
-import TipoEmbalaje from "@dbModels/catalogos/tipo_embarque/tipo_embalaje.model";
-import "@db/assosiations/mantenimiento/tipos_embarque.as";
-import { TipoEmbarque, TipoEmbarqueCreationAttributes } from "@typesApp/entities/mantenimiento/TiposEmbarqueTypes";
+import TiposEmbarque from "@models/mantenimiento/tipos_embarque.model";
+import TipoCarga from "@models/catalogos/tipo_embarque/tipo_carga.model";
+import TipoEmbalaje from "@models/catalogos/tipo_embarque/tipo_embalaje.model";
+import "src/config/assosiations/mantenimiento/tipos_embarque.as";
+import { TipoEmbarque, TipoEmbarqueAtributosCreacion } from "@typesApp/mantenimiento/tipo_embarque.type";
 
 export async function getTiposEmbarque(): Promise<TipoEmbarque[]> {
-    const tiposEmbarqueList = await tipos_embarque.findAll();
+    const tiposEmbarqueList = await TiposEmbarque.findAll();
     return tiposEmbarqueList.map((tipoEmbarque) => tipoEmbarque.toJSON()) as TipoEmbarque[];
 }
 
 export async function getTipoEmbarque(id: number): Promise<TipoEmbarque | null> {
-    const tipoEmbarque = await tipos_embarque.findByPk(id);
+    const tipoEmbarque = await TiposEmbarque.findByPk(id);
     return tipoEmbarque ? tipoEmbarque.toJSON() as TipoEmbarque : null;
 }
 
-export async function createTipoEmbarque(tipoEmbarque: TipoEmbarqueCreationAttributes) {
+export async function createTipoEmbarque(tipoEmbarque: TipoEmbarqueAtributosCreacion) {
     const tipoEmbarqueData = extractDataToTipoEmbarque(tipoEmbarque);
-    return await tipos_embarque.create(tipoEmbarqueData);
+    return await TiposEmbarque.create(tipoEmbarqueData);
 }
 
 export async function updateTipoEmbarque(tipoEmbarque: TipoEmbarque): Promise<TipoEmbarque | null> {
-    const tipoEmbarqueToUpdate = await tipos_embarque.findByPk(tipoEmbarque.id_tipo_embarque);
+    const tipoEmbarqueToUpdate = await TiposEmbarque.findByPk(tipoEmbarque.id_tipo_embarque);
     const tipoEmbarqueData = extractDataToTipoEmbarque(tipoEmbarque);
     if (tipoEmbarqueToUpdate) {
-        await tipos_embarque.update(tipoEmbarqueData, {
+        await TiposEmbarque.update(tipoEmbarqueData, {
             where: {
                 id_tipo_embarque: tipoEmbarque.id_tipo_embarque
             }
         });
-        const updatedTipoEmbarque = await tipos_embarque.findByPk(tipoEmbarque.id_tipo_embarque);
+        const updatedTipoEmbarque = await TiposEmbarque.findByPk(tipoEmbarque.id_tipo_embarque);
         return updatedTipoEmbarque ? updatedTipoEmbarque.toJSON() as TipoEmbarque : null;
     }
     return null;
 }
 
 export async function deleteTipoEmbarque(id: number): Promise<TipoEmbarque | null> {
-    const tipoEmbarqueToDelete = await tipos_embarque.findByPk(id);
+    const tipoEmbarqueToDelete = await TiposEmbarque.findByPk(id);
 
     if (tipoEmbarqueToDelete) {
-        await tipos_embarque.destroy({
+        await TiposEmbarque.destroy({
             where: {
                 id_tipo_embarque: id
             }
@@ -50,14 +50,14 @@ export async function deleteTipoEmbarque(id: number): Promise<TipoEmbarque | nul
 }
 
 export async function deleteTipoEmbarques(id: number[]) {
-    const tipoEmbarquesToDelete = await tipos_embarque.findAll({
+    const tipoEmbarquesToDelete = await TiposEmbarque.findAll({
         where: {
             id_tipo_embarque: id
         }
     });
 
     if (tipoEmbarquesToDelete.length) {
-        await tipos_embarque.destroy({
+        await TiposEmbarque.destroy({
             where: {
                 id_tipo_embarque: id
             }
@@ -69,7 +69,7 @@ export async function deleteTipoEmbarques(id: number[]) {
 }
 
 export async function getTiposEmbarqueJoinAll() {
-    return await tipos_embarque.findAll({
+    return await TiposEmbarque.findAll({
         include: [
             {
                 model: TipoCarga,

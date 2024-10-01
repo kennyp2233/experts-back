@@ -1,8 +1,8 @@
-import tipoDocumento from "@dbModels/catalogos/consignatario/consignatario_tipo_documento.model";
-import { TipoDocumento, TipoDocumentoCreationAttributes } from "@typesApp/entities/catalogos/consignatario/TipoDocumentoTypes";
+import TiposDocumento from "@models/catalogos/consignatario/consignatario_tipo_documento.model";
+import { TipoDocumento } from "@typesApp/catalogos/consignatario/tipo_documento.type";
 
 export async function getTiposDocumento() {
-    const tiposDocumentoList = await tipoDocumento.findAll(
+    const tiposDocumentoList = await TiposDocumento.findAll(
         {
             order: [['nombre', 'ASC']] // Ordena por 'codigo_embarque' en orden ascendente
         }

@@ -1,52 +1,94 @@
-import express from 'express';
-import { createAduana, deleteAduana, getAduana, getAduanas, updateAduana, deleteAduanas } from '@services/mantenimiento/cae_aduana.servicio';
-import { CaeAduanaCreationAttributes, CaeAduana } from '@typesApp/entities/mantenimiento/CaeAduanaTypes';
+import express, { Request, Response, NextFunction } from 'express';
+import { body, query } from 'express-validator';
+import validationMiddleware from '@middlewares/validationMiddleware';
+import {
+    createAduana,
+    deleteAduana,
+    getAduana,
+    getAduanas,
+    updateAduana,
+    deleteAduanas
+} from '@services/mantenimiento/cae_aduana.servicio';
+import { CaeAduanaAtributosCreacion, CaeAduana } from '@typesApp/mantenimiento/cae_aduana.type';
 
 const router = express.Router();
 
-router.get('/aduanas', async (req, res) => {
-    try {
-        if (req.query.id) {
-            res.send(await getAduana(Number.parseInt(req.query.id as string)));
-        } else {
-            res.send(await getAduanas());
+// GET /aduanas
+router.get('/aduanas',
+    [
+        query('id').optional().isInt({ min: 1 }).withMessage('El ID debe ser un número entero positivo')
+    ],
+    validationMiddleware,
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const id = req.query.id ? Number.parseInt(req.query.id as string) : undefined;
+            const response = id ? await getAduana(id) : await getAduanas();
+            res.json(response);
+        } catch (error) {
+            next(error); // Todos los errores deben ser manejados por el middleware global
         }
+    }
+);
 
-    } catch (error: any) {
-        res.status(400).json({ ok: false, msg: error.message });
-    }
-});
-
-router.post('/aduanas', async (req, res) => {
-    try {
-        const resultado = await createAduana(req.body as CaeAduanaCreationAttributes);
-        res.status(201).json({ ok: true, msg: 'Aduana creada', resultado });
-    }
-    catch (error: any) {
-        res.status(400).json({ ok: false, msg: error.message });
-    }
-});
-
-router.put('/aduanas', async (req, res) => {
-    try {
-        await updateAduana(req.body as CaeAduana);
-        res.status(200).json({ ok: true, msg: 'Aduana actualizada' });
-    }
-    catch (error: any) {
-        res.status(400).json({ ok: false, msg: error.message });
-    }
-});
-
-router.delete('/aduanas', async (req, res) => {
-    try {
-        if (req.query.id) {
-            res.send(await deleteAduana(Number.parseInt(req.query.id as string)));
-        } else {
-            res.send(await deleteAduanas(req.body as number[]));
+// POST /aduanas
+router.post('/aduanas',
+    [
+    ],
+    validationMiddleware,
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const resultado = await createAduana(req.body as CaeAduanaAtributosCreacion);
+            res.status(201).json({ ok: true, msg: 'Aduana creada', resultado });
+        } catch (error) {
+            next(error); // Todos los errores deben ser manejados por el middleware global
         }
-    } catch (error: any) {
-        res.status(400).json({ ok: false, msg: error.message });
     }
-});
+);
+
+// PUT /aduanas
+router.put('/aduanas',
+    [
+        body('id').isInt({ min: 1 }).withMessage('El ID debe ser un número entero positivo'),
+        // Añadir más validaciones según sea necesario
+    ],
+    validationMiddleware,
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            await updateAduana(req.body as CaeAduana);
+            res.status(200).json({ ok: true, msg: 'Aduana actualizada' });
+        } catch (error) {
+            next(error); // Todos los errores deben ser manejados por el middleware global
+        }
+    }
+);
+
+// DELETE /aduanas
+router.delete('/aduanas',
+    [
+        query('id').optional().isInt({ min: 1 }).withMessage('El ID debe ser un número entero positivo'),
+        body().optional().custom((value) => {
+            // Validar que el cuerpo sea un array de IDs si 'id' no está presente en la consulta
+            if (!('id' in value) && !Array.isArray(value)) {
+                throw new Error('El cuerpo debe ser un array de IDs');
+            }
+            return true;
+        })
+    ],
+    validationMiddleware,
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const id = req.query.id ? Number.parseInt(req.query.id as string) : undefined;
+            if (id !== undefined) {
+                await deleteAduana(id);
+                res.json({ ok: true, msg: 'Aduana eliminada' });
+            } else {
+                await deleteAduanas(req.body as number[]);
+                res.json({ ok: true, msg: 'Aduanas eliminadas' });
+            }
+        } catch (error) {
+            next(error); // Todos los errores deben ser manejados por el middleware global
+        }
+    }
+);
 
 export default router;

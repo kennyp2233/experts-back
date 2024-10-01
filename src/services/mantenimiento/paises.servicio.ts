@@ -1,43 +1,43 @@
-import paises from '@dbModels/mantenimiento/paises.model';
-import acuerdos from '@dbModels/mantenimiento/acuerdos_arancelarios.model';
-import "@db/assosiations/mantenimiento/paises_acuerdos.as"
-import { Pais, PaisCreationAttributes } from '@typesApp/entities/mantenimiento/PaisTypes';
+import Paises from '@models/mantenimiento/pais.model';
+import AcuerdosArancelarios from '@models/mantenimiento/acuerdo_arancelario.model';
+import "src/config/assosiations/mantenimiento/paises_acuerdos.as"
+import { Pais, PaisAtributosCreacion } from '@typesApp/mantenimiento/pais.type';
 
 export async function getPaises() {
-    const paisesList = await paises.findAll();
+    const paisesList = await Paises.findAll();
     return paisesList.map((pais) => pais.toJSON()) as Pais[];
 }
 
 export async function getPais(id: number) {
-    const pais = await paises.findByPk(id);
+    const pais = await Paises.findByPk(id);
     return pais ? pais.toJSON() as Pais : null;
 }
 
-export async function createPais(pais: PaisCreationAttributes) {
+export async function createPais(pais: PaisAtributosCreacion) {
     const paisData = extraerPaisDeData(pais);
-    return await paises.create(paisData);
+    return await Paises.create(paisData);
 }
 
 
 export async function updatePais(pais: Pais) {
-    const paisToUpdate = await paises.findByPk(pais.id_pais);
+    const paisToUpdate = await Paises.findByPk(pais.id_pais);
     const paisData = extraerPaisDeData(pais);
     if (paisToUpdate) {
-        await paises.update(paisData, {
+        await Paises.update(paisData, {
             where: {
                 id_pais: pais.id_pais
             }
         });
-        const updatedPais = await paises.findByPk(pais.id_pais);
+        const updatedPais = await Paises.findByPk(pais.id_pais);
         return updatedPais ? updatedPais.toJSON() as Pais : null;
     }
     return null;
 }
 
 export async function deletePais(id: number) {
-    const paisToDelete = await paises.findByPk(id);
+    const paisToDelete = await Paises.findByPk(id);
     if (paisToDelete) {
-        await paises.destroy({
+        await Paises.destroy({
             where: {
                 id_pais: id
             }
@@ -48,13 +48,13 @@ export async function deletePais(id: number) {
 }
 
 export async function deletePaises(paisesDelete: number[]) {
-    const paisesToDelete = await paises.findAll({
+    const paisesToDelete = await Paises.findAll({
         where: {
             id_pais: paisesDelete // Fix: Use paisesDelete instead of paises
         }
     });
     if (paisesToDelete) {
-        await paises.destroy({
+        await Paises.destroy({
             where: {
                 id_pais: paisesDelete // Fix: Use paisesDelete instead of paises
             }
@@ -64,9 +64,9 @@ export async function deletePaises(paisesDelete: number[]) {
     return null;
 }
 export async function paisesJoinAcuerdos() {
-    const paisesList = await paises.findAll({
+    const paisesList = await Paises.findAll({
         include: [{
-            model: acuerdos,
+            model: AcuerdosArancelarios,
             required: false,
 
         }]

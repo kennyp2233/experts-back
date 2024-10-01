@@ -1,22 +1,23 @@
-import productos from '@db/models/mantenimiento/productos.model';
-import ProductosMiPro from '@dbModels/mantenimiento/productos/productos_mi_pro.model';
-import ProductosAranceles from '@dbModels/mantenimiento/productos/productos_aranceles.model';
-import { ProductoCreationAttributes, Producto } from '@typesApp/entities/mantenimiento/ProductosTypes';
-import ProductosCompuesto from '@dbModels/mantenimiento/productos/productos_producto_compuesto.model';
-import "@db/assosiations/mantenimiento/productos.as";
-import sequelize from "@db/experts.db";
+import Productos from '@models/mantenimiento/producto.model';
+import ProductosMiPro from '@models/mantenimiento/productos/productos_mi_pro.model';
+import ProductosAranceles from '@models/mantenimiento/productos/productos_aranceles.model';
+import { ProductoAtributosCreacion, Producto } from '@typesApp/mantenimiento/producto.type';
+import ProductosCompuesto from '@models/mantenimiento/productos/productos_producto_compuesto.model';
+
+import "src/config/assosiations/mantenimiento/productos.as";
+import sequelize from "src/config/experts.db";
 import { crearRegistrosConSeries } from '@utils/custom_data_utils';
 export async function getProductos() {
-    const productosList = await productos.findAll();
+    const productosList = await Productos.findAll();
     return productosList.map((producto) => producto.toJSON()) as Producto[];
 }
 
 export async function getProducto(id: number) {
-    const producto = await productos.findByPk(id);
+    const producto = await Productos.findByPk(id);
     return producto ? producto.toJSON() as Producto : null;
 }
 
-export async function createProducto(producto: ProductoCreationAttributes) {
+export async function createProducto(producto: ProductoAtributosCreacion) {
     const transaction = await sequelize.transaction();
 
     try {
@@ -25,19 +26,18 @@ export async function createProducto(producto: ProductoCreationAttributes) {
         const arancelesData = extraerArancelesData(producto) as any[];
         const productoCompuestoData = extraerProductoCompuestoData(producto) as any[];
 
-        const newProducto: any = await productos.create(productoData, { transaction });
+        const newProducto: any = await Productos.create(productoData, { transaction });
 
         await crearRegistrosConSeries(newProducto.id_producto, miProData, ['mipro_acuerdo', 'mipro_djocode', 'mipro_tariffcode'], ProductosMiPro, transaction, 'id_producto');
         await crearRegistrosConSeries(newProducto.id_producto, arancelesData, ['aranceles_destino', 'aranceles_codigo'], ProductosAranceles, transaction, 'id_producto');
         await crearRegistrosConSeries(newProducto.id_producto, productoCompuestoData, ['producto_compuesto_destino', 'producto_compuesto_declaracion'], ProductosCompuesto, transaction, 'id_producto');
 
         await transaction.commit();
-        return await productos.findByPk(newProducto.id_producto);
+        return await Productos.findByPk(newProducto.id_producto);
 
-    } catch (error: any) {
-        console.error('Error en createProducto:', error);
+    } catch (error) {
         await transaction.rollback();
-        return { error: error.message };
+        throw error
     }
 }
 
@@ -45,7 +45,7 @@ export async function updateProducto(producto: Producto) {
     const transaction = await sequelize.transaction();
 
     try {
-        const productoToUpdate = await productos.findByPk(producto.id_producto, { transaction });
+        const productoToUpdate = await Productos.findByPk(producto.id_producto, { transaction });
         if (!productoToUpdate) {
             throw new Error('Producto no encontrado');
         }
@@ -59,7 +59,7 @@ export async function updateProducto(producto: Producto) {
         await ProductosAranceles.destroy({ where: { id_producto: producto.id_producto }, transaction });
         await ProductosCompuesto.destroy({ where: { id_producto: producto.id_producto }, transaction });
 
-        await productos.update(productoData, {
+        await Productos.update(productoData, {
             where: { id_producto: producto.id_producto },
             transaction
         });
@@ -70,12 +70,12 @@ export async function updateProducto(producto: Producto) {
 
         await transaction.commit();
 
-        const updatedProducto = await productos.findByPk(producto.id_producto);
+        const updatedProducto = await Productos.findByPk(producto.id_producto);
         return updatedProducto ? updatedProducto.toJSON() as Producto : null;
 
-    } catch (error: any) {
+    } catch (error) {
         await transaction.rollback();
-        return { error: error.message };
+        throw error
     }
 }
 
@@ -86,7 +86,7 @@ export async function deleteProducto(id: number) {
 
     try {
         // Buscar el producto que se desea eliminar
-        const productoToDelete = await productos.findByPk(id, { transaction });
+        const productoToDelete = await Productos.findByPk(id, { transaction });
         if (!productoToDelete) {
             throw new Error('Producto no encontrado');
         }
@@ -97,16 +97,15 @@ export async function deleteProducto(id: number) {
         await ProductosCompuesto.destroy({ where: { id_producto: id }, transaction });
 
         // Eliminar el producto principal
-        await productos.destroy({ where: { id_producto: id }, transaction });
+        await Productos.destroy({ where: { id_producto: id }, transaction });
 
         // Confirmar la transacción
         await transaction.commit();
 
         return productoToDelete.toJSON() as Producto;
-    } catch (error: any) {
-        // Revertir la transacción en caso de error
+    } catch (error) {
         await transaction.rollback();
-        return { error: error.message };
+        throw error
     }
 }
 
@@ -116,7 +115,7 @@ export async function deleteProductos(productosDelete: number[]) {
 
     try {
         // Buscar los productos que se desean eliminar
-        const productosToDelete = await productos.findAll({
+        const productosToDelete = await Productos.findAll({
             where: {
                 id_producto: productosDelete
             },
@@ -135,7 +134,7 @@ export async function deleteProductos(productosDelete: number[]) {
         ]);
 
         // Eliminar los productos principales
-        await productos.destroy({
+        await Productos.destroy({
             where: {
                 id_producto: productosDelete
             },
@@ -146,16 +145,15 @@ export async function deleteProductos(productosDelete: number[]) {
         await transaction.commit();
 
         return productosToDelete.map((producto) => producto.toJSON()) as Producto[];
-    } catch (error: any) {
-        // Revertir la transacción en caso de error
+    } catch (error) {
         await transaction.rollback();
-        return { error: error.message };
+        throw error
     }
 }
 
 
 export async function getProductoJoinAll() {
-    return await productos.findAll({
+    return await Productos.findAll({
         include: [
             {
                 association: 'opcion',

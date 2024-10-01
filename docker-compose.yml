@@ -1,11 +1,20 @@
-version: '3.9'
 services:
-  db:
-    image: mysql:8.0
-    command: --default-authentication-plugin=mysql_native_password
-    restart: no
+  postgres:
+    image: postgres:15.3  # Puedes cambiar a la versión que prefieras
     environment:
-      MYSQL_ROOT_PASSWORD: 123456
-      MYSQL_DATABASE: experts_db
+      POSTGRES_USER: ${DB_USER}             # Nombre de usuario
+      POSTGRES_PASSWORD: ${DB_PASSWORD}     # Contraseña del usuario
+      POSTGRES_DB: ${DB_NAME}               # Base de datos por defecto (opcional)
     ports:
-      - "3310:3306"
+      - "${DB_PORT}:5432"  # Puerto estándar de PostgreSQL
+    volumes:
+      - pg-data:/var/lib/postgresql/data  # Volumen para persistencia de datos
+      - ./initdb:/docker-entrypoint-initdb.d  # Montar la carpeta de scripts de inicialización
+    networks:
+      - app-network
+
+volumes:
+  pg-data:
+
+networks:
+  app-network:

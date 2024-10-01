@@ -1,120 +1,156 @@
-import usuarios from "@dbModels/usuarios/usuarios.model";
-import { isUserAdmin } from "@services/usuarios/admins.servicio"
-import { Usuario, UsuarioCreationAttributes } from "@typesApp/entities/usuarios/UsuarioTypes";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-const SECRET_KEY = process.env.SECRET_KEY;
+import Usuarios from "@models/usuarios/usuario.model";
+import { isUserAdmin } from "@services/usuarios/admins.servicio";
+import { Usuario, UsuarioAtributosCreacion } from "@typesApp/usuarios/usuario.type";
+import { SECRET_KEY, BY_SALT, SECRET_REFRESH_KEY } from "@db/config";
 
-export async function login(usuario: string, pass: string, mantenerSesion: boolean) {
+
+
+import { UUID } from 'crypto';
+
+export async function login(usuario: string, pass: string, mantenerSesion: boolean): Promise<{ accessToken: string, refreshToken: string }> {
     let user: Usuario | null = null;
-    let payload: object = {};
 
-    try {
-        if (isEmail(usuario)) {
-            user = await getUserByEmailOrUsername(usuario);
-        } else {
-            const userInstance = await usuarios.findOne({ where: { usuario } });
-            user = userInstance ? userInstance.dataValues as Usuario : null;
-        }
-
-        if (!user) return { error: 'Credenciales inválidas' };
-        if (user && user.pass && pass) {
-            const isPasswordCorrect = await bcrypt.compare(pass, user.pass);
-            if (isPasswordCorrect) {
-                if (SECRET_KEY) {
-
-                    const expiresIn = mantenerSesion ? '7d' : '1h';
-                    const token = jwt.sign({ id_usuario: user.id_usuario, admin: await isUserAdmin(user.id_usuario || 0) }, SECRET_KEY, { expiresIn });
-                    //console.log(jwt.verify(token, SECRET_KEY) as any);
-                    return { token };
-                }
-            } else {
-                return { error: 'Contraseña incorrecta' };
-            }
-        }
-    } catch (error: any) {
-        console.log(error);
-        return { error: error.message };
+    if (isEmail(usuario)) {
+        user = await getUserByEmailOrUsername(usuario);
+    } else {
+        const userInstance = await Usuarios.findOne({ where: { usuario } });
+        //console.log(userInstance);
+        user = userInstance ? userInstance.dataValues as Usuario : null;
     }
-    return { error: 'Credenciales inválidas' };
+
+    if (!user) {
+        throw new Error('Credenciales inválidas');
+    }
+
+    const isPasswordCorrect = await bcrypt.compare(pass, user.pass);
+    if (!isPasswordCorrect) {
+        throw new Error('Credenciales inválidas');
+    }
+
+    if (!SECRET_KEY) {
+        throw new Error('Clave secreta no configurada');
+    }
+
+    if (!SECRET_REFRESH_KEY) {
+        throw new Error('Clave secreta de refresco no configurada');
+    }
+
+    const accessTokenExpiresIn = '15m'; // Token de acceso válido por 15 minutos
+    const refreshTokenExpiresIn = mantenerSesion ? '7d' : '1h'; // Token de refresco
+
+    const accessToken = jwt.sign(
+        {
+            id_usuario: user.id_usuario,
+            admin: await isUserAdmin(user.id_usuario || 0)
+        },
+        SECRET_KEY,
+        { expiresIn: accessTokenExpiresIn }
+    );
+
+    const refreshToken = jwt.sign(
+        {
+            id_usuario: user.id_usuario
+        },
+        SECRET_REFRESH_KEY, // Nueva clave secreta para el token de refresco
+        { expiresIn: refreshTokenExpiresIn }
+    );
+
+    // Opcional: Guardar el refreshToken en la base de datos si deseas invalidarlo posteriormente
+
+    return { accessToken, refreshToken };
 }
-// ahora para registrarme
-export async function register(usuario: UsuarioCreationAttributes): Promise<UsuarioCreationAttributes | any> {
-    const userExists = await getUserByEmailOrUsername(usuario.email || ''); // Handle null case by providing a default empty string
+
+export async function register(usuario: UsuarioAtributosCreacion): Promise<UsuarioAtributosCreacion> {
+    const userExists = await getUserByEmailOrUsername(usuario.email || '');
     if (userExists) {
-        return { error: 'El usuario ya existe' };
-    }
-    if (!usuario.email || !usuario.usuario || !usuario.pass) {
-        return { error: 'Faltan datos' };
+        throw new Error('El usuario ya existe');
     }
 
-    if (usuario.pass.length < 6) {
-        return { error: 'La contraseña debe tener al menos 6 caracteres' };
+    const { email, usuario: username, pass } = usuario;
+
+    if (!email || !username || !pass) {
+        throw new Error('Faltan datos');
     }
 
-    if (usuario.usuario.length < 6) {
-        return { error: 'El usuario debe tener al menos 6 caracteres' };
+    if (pass.length < 6) {
+        throw new Error('La contraseña debe tener al menos 6 caracteres');
     }
 
-    if (usuario.usuario.length > 20) {
-        return { error: 'El usuario no puede tener más de 20 caracteres' };
+    if (username.length < 6 || username.length > 20) {
+        throw new Error('El usuario debe tener entre 6 y 20 caracteres');
     }
 
-    if (usuario.usuario.includes(' ')) {
-        return { error: 'El usuario no puede contener espacios' };
+    if (username.includes(' ')) {
+        throw new Error('El usuario no puede contener espacios');
     }
 
-    if (!isEmail(usuario.email)) {
-        return { error: 'El email no es válido' };
+    if (!isEmail(email)) {
+        throw new Error('El email no es válido');
     }
 
-    const hashedPass = await bcrypt.hash(usuario.pass, 10);
+    const hashedPass = await bcrypt.hash(pass, Number(BY_SALT));
     usuario.pass = hashedPass;
 
-
     try {
-        const user = await usuarios.create({
+        const user = await Usuarios.create({
             email: usuario.email,
             usuario: usuario.usuario,
             pass: usuario.pass
-
         });
         return user.toJSON();
-    } catch (e: any) {
-        return { error: e.message };
+    } catch (error) {
+        throw new Error('Error al crear el usuario');
     }
-
 }
 
-export async function verifyToken(token: string) {
+export async function verifyToken(token: string): Promise<{ valid: boolean }> {
+    if (!SECRET_KEY) {
+        throw new Error('Clave secreta no configurada');
+    }
+
     try {
-        const SECRET_KEY = process.env.SECRET_KEY || ''; // Reemplaza 'your-secret-key' con tu clave secreta
         jwt.verify(token, SECRET_KEY);
         return { valid: true };
-    } catch (error: any) {
-        return { valid: false, error: error.message };
+    } catch (error) {
+        throw new Error('Token inválido');
     }
 }
+export async function refreshToken(token: string): Promise<{ token: string }> {
+    const payload = jwt.verify(token, SECRET_REFRESH_KEY!) as { id_usuario: UUID };
 
-export async function isAdminToken(token: string) {
+    const newAccessToken = jwt.sign(
+        {
+            id_usuario: payload.id_usuario,
+            admin: await isUserAdmin(payload.id_usuario)
+        },
+        SECRET_KEY!,
+        { expiresIn: '15m' }
+    );
+
+    return { token: newAccessToken };
+}
+
+async function isAdminToken(token: string): Promise<{ isAdmin: boolean }> {
+    if (!SECRET_KEY) {
+        throw new Error('Clave secreta no configurada');
+    }
+
     try {
-        const SECRET_KEY = process.env.SECRET_KEY || ''; // Reemplaza 'your-secret-key' con tu clave secreta
-        const decoded = jwt.verify(token, SECRET_KEY) as any;
+        const decoded = jwt.verify(token, SECRET_KEY) as { admin?: boolean };
         return { isAdmin: decoded.admin || false };
-    } catch (error: any) {
-        return { error: error.message };
+    } catch (error) {
+        throw new Error('Token inválido');
     }
 }
-
 
 async function getUserByEmailOrUsername(identifier: string): Promise<Usuario | null> {
-    let user: Usuario | null = null;
     if (isEmail(identifier)) {
-        user = await usuarios.findOne({ where: { email: identifier } }) as Usuario | null;
+        return await Usuarios.findOne({ where: { email: identifier } }) as Usuario | null;
     } else {
-        user = await usuarios.findOne({ where: { usuario: identifier } }) as Usuario | null;
+        return await Usuarios.findOne({ where: { usuario: identifier } }) as Usuario | null;
     }
-    return user;
 }
 
 function isEmail(identifier: string): boolean {

@@ -1,23 +1,23 @@
-import clientes from "@dbModels/mantenimiento/clientes.model";
-import { Cliente, ClienteCreationAttributes } from "@typesApp/entities/mantenimiento/ClientesTypes";
+import Clientes from "@models/mantenimiento/cliente.model";
+import { Cliente, ClienteAtributosCreacion } from "@typesApp/mantenimiento/cliente.type";
 
 export async function getClientes() {
-    const clientesList = await clientes.findAll();
+    const clientesList = await Clientes.findAll();
     return clientesList.map((cliente) => cliente.toJSON()) as Cliente[];
 }
 
 export async function getCliente(id: number) {
-    const cliente = await clientes.findByPk(id);
+    const cliente = await Clientes.findByPk(id);
     return cliente?.toJSON() as Cliente;
 }
 
-export async function createCliente(cliente: ClienteCreationAttributes) {
-    const newCliente = await clientes.create(cliente);
+export async function createCliente(cliente: ClienteAtributosCreacion) {
+    const newCliente = await Clientes.create(cliente);
     return newCliente.toJSON() as Cliente;
 }
 
 export async function updateCliente(cliente: Cliente) {
-    const updatedCliente = await clientes.update(cliente, {
+    const updatedCliente = await Clientes.update(cliente, {
         where: {
             id_clientes: cliente.id_clientes
         }
@@ -26,7 +26,7 @@ export async function updateCliente(cliente: Cliente) {
 }
 
 export async function deleteClientes(ids: number[]) {
-    const deletedClientes = await clientes.destroy({
+    const deletedClientes = await Clientes.destroy({
         where: {
             id_clientes: ids
         }

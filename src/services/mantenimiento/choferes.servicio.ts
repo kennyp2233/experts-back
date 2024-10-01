@@ -1,5 +1,5 @@
-import Choferes from "@dbModels/mantenimiento/chofer.model";
-import { Chofer, ChoferCreationAttributes } from "@typesApp/entities/mantenimiento/ChoferTypes";
+import Choferes from "@models/mantenimiento/chofer.model";
+import { Chofer, ChoferAtributosCreacion } from "@typesApp/mantenimiento/chofer.type";
 
 export async function getChoferes() {
     const choferesList = await Choferes.findAll();
@@ -11,7 +11,7 @@ export async function getChofer(id: number) {
     return chofer ? chofer.toJSON() as Chofer : null;
 }
 
-export async function createChofer(chofer: ChoferCreationAttributes) {
+export async function createChofer(chofer: ChoferAtributosCreacion) {
     const newChofer = await Choferes.create(chofer);
     return newChofer.toJSON() as Chofer;
 }

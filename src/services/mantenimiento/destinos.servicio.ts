@@ -1,42 +1,42 @@
-import destinos from "@dbModels/mantenimiento/destinos.model"
-import pais from "@dbModels/mantenimiento/paises.model"
-import { Destino, DestinoCreationAttributes } from "@typesApp/entities/mantenimiento/DestinoTypes"
-import "@db/assosiations/mantenimiento/destinos_pais.as"
+import Destinos from "@models/mantenimiento/destino.model";
+import Pais from "@models/mantenimiento/pais.model";
+import { Destino, DestinoAtributosCreacion } from "@typesApp/mantenimiento/destino.type"
+import "src/config/assosiations/mantenimiento/destinos_pais.as"
 
 export async function getDestinos() {
-    const destinosList = await destinos.findAll();
+    const destinosList = await Destinos.findAll();
     return destinosList.map((destino) => destino.toJSON()) as Destino[];
 }
 
 export async function getDestino(id: number) {
-    const destino = await destinos.findByPk(id);
+    const destino = await Destinos.findByPk(id);
     return destino ? destino.toJSON() as Destino : null;
 }
 
-export async function createDestino(destino: DestinoCreationAttributes) {
+export async function createDestino(destino: DestinoAtributosCreacion) {
     const destinoData = extraerDestinoDeData(destino);
-    return await destinos.create(destinoData);
+    return await Destinos.create(destinoData);
 }
 
 export async function updateDestino(destino: Destino) {
-    const destinoToUpdate = await destinos.findByPk(destino.id_destino);
+    const destinoToUpdate = await Destinos.findByPk(destino.id_destino);
     const destinoData = extraerDestinoDeData(destino);
     if (destinoToUpdate) {
-        await destinos.update(destinoData, {
+        await Destinos.update(destinoData, {
             where: {
                 id_destino: destino.id_destino
             }
         });
-        const updatedDestino = await destinos.findByPk(destino.id_destino);
+        const updatedDestino = await Destinos.findByPk(destino.id_destino);
         return updatedDestino ? updatedDestino.toJSON() as Destino : null;
     }
     return null;
 }
 
 export async function deleteDestino(id: number) {
-    const destinoToDelete = await destinos.findByPk(id);
+    const destinoToDelete = await Destinos.findByPk(id);
     if (destinoToDelete) {
-        await destinos.destroy({
+        await Destinos.destroy({
             where: {
                 id_destino: id
             }
@@ -47,7 +47,7 @@ export async function deleteDestino(id: number) {
 }
 
 export async function deleteDestinos(destinosDelete: number[]) {
-    return await destinos.destroy({
+    return await Destinos.destroy({
         where: {
             id_destino: destinosDelete
         }
@@ -55,10 +55,10 @@ export async function deleteDestinos(destinosDelete: number[]) {
 }
 
 export async function getDestinosJoinPais() {
-    return await destinos.findAll({
+    return await Destinos.findAll({
         include: [
             {
-                model: pais,
+                model: Pais,
                 required: false
             }
         ]

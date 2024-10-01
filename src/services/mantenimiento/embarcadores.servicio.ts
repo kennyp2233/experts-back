@@ -1,38 +1,38 @@
-import embarcadores from "@dbModels/mantenimiento/embarcadores.model";
-import { Embarcador, EmbarcadorCreationAttributes } from "@typesApp/entities/mantenimiento/EmbarcadoresTypes";
+import Embarcadores from "@models/mantenimiento/embarcador.model";
+import { Embarcador, EmbarcadorAtributosCreacion } from "@typesApp/mantenimiento/embarcador.type";
 
 export async function getEmbarcadores() {
-    const embarcadoresList = await embarcadores.findAll();
+    const embarcadoresList = await Embarcadores.findAll();
     return embarcadoresList.map((embarcador) => embarcador.toJSON()) as Embarcador[];
 }
 
 export async function getEmbarcador(id: number) {
-    const embarcador = await embarcadores.findByPk(id);
+    const embarcador = await Embarcadores.findByPk(id);
     return embarcador ? embarcador.toJSON() as Embarcador : null;
 }
 
-export async function createEmbarcador(embarcador: EmbarcadorCreationAttributes) {
-    return await embarcadores.create(embarcador);
+export async function createEmbarcador(embarcador: EmbarcadorAtributosCreacion) {
+    return await Embarcadores.create(embarcador);
 }
 
 export async function updateEmbarcador(embarcador: Embarcador) {
-    const embarcadorToUpdate = await embarcadores.findByPk(embarcador.id_embarcador);
+    const embarcadorToUpdate = await Embarcadores.findByPk(embarcador.id_embarcador);
     if (embarcadorToUpdate) {
-        await embarcadores.update(embarcador, {
+        await Embarcadores.update(embarcador, {
             where: {
                 id_embarcador: embarcador.id_embarcador
             }
         });
-        const updatedEmbarcador = await embarcadores.findByPk(embarcador.id_embarcador);
+        const updatedEmbarcador = await Embarcadores.findByPk(embarcador.id_embarcador);
         return updatedEmbarcador ? updatedEmbarcador.toJSON() as Embarcador : null;
     }
     return null;
 }
 
 export async function deleteEmbarcador(id: number) {
-    const embarcadorToDelete = await embarcadores.findByPk(id);
+    const embarcadorToDelete = await Embarcadores.findByPk(id);
     if (embarcadorToDelete) {
-        await embarcadores.destroy({
+        await Embarcadores.destroy({
             where: {
                 id_embarcador: id
             }
@@ -43,13 +43,13 @@ export async function deleteEmbarcador(id: number) {
 }
 
 export async function deleteEmbarcadores(embarcadoresDelete: number[]) {
-    const embarcadoresToDelete = await embarcadores.findAll({
+    const embarcadoresToDelete = await Embarcadores.findAll({
         where: {
             id_embarcador: embarcadoresDelete
         }
     });
     if (embarcadoresToDelete) {
-        await embarcadores.destroy({
+        await Embarcadores.destroy({
             where: {
                 id_embarcador: embarcadoresDelete
             }

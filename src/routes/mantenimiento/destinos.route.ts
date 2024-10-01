@@ -1,57 +1,91 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
+import { body, query } from 'express-validator';
+import validationMiddleware from '@middlewares/validationMiddleware';
 import { createDestino, getDestino, getDestinos, updateDestino, deleteDestinos, getDestinosJoinPais } from '@services/mantenimiento/destinos.servicio';
-import { Destino, DestinoCreationAttributes } from '@typesApp/entities/mantenimiento/DestinoTypes';
+import { Destino, DestinoAtributosCreacion } from '@typesApp/mantenimiento/destino.type';
 
 const router = express.Router();
 
-router.get('/destinos', async (req, res) => {
-    try {
-        if (req.query.id) {
-            res.send(await getDestino(Number.parseInt(req.query.id as string)));
-        } else {
-            res.send(await getDestinos());
+// GET /destinos
+router.get('/destinos',
+    [
+        query('id').optional().isInt().withMessage('ID debe ser un número entero'),
+        // Agregar más validaciones si es necesario
+    ],
+    validationMiddleware,
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            if (req.query.id) {
+                const destino = await getDestino(Number.parseInt(req.query.id as string));
+                res.json(destino);
+            } else {
+                const destinos = await getDestinos();
+                res.json(destinos);
+            }
+        } catch (error) {
+            next(error); // Todos los errores deben ser manejados por el middleware global
         }
-    } catch (error: any) {
-        res.status(400).json({ ok: false, msg: error.message });
     }
-}
 );
 
-router.get('/destinos/paises', async (req, res) => {
+// GET /destinos/paises
+router.get('/destinos/paises', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        res.send(await getDestinosJoinPais());
-    } catch (error: any) {
-        res.status(400).json({ ok: false, msg: error.message });
+        const destinosPaises = await getDestinosJoinPais();
+        res.json(destinosPaises);
+    } catch (error) {
+        next(error); // Todos los errores deben ser manejados por el middleware global
     }
 });
 
-router.post('/destinos', async (req, res) => {
-    console.log(req.body);
-    try {
-        await createDestino(req.body as DestinoCreationAttributes);
-        res.status(201).json({ ok: true, msg: 'Destino creado' });
-    } catch (error: any) {
-        res.status(400).json({ ok: false, msg: error.message });
+// POST /destinos
+router.post('/destinos',
+    [
+    ],
+    validationMiddleware,
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            await createDestino(req.body as DestinoAtributosCreacion);
+            res.status(201).json({ ok: true, msg: 'Destino creado' });
+        } catch (error) {
+            next(error); // Todos los errores deben ser manejados por el middleware global
+        }
     }
-});
+);
 
-router.put('/destinos', async (req, res) => {
-    try {
-        await updateDestino(req.body as Destino);
-        res.status(200).json({ ok: true, msg: 'Destino actualizado' });
-    } catch (error: any) {
-        res.status(400).json({ ok: false, msg: error.message });
+// PUT /destinos
+router.put('/destinos',
+    [
+        body('id').isInt().withMessage('ID debe ser un número entero'),
+    ],
+    validationMiddleware,
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            await updateDestino(req.body as Destino);
+            res.status(200).json({ ok: true, msg: 'Destino actualizado' });
+        } catch (error) {
+            next(error); // Todos los errores deben ser manejados por el middleware global
+        }
     }
-});
+);
 
-router.delete('/destinos', async (req, res) => {
-    try {
-        const destinos = req.body as any[];
-        await deleteDestinos(destinos.map(Number));
-        res.status(200).json({ ok: true, msg: 'Destino eliminado' });
-    } catch (error: any) {
-        res.status(400).json({ ok: false, msg: error.message });
+// DELETE /destinos
+router.delete('/destinos',
+    [
+        body('ids').isArray().withMessage('El cuerpo debe ser un array de destinos'),
+        body('ids.*').isInt().withMessage('Cada destino debe ser un número entero'),
+        // Agregar más validaciones si es necesario
+    ],
+    validationMiddleware,
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const destinos = req.body as number[];
+            await deleteDestinos(destinos);
+            res.status(200).json({ ok: true, msg: 'Destinos eliminados' });
+        } catch (error) {
+            next(error); // Todos los errores deben ser manejados por el middleware global
+        }
     }
-});
+);
 
 export default router;

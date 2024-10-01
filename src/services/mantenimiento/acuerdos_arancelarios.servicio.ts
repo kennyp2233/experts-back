@@ -1,6 +1,6 @@
-import AcuerdosArancelarios from "@dbModels/mantenimiento/acuerdos_arancelarios.model";
+import AcuerdosArancelarios from "@models/mantenimiento/acuerdo_arancelario.model";
 
-import { AcuerdoArancelario, AcuerdoArancelarioCreationAttributes } from "@typesApp/entities/mantenimiento/AcuerdosArancelariosTypes";
+import { AcuerdoArancelario, AcuerdoArancelarioAtributosCreacion } from "@typesApp/mantenimiento/acuerdo_arancelario.type";
 
 export async function getAcuerdosArancelarios(): Promise<AcuerdoArancelario[]> {
     const acuerdosArancelariosList = await AcuerdosArancelarios.findAll();
@@ -12,7 +12,7 @@ export async function getAcuerdoArancelario(id: number): Promise<AcuerdoArancela
     return acuerdoArancelario ? acuerdoArancelario.toJSON() as AcuerdoArancelario : null;
 }
 
-export async function createAcuerdoArancelario(acuerdoArancelario: AcuerdoArancelarioCreationAttributes) {
+export async function createAcuerdoArancelario(acuerdoArancelario: AcuerdoArancelarioAtributosCreacion) {
     return await AcuerdosArancelarios.create(acuerdoArancelario as any);
 }
 

@@ -1,6 +1,6 @@
 import express from 'express';
 import { createOrigen, getOrigen, getOrigenes, updateOrigen, deleteOrigenes, origenJoinPaisesAduanas } from '@services/mantenimiento/origenes.servicio';
-import { Origen, OrigenCreationAttributes } from '@typesApp/entities/mantenimiento/OrigenTypes';
+import { Origen, OrigenCreationAttributes } from '@typesApp/mantenimiento/origen.type';
 
 const router = express.Router();
 

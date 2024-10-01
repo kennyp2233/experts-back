@@ -1,5 +1,5 @@
-import CatalogoModoAerolinea from "@dbModels/catalogos/aerolineas/catalogo_modo_aerolinea.model";
-import { CatalogoModo, CatalogoModoCreationAttributes } from "@typesApp/entities/catalogos/aerolineas/CatalogoModo";
+import CatalogoModoAerolinea from "@models/catalogos/aerolineas/catalogo_modo_aerolinea.model";
+import { CatalogoModo, CatalogoModoCreationAttributes } from "@typesApp/catalogos/aerolineas/catalogo_modo.type";
 
 export async function getCatalogoModos(): Promise<CatalogoModo[]> {
     const catalogoModosList = await CatalogoModoAerolinea.findAll();

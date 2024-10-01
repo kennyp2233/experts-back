@@ -1,38 +1,38 @@
-import cae_aduana from '@dbModels/mantenimiento/cae_aduana.model';
-import { CaeAduana, CaeAduanaCreationAttributes } from '@typesApp/entities/mantenimiento/CaeAduanaTypes';
+import CaesAduana from '@models/mantenimiento/cae_aduana.model';
+import { CaeAduana, CaeAduanaAtributosCreacion } from '@typesApp/mantenimiento/cae_aduana.type';
 
 export async function getAduanas() {
-    const aduanasList = await cae_aduana.findAll();
+    const aduanasList = await CaesAduana.findAll();
     return aduanasList.map((cae_aduana) => cae_aduana.toJSON()) as CaeAduana[];
 }
 
 export async function getAduana(id: number) {
-    const aduana = await cae_aduana.findByPk(id);
+    const aduana = await CaesAduana.findByPk(id);
     return aduana ? aduana.toJSON() as CaeAduana : null;
 }
 
-export async function createAduana(aduana: CaeAduanaCreationAttributes) {
-    return await cae_aduana.create(aduana);
+export async function createAduana(aduana: CaeAduanaAtributosCreacion) {
+    return await CaesAduana.create(aduana);
 }
 
 export async function updateAduana(aduana: CaeAduana) {
-    const aduanaToUpdate = await cae_aduana.findByPk(aduana.id_cae_aduana);
+    const aduanaToUpdate = await CaesAduana.findByPk(aduana.id_cae_aduana);
     if (aduanaToUpdate) {
-        await cae_aduana.update(aduana, {
+        await CaesAduana.update(aduana, {
             where: {
                 id_cae_aduana: aduana.id_cae_aduana
             }
         });
-        const updatedAduana = await cae_aduana.findByPk(aduana.id_cae_aduana);
+        const updatedAduana = await CaesAduana.findByPk(aduana.id_cae_aduana);
         return updatedAduana ? updatedAduana.toJSON() as CaeAduana : null;
     }
     return null;
 }
 
 export async function deleteAduana(id: number) {
-    const aduanaToDelete = await cae_aduana.findByPk(id);
+    const aduanaToDelete = await CaesAduana.findByPk(id);
     if (aduanaToDelete) {
-        await cae_aduana.destroy({
+        await CaesAduana.destroy({
             where: {
                 id_cae_aduana: id
             }
@@ -43,7 +43,7 @@ export async function deleteAduana(id: number) {
 }
 
 export async function deleteAduanas(aduanasDelete: number[]) {
-    return await cae_aduana.destroy({
+    return await CaesAduana.destroy({
         where: {
             id_cae_aduana: aduanasDelete
         }

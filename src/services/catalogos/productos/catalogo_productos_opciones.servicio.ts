@@ -1,5 +1,5 @@
-import catalogo from "@dbModels/catalogos/productos/catalogo_productos_opciones.model";
-import { CatalogoProductoOpciones, CatalogoProductoOpcionesCreationAttributes } from "@typesApp/entities/catalogos/productos/CatalogoProductoOpcionesTypes";
+import catalogo from "@models/catalogos/productos/catalogo_productos_opciones.model";
+import { CatalogoProductoOpciones, CatalogoProductoOpcionesCreationAttributes } from "@typesApp/catalogos/productos/catalogo_producto_opciones.type";
 
 export async function getCatalogoProductosOpciones(): Promise<CatalogoProductoOpciones[]> {
     const catalogoProductosOpcionesList = await catalogo.findAll();

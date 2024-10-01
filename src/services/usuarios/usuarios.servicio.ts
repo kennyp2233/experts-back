@@ -1,43 +1,60 @@
-import usuarios from "@dbModels/usuarios/usuarios.model";
-import { Usuario, UsuarioCreationAttributes } from "@typesApp/entities/usuarios/UsuarioTypes";
+// src/services/usuarios/usuarios.servicio.ts
+import Usuarios from "@models/usuarios/usuario.model";
+import { Usuario, UsuarioAtributosCreacion } from "@typesApp/usuarios/usuario.type";
 
-export async function getUsuarios() {
-    const usuariosList = await usuarios.findAll();
+// No se utiliza try/catch aquí; los errores se propagan a las rutas
+export async function getUsuarios(): Promise<Usuario[]> {
+    const usuariosList = await Usuarios.findAll();
     return usuariosList.map((usuario) => usuario.toJSON()) as Usuario[];
 }
 
-export async function getUsuario(id: number) {
-    const usuarioInstance = await usuarios.findByPk(id);
-    return usuarioInstance ? usuarioInstance.toJSON() as Usuario : null;
-}
-
-export async function createUsuario(usuario: UsuarioCreationAttributes) {
-    return await usuarios.create(usuario);
-}
-
-export async function updateUsuario(usuario: Usuario) {
-    const usuarioToUpdate = await usuarios.findByPk(usuario.id_usuario);
-    if (usuarioToUpdate) {
-        await usuarios.update(usuario, {
-            where: {
-                id_usuario: usuario.id_usuario
-            }
-        });
-        const updatedUsuario = await usuarios.findByPk(usuario.id_usuario);
-        return updatedUsuario ? updatedUsuario.toJSON() as Usuario : null;
+export async function getUsuario(id: number): Promise<Usuario> {
+    const usuarioInstance = await Usuarios.findByPk(id);
+    if (!usuarioInstance) {
+        throw new Error('Usuario no encontrado');
     }
-    return null;
+    return usuarioInstance.toJSON() as Usuario;
 }
 
-export async function deleteUsuario(id: number) {
-    const usuarioToDelete = await usuarios.findByPk(id);
-    if (usuarioToDelete) {
-        await usuarios.destroy({
-            where: {
-                id_usuario: id
-            }
-        });
-        return usuarioToDelete.toJSON() as Usuario;
+export async function createUsuario(usuario: UsuarioAtributosCreacion): Promise<Usuario> {
+    const existingUser = await Usuarios.findOne({ where: { email: usuario.email } });
+    if (existingUser) {
+        throw new Error('El usuario ya existe');
     }
-    return null;
+
+    const nuevoUsuario = await Usuarios.create(usuario);
+    return nuevoUsuario.toJSON() as Usuario;
+}
+
+export async function updateUsuario(id: number, usuario: Partial<UsuarioAtributosCreacion>): Promise<Usuario> {
+    const usuarioToUpdate = await Usuarios.findByPk(id);
+    if (!usuarioToUpdate) {
+        throw new Error('Usuario no encontrado');
+    }
+
+    await Usuarios.update(usuario, {
+        where: {
+            id_usuario: id
+        }
+    });
+
+    const updatedUsuario = await Usuarios.findByPk(id);
+    if (!updatedUsuario) {
+        throw new Error('Error al actualizar el usuario');
+    }
+    return updatedUsuario.toJSON() as Usuario;
+}
+
+export async function deleteUsuario(id: number): Promise<Usuario> {
+    const usuarioToDelete = await Usuarios.findByPk(id);
+    if (!usuarioToDelete) {
+        throw new Error('Usuario no encontrado');
+    }
+
+    await Usuarios.destroy({
+        where: {
+            id_usuario: id
+        }
+    });
+    return usuarioToDelete.toJSON() as Usuario;
 }

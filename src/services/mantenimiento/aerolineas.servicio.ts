@@ -1,13 +1,13 @@
-import Aerolineas from "@dbModels/mantenimiento/aerolineas.model";
-import { Aerolinea, AerolineaCreationAttributes } from "@typesApp/entities/mantenimiento/AerolineaTypes";
-import Origenes from "@dbModels/mantenimiento/origenes.model";
-import Destinos from "@dbModels/mantenimiento/destinos.model";
-import AerolineasPlantillas from "@dbModels/mantenimiento/aerolineas_plantillas.model"
-import CatalogoModoAerolinea from "@dbModels/catalogos/aerolineas/catalogo_modo_aerolinea.model";
-import CatalogoMultiplicadorAerolinea from "@dbModels/catalogos/aerolineas/catalogo_multiplicador_aerolinea.model";
-import "@db/assosiations/mantenimiento/aerolineas_all_assosiation.as"
-import sequelize from "@db/experts.db";
-import { AerolineasPlantilla, AerolineasPlantillaCreationAttributes } from "@typesApp/entities/mantenimiento/AerolineaPlantillaTypes";
+import Aerolineas from "@models/mantenimiento/aerolinea.model";
+import { Aerolinea, AerolineaCreationAttributes } from "@typesApp/mantenimiento/aerolinea.type";
+import Origenes from "@models/mantenimiento/origen.model";
+import Destinos from "@models/mantenimiento/destino.model";
+import AerolineasPlantillas from "@models/mantenimiento/aerolinea_plantilla.model";
+import CatalogoModoAerolinea from "@models/catalogos/aerolineas/catalogo_modo_aerolinea.model";
+import CatalogoMultiplicadorAerolinea from "@models/catalogos/aerolineas/catalogo_multiplicador_aerolinea.model";
+import "src/config/assosiations/mantenimiento/aerolineas_all_assosiation.as"
+import sequelize from "src/config/experts.db";
+import { AerolineasPlantilla, AerolineasPlantillaCreationAttributes } from "@typesApp/mantenimiento/aerolinea_plantilla.type";
 
 export async function getAerolineas(): Promise<Aerolinea[]> {
     const aerolineasList = await Aerolineas.findAll();
@@ -146,10 +146,9 @@ export async function createAerolineaAndPlantilla(data: any) {
             aerolinea: newAerolinea.toJSON(),
             aerolineaPlantilla: newAerolineaPlantilla.toJSON()
         };
-    } catch (error: any) {
-        // Revertir la transacción en caso de error
+    } catch (error) {
         await transaction.rollback();
-        return { error: error.message };
+        throw error
     }
 }
 
@@ -185,10 +184,9 @@ export async function updateAerolineaAndPlantilla(data: any) {
             aerolinea: aerolinea ? aerolinea.toJSON() : null,
             aerolineaPlantilla: aerolineaPlantilla ? aerolineaPlantilla.toJSON() : null
         };
-    } catch (error: any) {
-        // Revertir la transacción en caso de error
+    } catch (error) {
         await transaction.rollback();
-        return { error: error.message };
+        throw error
     }
 }
 
@@ -210,12 +208,10 @@ export async function deleteAerolineaAndPlantilla(ids: any[]) {
         // Confirmar la transacción
         await transaction.commit();
 
-        return { ok: true };
 
-    } catch (error: any) {
-        // Revertir la transacción en caso de error
+    } catch (error) {
         await transaction.rollback();
-        return { error: error.message };
+        throw error
     }
 
 }

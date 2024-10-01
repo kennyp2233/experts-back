@@ -1,8 +1,8 @@
-import tipo_embalaje from "@dbModels/catalogos/tipo_embarque/tipo_embalaje.model";
-import { TipoEmbalaje, TipoEmbalajeCreationAttributes } from "@typesApp/entities/catalogos/tipo_embarque/TipoEmbalajeTypes";
+import TiposEmbalaje from "@models/catalogos/tipo_embarque/tipo_embalaje.model";
+import { TipoEmbalaje, TipoEmbalajeAtributosCreacion } from "@typesApp/catalogos/tipo_embarque/tipo_embalaje.type";
 
 export async function getTiposEmbalaje(): Promise<TipoEmbalaje[]> {
-    const tiposEmbalajeList = await tipo_embalaje.findAll(
+    const tiposEmbalajeList = await TiposEmbalaje.findAll(
         {
             order: [['nombre', 'ASC']] // Ordena por 'nombre' en orden ascendente
         }
@@ -11,33 +11,33 @@ export async function getTiposEmbalaje(): Promise<TipoEmbalaje[]> {
 }
 
 export async function getTipoEmbalaje(id: number): Promise<TipoEmbalaje | null> {
-    const tipoEmbalaje = await tipo_embalaje.findByPk(id);
+    const tipoEmbalaje = await TiposEmbalaje.findByPk(id);
     return tipoEmbalaje ? tipoEmbalaje.toJSON() as TipoEmbalaje : null;
 }
 
-export async function createTipoEmbalaje(tipoEmbalaje: TipoEmbalajeCreationAttributes) {
-    return await tipo_embalaje.create(tipoEmbalaje as any);
+export async function createTipoEmbalaje(tipoEmbalaje: TipoEmbalajeAtributosCreacion) {
+    return await TiposEmbalaje.create(tipoEmbalaje as any);
 }
 
 export async function updateTipoEmbalaje(tipoEmbalaje: TipoEmbalaje): Promise<TipoEmbalaje | null> {
-    const tipoEmbalajeToUpdate = await tipo_embalaje.findByPk(tipoEmbalaje.id_tipo_embalaje);
+    const tipoEmbalajeToUpdate = await TiposEmbalaje.findByPk(tipoEmbalaje.id_tipo_embalaje);
     if (tipoEmbalajeToUpdate) {
-        await tipo_embalaje.update(tipoEmbalaje, {
+        await TiposEmbalaje.update(tipoEmbalaje, {
             where: {
                 id_tipo_embalaje: tipoEmbalaje.id_tipo_embalaje
             }
         });
-        const updatedTipoEmbalaje = await tipo_embalaje.findByPk(tipoEmbalaje.id_tipo_embalaje);
+        const updatedTipoEmbalaje = await TiposEmbalaje.findByPk(tipoEmbalaje.id_tipo_embalaje);
         return updatedTipoEmbalaje ? updatedTipoEmbalaje.toJSON() as TipoEmbalaje : null;
     }
     return null;
 }
 
 export async function deleteTipoEmbalaje(id: number): Promise<TipoEmbalaje | null> {
-    const tipoEmbalajeToDelete = await tipo_embalaje.findByPk(id);
+    const tipoEmbalajeToDelete = await TiposEmbalaje.findByPk(id);
 
     if (tipoEmbalajeToDelete) {
-        await tipo_embalaje.destroy({
+        await TiposEmbalaje.destroy({
             where: {
                 id_tipo_embalaje: id
             }
@@ -49,14 +49,14 @@ export async function deleteTipoEmbalaje(id: number): Promise<TipoEmbalaje | nul
 }
 
 export async function deleteTipoEmbalajes(id: number[]): Promise<TipoEmbalaje[]> {
-    const tipoEmbalajesToDelete = await tipo_embalaje.findAll({
+    const tipoEmbalajesToDelete = await TiposEmbalaje.findAll({
         where: {
             id_tipo_embalaje: id
         }
     });
 
     if (tipoEmbalajesToDelete.length) {
-        await tipo_embalaje.destroy({
+        await TiposEmbalaje.destroy({
             where: {
                 id_tipo_embalaje: id
             }
