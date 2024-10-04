@@ -6,7 +6,7 @@ import { getConsignatariosJoinAll, createConsignatarioJoinAll, updateConsignatar
 const router = express.Router();
 
 // GET /consignatariosJoinAll
-router.get('/consignatariosJoinAll', async (req: Request, res: Response, next: NextFunction) => {
+router.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const consignatarios = await getConsignatariosJoinAll();
         res.json(consignatarios);
@@ -16,7 +16,7 @@ router.get('/consignatariosJoinAll', async (req: Request, res: Response, next: N
 });
 
 // POST /consignatariosJoinAll
-router.post('/consignatariosJoinAll',
+router.post('/',
     [
         // Añadir más validaciones según la estructura esperada del cuerpo de la solicitud
     ],
@@ -32,7 +32,7 @@ router.post('/consignatariosJoinAll',
 );
 
 // PUT /consignatariosJoinAll
-router.put('/consignatariosJoinAll',
+router.put('/',
     [
     ],
     validationMiddleware,
@@ -47,7 +47,7 @@ router.put('/consignatariosJoinAll',
 );
 
 // DELETE /consignatariosJoinAll
-router.delete('/consignatariosJoinAll',
+router.delete('/',
     [
         body('ids').optional().isArray().withMessage('El cuerpo debe ser un array de IDs'),
         body('ids.*').optional().isInt({ min: 1 }).withMessage('Cada ID debe ser un número entero positivo'),

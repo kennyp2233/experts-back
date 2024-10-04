@@ -9,7 +9,7 @@ import {
 
 const router = express.Router();
 
-router.get('/unidadesMedida',
+router.get('/',
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             if (req.query.id) {
@@ -22,7 +22,7 @@ router.get('/unidadesMedida',
         }
     });
 
-router.post('/unidadesMedida',
+router.post('/',
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             console.log(req.body);
@@ -33,7 +33,7 @@ router.post('/unidadesMedida',
         }
     });
 
-router.put('/unidadesMedida',
+router.put('/',
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             await updateCatalogoProductoUnidad(req.body);
@@ -43,7 +43,7 @@ router.put('/unidadesMedida',
         }
     });
 
-router.delete('/unidadesMedida',
+router.delete('/',
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             const productos = req.body as any[];

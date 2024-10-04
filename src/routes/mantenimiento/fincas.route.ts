@@ -14,7 +14,7 @@ router.get('/fincasJoinAll',
         }
     });
 
-router.post('/fincas',
+router.post('/',
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             await createFincaWithAllData(req.body as Finca);
@@ -28,7 +28,7 @@ router.post('/fincas',
         }
     });
 
-router.put('/fincas',
+router.put('/',
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             await updateFincaWithAllData(req.body as Finca);
@@ -42,7 +42,7 @@ router.put('/fincas',
         }
     });
 
-router.delete('/fincas',
+router.delete('/',
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             await deleteFincas(req.body);

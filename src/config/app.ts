@@ -1,12 +1,15 @@
+// src/app.ts
 import express from 'express';
 import cookieParser from 'cookie-parser';
-
 import cors from 'cors';
 import { expressjwt } from 'express-jwt';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import errorHandler from '@middlewares/errorHandler';
 import { jwtMiddleware } from '@middlewares/jwtMiddleware';
+import { authorize } from '@middlewares/authorize';
+
+
 import {
     SECRET_KEY,
     PORT,
@@ -31,6 +34,7 @@ import consignatarioRouter from '@routes/mantenimiento/consignatario.route';
 import clientesRouter from '@routes/mantenimiento/clientes.route';
 import fincasRouter from '@routes/mantenimiento/fincas.route';
 import choferesRouter from '@routes/mantenimiento/choferes.route';
+import paisesAcuerdo from '@routes/catalogos/paises_acuerdo.route';
 
 const app = express();
 
@@ -60,12 +64,10 @@ app.use(cors({
     credentials: true,
 }));
 
-
-
 app.use(express.json());
 app.use(cookieParser());
 
-
+// Middleware JWT
 app.use(expressjwt({
     secret: SECRET_KEY!,
     algorithms: ['HS256'],
@@ -76,27 +78,43 @@ app.use(expressjwt({
     credentialsRequired: true,
 }).unless({ path: ['/api/v1/login', '/api/v1/register', '/api-docs'] }));
 
-
+// Middleware personalizado adicional (si es necesario)
 app.use(jwtMiddleware);
 
+app.use('/api/v1/aerolineas', authorize('admin'), aerolineasRouter);
+app.use('/api/v1/unidadesMedida', authorize('admin'), unidadesMedidaRouter);
+app.use('/api/v1/paises', authorize('admin'), paisesRouter);
+app.use('/api/v1/paises-acuerdos', authorize('admin'), paisesAcuerdo);
+app.use('/api/v1/origenes', authorize('admin'), origenesRouter);
+app.use('/api/v1/aduanas', authorize('admin'), caeAduanaRouter);
+app.use('/api/v1/acuerdos_arancelarios', authorize('admin'), acuerdosArancelariosRoute);
+app.use('/api/v1/destinos', authorize('admin'), destinosRouter);
+app.use('/api/v1/productos', authorize('admin'), productosRouter);
+app.use('/api/v1/catalogos', authorize('admin'), catalogosRouter);
+app.use('/api/v1/tiposEmbarque', authorize('admin'), tiposEmbarqueRouter);
+app.use('/api/v1/embarcadores', authorize('admin'), embarcadoresRouter);
+app.use('/api/v1/consignatariosJoinAll', authorize('admin'), consignatarioRouter);
+app.use('/api/v1/clientes', authorize('admin'), clientesRouter);
+app.use('/api/v1/fincas', authorize('admin'), fincasRouter);
+app.use('/api/v1/choferes', authorize('admin'), choferesRouter);
 // Rutas
 app.use('/api/v1',
-    aerolineasRouter,
-    paisesRouter,
-    origenesRouter,
-    caeAduanaRouter,
+    //aerolineasRouter,
+    //paisesRouter,
+    //origenesRouter,
+    //caeAduanaRouter,
     auth,
-    acuerdosArancelariosRoute,
-    destinosRouter,
-    productosRouter,
-    catalogosRouter,
-    unidadesMedidaRouter,
-    tiposEmbarqueRouter,
-    embarcadoresRouter,
-    consignatarioRouter,
-    clientesRouter,
-    fincasRouter,
-    choferesRouter
+    //acuerdosArancelariosRoute,
+    //destinosRouter,
+    //productosRouter,
+    //catalogosRouter,
+    //unidadesMedidaRouter,
+    //tiposEmbarqueRouter,
+    //embarcadoresRouter,
+    //consignatarioRouter,
+    //clientesRouter,
+    //fincasRouter,
+    //choferesRouter
 );
 
 // Middleware para manejo de errores

@@ -6,7 +6,7 @@ import { createCliente, deleteClientes, getCliente, getClientes, updateCliente }
 const router = express.Router();
 
 // GET /clientes
-router.get('/clientes',
+router.get('/',
     [
         query('id').optional().isInt({ min: 1 }).withMessage('El ID debe ser un número entero positivo'),
     ],
@@ -23,7 +23,7 @@ router.get('/clientes',
 );
 
 // POST /clientes
-router.post('/clientes',
+router.post('/',
     [
     ],
     validationMiddleware,
@@ -38,7 +38,7 @@ router.post('/clientes',
 );
 
 // PUT /clientes
-router.put('/clientes',
+router.put('/',
     [
         body('id').isInt({ min: 1 }).withMessage('El ID debe ser un número entero positivo'),
         // Añadir más validaciones según los campos necesarios para la actualización
@@ -55,7 +55,7 @@ router.put('/clientes',
 );
 
 // DELETE /clientes
-router.delete('/clientes',
+router.delete('/',
     [
         query('id').optional().isInt({ min: 1 }).withMessage('El ID debe ser un número entero positivo'),
         body('ids').optional().isArray().withMessage('El cuerpo debe ser un array de IDs'),

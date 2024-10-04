@@ -7,7 +7,7 @@ import { AcuerdoArancelarioAtributosCreacion } from '@typesApp/mantenimiento/acu
 const router = Router();
 
 // Obtener acuerdos arancelarios
-router.get('/acuerdos_arancelarios',
+router.get('/',
     [
     ],
     validationMiddleware,
@@ -27,7 +27,7 @@ router.get('/acuerdos_arancelarios',
 );
 
 // Crear acuerdo arancelario
-router.post('/acuerdos_arancelarios',
+router.post('/',
     [
         // Añade más validaciones según la estructura de AcuerdoArancelarioAtributosCreacion
     ],

@@ -10,7 +10,7 @@ import {
 
 const router = express.Router();
 
-router.get('/tiposEmbarque',
+router.get('/',
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             if (req.query.id) {
@@ -23,7 +23,7 @@ router.get('/tiposEmbarque',
         }
     });
 
-router.post('/tiposEmbarque',
+router.post('/',
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             console.log(req.body);
@@ -34,7 +34,7 @@ router.post('/tiposEmbarque',
         }
     });
 
-router.put('/tiposEmbarque',
+router.put('/',
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             await updateTipoEmbarque(req.body);
@@ -44,7 +44,7 @@ router.put('/tiposEmbarque',
         }
     });
 
-router.delete('/tiposEmbarque',
+router.delete('/',
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             const tiposEmbarque = req.body as any[];
@@ -55,7 +55,7 @@ router.delete('/tiposEmbarque',
         }
     });
 
-router.delete('/tiposEmbarque/:id',
+router.delete('/:id',
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             await deleteTipoEmbarque(Number.parseInt(req.params.id));

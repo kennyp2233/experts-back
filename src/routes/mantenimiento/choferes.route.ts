@@ -7,7 +7,7 @@ import { Chofer } from '@typesApp/mantenimiento/chofer.type';
 const router = express.Router();
 
 // GET /choferes
-router.get('/choferes',
+router.get('/',
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             const choferes = await getChoferes();
@@ -19,7 +19,7 @@ router.get('/choferes',
 );
 
 // POST /choferes
-router.post('/choferes',
+router.post('/',
     [
     ],
     validationMiddleware,
@@ -37,7 +37,7 @@ router.post('/choferes',
 );
 
 // PUT /choferes
-router.put('/choferes',
+router.put('/',
     [
         body('id').isInt({ min: 1 }).withMessage('El ID debe ser un número entero positivo'),
         // Añadir más validaciones según sea necesario
@@ -57,7 +57,7 @@ router.put('/choferes',
 );
 
 // DELETE /choferes
-router.delete('/choferes',
+router.delete('/',
     [
         body('ids').isArray().withMessage('El cuerpo debe ser un array de IDs'),
         body('ids.*').isInt({ min: 1 }).withMessage('Cada ID debe ser un número entero positivo'),

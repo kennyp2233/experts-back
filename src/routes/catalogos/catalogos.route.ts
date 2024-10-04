@@ -9,7 +9,7 @@ import { getTiposDocumento } from '@services/catalogos/consignatario/consignatar
 
 const router = express.Router();
 
-router.get('/catalogos/aerolineas/modo', async (req, res) => {
+router.get('/aerolineas/modo', async (req, res) => {
     try {
         if (req.query.id) {
             res.send(await getCatalogoModo(Number.parseInt(req.query.id as string)));
@@ -22,7 +22,7 @@ router.get('/catalogos/aerolineas/modo', async (req, res) => {
     }
 });
 
-router.get('/catalogos/aerolineas/multiplicador', async (req, res) => {
+router.get('/aerolineas/multiplicador', async (req, res) => {
     try {
         if (req.query.id) {
             res.send(await getCatalogoMultiplicador(Number.parseInt(req.query.id as string)));
@@ -35,7 +35,7 @@ router.get('/catalogos/aerolineas/multiplicador', async (req, res) => {
     }
 });
 
-router.get('/catalogos/productos/opciones', async (req, res) => {
+router.get('/productos/opciones', async (req, res) => {
     try {
         if (req.query.id) {
             res.send(await getCatalogoProductoOpciones(Number.parseInt(req.query.id as string)));
@@ -48,7 +48,7 @@ router.get('/catalogos/productos/opciones', async (req, res) => {
     }
 });
 
-router.get('/catalogos/productos/unidad', async (req, res) => {
+router.get('/productos/unidad', async (req, res) => {
     try {
         if (req.query.id) {
             res.send(await getCatalogoProductoUnidad(Number.parseInt(req.query.id as string)));
@@ -61,7 +61,7 @@ router.get('/catalogos/productos/unidad', async (req, res) => {
     }
 });
 
-router.get('/catalogos/tipos-embarque/carga', async (req, res) => {
+router.get('/tipos-embarque/carga', async (req, res) => {
     try {
         res.send(await getTiposCarga());
     }
@@ -70,7 +70,7 @@ router.get('/catalogos/tipos-embarque/carga', async (req, res) => {
     }
 });
 
-router.get('/catalogos/tipos-embarque/embalaje', async (req, res) => {
+router.get('/tipos-embarque/embalaje', async (req, res) => {
     try {
         res.send(await getTiposEmbalaje());
     }
@@ -79,7 +79,7 @@ router.get('/catalogos/tipos-embarque/embalaje', async (req, res) => {
     }
 });
 
-router.get('/catalogos/tipo-documento', async (req, res) => {
+router.get('/tipo-documento', async (req, res) => {
     try {
         res.send(await getTiposDocumento());
     }

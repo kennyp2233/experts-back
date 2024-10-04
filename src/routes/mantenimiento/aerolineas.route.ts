@@ -17,7 +17,7 @@ import { Aerolinea, AerolineaCreationAttributes } from '@typesApp/mantenimiento/
 const router = express.Router();
 
 // GET /aerolineas
-router.get('/aerolineas',
+router.get('/',
     [
         query('id').optional().isInt({ min: 1 }).withMessage('El ID debe ser un número entero positivo')
     ],
@@ -34,7 +34,7 @@ router.get('/aerolineas',
 );
 
 // POST /aerolineas
-router.post('/aerolineas',
+router.post('/',
     [
     ],
     validationMiddleware,
@@ -49,7 +49,7 @@ router.post('/aerolineas',
 );
 
 // POST /aerolineas/joinAll
-router.post('/aerolineas/joinAll',
+router.post('/joinAll',
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             const data = req.body;
@@ -62,7 +62,7 @@ router.post('/aerolineas/joinAll',
 );
 
 // PUT /aerolineas
-router.put('/aerolineas',
+router.put('/',
     [
         body('id').isInt({ min: 1 }).withMessage('El ID debe ser un número entero positivo'),
         // Añadir más validaciones según sea necesario
@@ -79,7 +79,7 @@ router.put('/aerolineas',
 );
 
 // PUT /aerolineas/joinAll
-router.put('/aerolineas/joinAll',
+router.put('/joinAll',
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             await updateAerolineaAndPlantilla(req.body as any);
@@ -91,7 +91,7 @@ router.put('/aerolineas/joinAll',
 );
 
 // DELETE /aerolineas
-router.delete('/aerolineas',
+router.delete('/',
     [
         body('aerolineas').isArray().withMessage('El cuerpo debe ser un array de IDs').custom(arr => arr.every((id: any) => typeof id === 'number'))
     ],
@@ -108,7 +108,7 @@ router.delete('/aerolineas',
 );
 
 // DELETE /aerolineas/joinAll
-router.delete('/aerolineas/joinAll',
+router.delete('/joinAll',
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             const aerolineas = req.body as number[];
@@ -121,7 +121,7 @@ router.delete('/aerolineas/joinAll',
 );
 
 // GET /aerolineas/joinAll
-router.get('/aerolineas/joinAll',
+router.get('/joinAll',
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             const response = await aerolineaJoinAll();

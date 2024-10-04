@@ -10,7 +10,7 @@ import {
 
 const router = express.Router();
 
-router.get('/productos',
+router.get('/',
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             if (req.query.id) {
@@ -33,7 +33,7 @@ router.get('/productosJoinAll',
     });
 
 
-router.post('/productos',
+router.post('/',
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             console.log(req.body);
@@ -44,7 +44,7 @@ router.post('/productos',
         }
     });
 
-router.put('/productos',
+router.put('/',
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             await updateProducto(req.body);
@@ -54,7 +54,7 @@ router.put('/productos',
         }
     });
 
-router.delete('/productos',
+router.delete('/',
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             const productos = req.body as any[];

@@ -7,7 +7,7 @@ import { Destino, DestinoAtributosCreacion } from '@typesApp/mantenimiento/desti
 const router = express.Router();
 
 // GET /destinos
-router.get('/destinos',
+router.get('/',
     [
         query('id').optional().isInt().withMessage('ID debe ser un número entero'),
         // Agregar más validaciones si es necesario
@@ -29,7 +29,7 @@ router.get('/destinos',
 );
 
 // GET /destinos/paises
-router.get('/destinos/paises', async (req: Request, res: Response, next: NextFunction) => {
+router.get('/paises', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const destinosPaises = await getDestinosJoinPais();
         res.json(destinosPaises);
@@ -39,7 +39,7 @@ router.get('/destinos/paises', async (req: Request, res: Response, next: NextFun
 });
 
 // POST /destinos
-router.post('/destinos',
+router.post('/',
     [
     ],
     validationMiddleware,
@@ -54,7 +54,7 @@ router.post('/destinos',
 );
 
 // PUT /destinos
-router.put('/destinos',
+router.put('/',
     [
         body('id').isInt().withMessage('ID debe ser un número entero'),
     ],
@@ -70,7 +70,7 @@ router.put('/destinos',
 );
 
 // DELETE /destinos
-router.delete('/destinos',
+router.delete('/',
     [
         body('ids').isArray().withMessage('El cuerpo debe ser un array de destinos'),
         body('ids.*').isInt().withMessage('Cada destino debe ser un número entero'),

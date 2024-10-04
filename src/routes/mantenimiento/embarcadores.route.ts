@@ -5,7 +5,7 @@ import { Embarcador, EmbarcadorAtributosCreacion } from '@typesApp/mantenimiento
 
 const router = express.Router();
 
-router.get('/embarcadores',
+router.get('/',
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             if (req.query.id) {
@@ -18,7 +18,7 @@ router.get('/embarcadores',
         }
     });
 
-router.post('/embarcadores',
+router.post('/',
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             const embarcador = await createEmbarcador(req.body as EmbarcadorAtributosCreacion);
@@ -28,7 +28,7 @@ router.post('/embarcadores',
         }
     });
 
-router.put('/embarcadores',
+router.put('/',
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             await updateEmbarcador(req.body as Embarcador);
@@ -38,7 +38,7 @@ router.put('/embarcadores',
         }
     });
 
-router.delete('/embarcadores',
+router.delete('/',
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             const embarcadores = req.body as any[];

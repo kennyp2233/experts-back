@@ -4,7 +4,7 @@ import { Origen, OrigenCreationAttributes } from '@typesApp/mantenimiento/origen
 
 const router = express.Router();
 
-router.get('/origenes', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         if (req.query.id) {
             res.send(await getOrigen(Number.parseInt(req.query.id as string)));
@@ -17,7 +17,7 @@ router.get('/origenes', async (req, res) => {
 }
 );
 
-router.get('/origenes/paises-aduanas', async (req, res) => {
+router.get('/paises-aduanas', async (req, res) => {
     try {
         res.send(await origenJoinPaisesAduanas());
     } catch (error: any) {
@@ -25,7 +25,7 @@ router.get('/origenes/paises-aduanas', async (req, res) => {
     }
 });
 
-router.post('/origenes', async (req, res) => {
+router.post('/', async (req, res) => {
     console.log(req.body);
     try {
         await createOrigen(req.body as OrigenCreationAttributes);
@@ -35,7 +35,7 @@ router.post('/origenes', async (req, res) => {
     }
 });
 
-router.put('/origenes', async (req, res) => {
+router.put('/', async (req, res) => {
     try {
         await updateOrigen(req.body as Origen);
         res.status(200).json({ ok: true, msg: 'Origen actualizado' });
@@ -44,7 +44,7 @@ router.put('/origenes', async (req, res) => {
     }
 });
 
-router.delete('/origenes', async (req, res) => {
+router.delete('/', async (req, res) => {
     try {
         const origenes = req.body as any[];
         await deleteOrigenes(origenes.map(Number));

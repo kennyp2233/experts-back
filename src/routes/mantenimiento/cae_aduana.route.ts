@@ -14,7 +14,7 @@ import { CaeAduanaAtributosCreacion, CaeAduana } from '@typesApp/mantenimiento/c
 const router = express.Router();
 
 // GET /aduanas
-router.get('/aduanas',
+router.get('/',
     [
         query('id').optional().isInt({ min: 1 }).withMessage('El ID debe ser un número entero positivo')
     ],
@@ -31,7 +31,7 @@ router.get('/aduanas',
 );
 
 // POST /aduanas
-router.post('/aduanas',
+router.post('/',
     [
     ],
     validationMiddleware,
@@ -46,7 +46,7 @@ router.post('/aduanas',
 );
 
 // PUT /aduanas
-router.put('/aduanas',
+router.put('/',
     [
         body('id').isInt({ min: 1 }).withMessage('El ID debe ser un número entero positivo'),
         // Añadir más validaciones según sea necesario
@@ -63,7 +63,7 @@ router.put('/aduanas',
 );
 
 // DELETE /aduanas
-router.delete('/aduanas',
+router.delete('/',
     [
         query('id').optional().isInt({ min: 1 }).withMessage('El ID debe ser un número entero positivo'),
         body().optional().custom((value) => {

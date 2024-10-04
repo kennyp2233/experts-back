@@ -1,10 +1,10 @@
 import express, { Request, Response, NextFunction } from 'express';
-import { createPais, deletePais, getPais, getPaises, updatePais, paisesJoinAcuerdos, deletePaises } from '@services/mantenimiento/paises.servicio';
+import { createPais, deletePais, getPais, getPaises, updatePais, deletePaises } from '@services/mantenimiento/paises.servicio';
 import { Pais, PaisAtributosCreacion } from '@typesApp/mantenimiento/pais.type';
 
 const router = express.Router();
 
-router.get('/paises',
+router.get('/',
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             if (req.query.id) {
@@ -17,16 +17,9 @@ router.get('/paises',
         }
     });
 
-router.get('/paises-acuerdos',
-    async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            res.send(await paisesJoinAcuerdos());
-        } catch (error: any) {
-            next(error);
-        }
-    });
 
-router.post('/paises',
+
+router.post('/',
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             const pais = await createPais(req.body);
@@ -36,7 +29,7 @@ router.post('/paises',
         }
     });
 
-router.put('/paises',
+router.put('/',
     async (req: Request, res: Response, next: NextFunction) => {
 
         try {
@@ -48,7 +41,7 @@ router.put('/paises',
         }
     });
 
-router.delete('/paises',
+router.delete('/',
     async (req: Request, res: Response, next: NextFunction) => {
 
         try {
