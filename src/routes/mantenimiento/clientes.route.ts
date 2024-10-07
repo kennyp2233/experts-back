@@ -8,7 +8,7 @@ const router = express.Router();
 // GET /clientes
 router.get('/',
     [
-        query('id').optional().isInt({ min: 1 }).withMessage('El ID debe ser un número entero positivo'),
+        query('id_clientes').optional().isInt({ min: 1 }).withMessage('El ID debe ser un número entero positivo'),
     ],
     validationMiddleware,
     async (req: Request, res: Response, next: NextFunction) => {
@@ -40,7 +40,7 @@ router.post('/',
 // PUT /clientes
 router.put('/',
     [
-        body('id').isInt({ min: 1 }).withMessage('El ID debe ser un número entero positivo'),
+        body('id_clientes').isInt({ min: 1 }).withMessage('El ID debe ser un número entero positivo'),
         // Añadir más validaciones según los campos necesarios para la actualización
     ],
     validationMiddleware,

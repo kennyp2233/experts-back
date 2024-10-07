@@ -3,7 +3,7 @@ import {  paisesJoinAcuerdos } from '@services/mantenimiento/paises.servicio';
 
 const router = express.Router();
 
-router.get('/paises-acuerdos',
+router.get('/',
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             res.send(await paisesJoinAcuerdos());

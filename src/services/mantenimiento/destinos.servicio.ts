@@ -4,8 +4,10 @@ import { Destino, DestinoAtributosCreacion } from "@typesApp/mantenimiento/desti
 import "src/config/assosiations/mantenimiento/destinos_pais.as"
 
 export async function getDestinos() {
-    const destinosList = await Destinos.findAll();
-    return destinosList.map((destino) => destino.toJSON()) as Destino[];
+    const destinosList = await Destinos.findAll({
+        order: [['codigo_destino', 'ASC']], // Order by codigo_destino in ascending order (use 'DESC' for descending)
+    });
+    return destinosList;
 }
 
 export async function getDestino(id: number) {

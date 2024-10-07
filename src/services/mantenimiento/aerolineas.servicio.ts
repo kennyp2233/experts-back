@@ -156,7 +156,7 @@ export async function updateAerolineaAndPlantilla(data: any) {
     const transaction = await sequelize.transaction();
     const aerolineaData = extractDataToAerolinea(data);
     const plantillaData = extractDataToAerolineaPlantilla(data);
-    //console.log("AEROLINEAS DATA!!!!!!!!!!!!!!!!!!!!!!", aerolineaData);
+    console.log("AEROLINEAS DATA!!!!!!!!!!!!!!!!!!!!!!", data);
     try {
         // Actualizar registro en Aerolineas
         const updatedAerolinea = await Aerolineas.update(aerolineaData, {

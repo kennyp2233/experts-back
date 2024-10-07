@@ -39,7 +39,7 @@ router.post('/',
 // PUT /choferes
 router.put('/',
     [
-        body('id').isInt({ min: 1 }).withMessage('El ID debe ser un número entero positivo'),
+        body('id_chofer').isInt({ min: 1 }).withMessage('El ID debe ser un número entero positivo'),
         // Añadir más validaciones según sea necesario
     ],
     validationMiddleware,

@@ -35,6 +35,10 @@ import clientesRouter from '@routes/mantenimiento/clientes.route';
 import fincasRouter from '@routes/mantenimiento/fincas.route';
 import choferesRouter from '@routes/mantenimiento/choferes.route';
 import paisesAcuerdo from '@routes/catalogos/paises_acuerdo.route';
+import agenciasIata from '@routes/mantenimiento/agencias_iata.route';
+import subAgencias from '@routes/mantenimiento/subagencias.route';
+import funcionariosAgrocalidad from '@routes/mantenimiento/funcionarios_agrocalidad.route';
+import bodegueros from '@routes/mantenimiento/bodeguero.route';
 
 const app = express();
 
@@ -97,24 +101,14 @@ app.use('/api/v1/consignatariosJoinAll', authorize('admin'), consignatarioRouter
 app.use('/api/v1/clientes', authorize('admin'), clientesRouter);
 app.use('/api/v1/fincas', authorize('admin'), fincasRouter);
 app.use('/api/v1/choferes', authorize('admin'), choferesRouter);
+app.use('/api/v1/agencias_iata', authorize('admin'), agenciasIata);
+app.use('/api/v1/subagencias', authorize('admin'), subAgencias);
+app.use('/api/v1/funcionarios_agrocalidad', authorize('admin'), funcionariosAgrocalidad);
+app.use('/api/v1/bodegueros', authorize('admin'), bodegueros);
+
 // Rutas
 app.use('/api/v1',
-    //aerolineasRouter,
-    //paisesRouter,
-    //origenesRouter,
-    //caeAduanaRouter,
     auth,
-    //acuerdosArancelariosRoute,
-    //destinosRouter,
-    //productosRouter,
-    //catalogosRouter,
-    //unidadesMedidaRouter,
-    //tiposEmbarqueRouter,
-    //embarcadoresRouter,
-    //consignatarioRouter,
-    //clientesRouter,
-    //fincasRouter,
-    //choferesRouter
 );
 
 // Middleware para manejo de errores

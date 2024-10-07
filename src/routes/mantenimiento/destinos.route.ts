@@ -9,7 +9,7 @@ const router = express.Router();
 // GET /destinos
 router.get('/',
     [
-        query('id').optional().isInt().withMessage('ID debe ser un número entero'),
+        query('id_destino').optional().isInt().withMessage('ID debe ser un número entero'),
         // Agregar más validaciones si es necesario
     ],
     validationMiddleware,
@@ -56,7 +56,7 @@ router.post('/',
 // PUT /destinos
 router.put('/',
     [
-        body('id').isInt().withMessage('ID debe ser un número entero'),
+        body('id_destino').isInt().withMessage('ID debe ser un número entero'),
     ],
     validationMiddleware,
     async (req: Request, res: Response, next: NextFunction) => {
