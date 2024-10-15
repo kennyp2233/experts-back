@@ -39,7 +39,6 @@ const Producto = sequelize.define<Model<Producto, ProductoAtributosCreacion>>('p
             model: CatalogoProductosUnidad,
             key: CatalogoProductosUnidad.primaryKeyAttribute
         },
-        onDelete: 'SET NULL',
     },
     precio_unitario: {
         type: DataTypes.FLOAT,
@@ -56,7 +55,6 @@ const Producto = sequelize.define<Model<Producto, ProductoAtributosCreacion>>('p
             model: CatalogoProductoOpciones,
             key: CatalogoProductoOpciones.primaryKeyAttribute
         },
-        onDelete: 'SET NULL',
     },
     stems_por_full: {
         type: DataTypes.INTEGER,

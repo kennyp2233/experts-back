@@ -66,13 +66,7 @@ router.put('/',
 router.delete('/',
     [
         query('id').optional().isInt({ min: 1 }).withMessage('El ID debe ser un número entero positivo'),
-        body().optional().custom((value) => {
-            // Validar que el cuerpo sea un array de IDs si 'id' no está presente en la consulta
-            if (!('id' in value) && !Array.isArray(value)) {
-                throw new Error('El cuerpo debe ser un array de IDs');
-            }
-            return true;
-        })
+        body().optional().isArray({ min: 1 }).withMessage('Debe enviar un arreglo de IDs'),
     ],
     validationMiddleware,
     async (req: Request, res: Response, next: NextFunction) => {

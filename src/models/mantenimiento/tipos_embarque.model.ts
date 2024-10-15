@@ -27,7 +27,6 @@ const TipoEmbarque = sequelize.define<Model<TipoEmbarque, TipoEmbarqueAtributosC
             model: TipoCarga,
             key: TipoCarga.primaryKeyAttribute,
         },
-        onDelete: 'SET NULL',
     },
     id_tipo_embalaje: {
         type: DataTypes.INTEGER,
@@ -36,7 +35,6 @@ const TipoEmbarque = sequelize.define<Model<TipoEmbarque, TipoEmbarqueAtributosC
             model: TipoEmbalaje,
             key: TipoEmbalaje.primaryKeyAttribute,
         },
-        onDelete: 'SET NULL',
     },
     regimen: {
         type: DataTypes.STRING,

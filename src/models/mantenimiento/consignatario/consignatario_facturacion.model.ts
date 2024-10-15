@@ -13,7 +13,6 @@ const ConsignatarioFacturaciones = sequelize.define<Model<ConsignatarioFacturaci
             model: Consignatarios,
             key: Consignatarios.primaryKeyAttribute,
         },
-        onDelete: 'CASCADE',
     },
     factura_nombre: {
         type: DataTypes.STRING,

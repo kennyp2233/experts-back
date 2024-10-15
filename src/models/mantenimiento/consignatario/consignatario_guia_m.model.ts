@@ -15,7 +15,6 @@ const ConsignatarioGuiaMs = sequelize.define<Model<ConsignatarioGuiaM>>('consign
             model: Consignatarios,
             key: Consignatarios.primaryKeyAttribute,
         },
-        onDelete: 'CASCADE',
     },
     id_destino: {
         type: DataTypes.INTEGER,

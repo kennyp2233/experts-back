@@ -49,14 +49,12 @@ router.put('/',
 // DELETE /consignatariosJoinAll
 router.delete('/',
     [
-        body('ids').optional().isArray().withMessage('El cuerpo debe ser un array de IDs'),
-        body('ids.*').optional().isInt({ min: 1 }).withMessage('Cada ID debe ser un número entero positivo'),
-        // Añadir validaciones adicionales si es necesario
-    ],
+        body('').optional().isArray().withMessage('El cuerpo debe ser un array de IDs'),
+        ],
     validationMiddleware,
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const respuesta = await deleteConsignatarioJoinAll(req.body.consignatarios);
+            const respuesta = await deleteConsignatarioJoinAll(req.body);
             res.status(200).json({ ok: true, msg: 'Consignatarios y plantilla eliminados con éxito' });
         } catch (error) {
             next(error); // Todos los errores deben ser manejados por el middleware global

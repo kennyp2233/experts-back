@@ -27,7 +27,6 @@ const Pais = sequelize.define<Model<Pais, PaisAtributosCreacion>>('paises', {
             model: AcuerdosArancelarios,
             key: AcuerdosArancelarios.primaryKeyAttribute,
         },
-        onDelete: 'SET NULL',
     },
 });
 

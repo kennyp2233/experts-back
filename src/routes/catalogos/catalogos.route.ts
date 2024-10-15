@@ -9,7 +9,7 @@ import { getTiposDocumento } from '@services/catalogos/consignatario/consignatar
 
 const router = express.Router();
 
-router.get('/aerolineas/modo', async (req, res) => {
+router.get('/aerolineas/modo', async (req, res, next) => {
     try {
         if (req.query.id) {
             res.send(await getCatalogoModo(Number.parseInt(req.query.id as string)));
@@ -18,11 +18,11 @@ router.get('/aerolineas/modo', async (req, res) => {
         }
     }
     catch (error: any) {
-        res.status(400).json({ ok: false, msg: error.message });
+        next(error);
     }
 });
 
-router.get('/aerolineas/multiplicador', async (req, res) => {
+router.get('/aerolineas/multiplicador', async (req, res, next) => {
     try {
         if (req.query.id) {
             res.send(await getCatalogoMultiplicador(Number.parseInt(req.query.id as string)));
@@ -31,11 +31,11 @@ router.get('/aerolineas/multiplicador', async (req, res) => {
         }
     }
     catch (error: any) {
-        res.status(400).json({ ok: false, msg: error.message });
+        next(error);
     }
 });
 
-router.get('/productos/opciones', async (req, res) => {
+router.get('/productos/opciones', async (req, res, next) => {
     try {
         if (req.query.id) {
             res.send(await getCatalogoProductoOpciones(Number.parseInt(req.query.id as string)));
@@ -44,11 +44,11 @@ router.get('/productos/opciones', async (req, res) => {
         }
     }
     catch (error: any) {
-        res.status(400).json({ ok: false, msg: error.message });
+        next(error);
     }
 });
 
-router.get('/productos/unidad', async (req, res) => {
+router.get('/productos/unidad', async (req, res, next) => {
     try {
         if (req.query.id) {
             res.send(await getCatalogoProductoUnidad(Number.parseInt(req.query.id as string)));
@@ -57,38 +57,35 @@ router.get('/productos/unidad', async (req, res) => {
         }
     }
     catch (error: any) {
-        res.status(400).json({ ok: false, msg: error.message });
+        next(error);
     }
 });
 
-router.get('/tipos-embarque/carga', async (req, res) => {
+router.get('/tipos-embarque/carga', async (req, res, next) => {
     try {
         res.send(await getTiposCarga());
     }
     catch (error: any) {
-        res.status(400).json({ ok: false, msg: error.message });
+        next(error);
     }
 });
 
-router.get('/tipos-embarque/embalaje', async (req, res) => {
+router.get('/tipos-embarque/embalaje', async (req, res, next) => {
     try {
         res.send(await getTiposEmbalaje());
     }
     catch (error: any) {
-        res.status(400).json({ ok: false, msg: error.message });
+        next(error);
     }
 });
 
-router.get('/tipo-documento', async (req, res) => {
+router.get('/tipo-documento', async (req, res, next) => {
     try {
         res.send(await getTiposDocumento());
     }
     catch (error: any) {
-        res.status(400).json({ ok: false, msg: error.message });
+        next(error);
     }
 });
 
-
-
 export default router;
-

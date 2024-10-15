@@ -13,8 +13,7 @@ const Admin = sequelize.define<Model<Admin, AdminAtrubutosCreacion>>('admins', {
             model: Usuario,
             key: Usuario.primaryKeyAttribute,
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+
     },
 
 });

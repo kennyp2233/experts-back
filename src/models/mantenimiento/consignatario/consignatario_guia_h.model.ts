@@ -13,7 +13,6 @@ const ConsignatarioGuiaHs = sequelize.define<Model<ConsignatarioGuiaH>>('consign
             model: Consignatarios,
             key: Consignatarios.primaryKeyAttribute,
         },
-        onDelete: 'CASCADE',
     },
     guia_h_consignee: {
         type: DataTypes.STRING,

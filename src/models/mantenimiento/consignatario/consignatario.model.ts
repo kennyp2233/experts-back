@@ -31,7 +31,6 @@ const Consignatarios = sequelize.define<Model<Consignatario, ConsignatarioCreati
             model: Embarcador,
             key: Embarcador.primaryKeyAttribute,
         },
-        onDelete: 'RESTRICT',
     },
     id_cliente: {
         type: DataTypes.INTEGER,

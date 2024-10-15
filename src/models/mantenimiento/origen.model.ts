@@ -27,7 +27,6 @@ const Origen = sequelize.define<Model<Origen, OrigenCreationAttributes>>('origen
             model: Paises,
             key: Paises.primaryKeyAttribute,
         },
-        onDelete: 'SET NULL',
     },
     id_cae_aduana: {
         type: DataTypes.INTEGER,
@@ -35,7 +34,6 @@ const Origen = sequelize.define<Model<Origen, OrigenCreationAttributes>>('origen
             model: CaeAduanas,
             key: CaeAduanas.primaryKeyAttribute,
         },
-        onDelete: 'SET NULL',
     }
 });
 

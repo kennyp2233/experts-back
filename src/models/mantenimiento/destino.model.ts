@@ -29,8 +29,6 @@ const Destino = sequelize.define<Model<Destino, DestinoAtributosCreacion>>('dest
             key: Paises.primaryKeyAttribute,
         },
         allowNull: true, // Agregado
-        onDelete: 'SET NULL',
-        onUpdate: 'CASCADE', // Asegúrate de que esto sea necesario y soportado
     },
     sesa_id: {
         type: DataTypes.STRING,

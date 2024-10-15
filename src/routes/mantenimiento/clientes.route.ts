@@ -58,13 +58,13 @@ router.put('/',
 router.delete('/',
     [
         query('id').optional().isInt({ min: 1 }).withMessage('El ID debe ser un número entero positivo'),
-        body('ids').optional().isArray().withMessage('El cuerpo debe ser un array de IDs'),
-        body('ids.*').optional().isInt({ min: 1 }).withMessage('Cada ID debe ser un número entero positivo'),
+        body('').optional().isArray().withMessage('El cuerpo debe ser un array de IDs'),
     ],
     validationMiddleware,
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const ids = req.query.id ? [Number.parseInt(req.query.id as string)] : req.body.ids;
+            console.log(req.body);
+            const ids = req.query.id ? [Number.parseInt(req.query.id as string)] : req.body;
             await deleteClientes(ids);
             res.status(200).json({ ok: true, msg: 'Clientes eliminados' });
         } catch (error) {

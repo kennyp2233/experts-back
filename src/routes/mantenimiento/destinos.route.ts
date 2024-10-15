@@ -72,8 +72,7 @@ router.put('/',
 // DELETE /destinos
 router.delete('/',
     [
-        body('ids').isArray().withMessage('El cuerpo debe ser un array de destinos'),
-        body('ids.*').isInt().withMessage('Cada destino debe ser un número entero'),
+        body('').isArray().withMessage('El cuerpo debe ser un array de destinos'),
         // Agregar más validaciones si es necesario
     ],
     validationMiddleware,

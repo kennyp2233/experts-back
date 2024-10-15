@@ -13,7 +13,6 @@ const ConsignatarioTransmisions = sequelize.define<Model<ConsignatarioTransmisio
             model: Consignatarios,
             key: Consignatarios.primaryKeyAttribute,
         },
-        onDelete: 'CASCADE',
     },
     consignee_nombre_trans: {
         type: DataTypes.STRING,

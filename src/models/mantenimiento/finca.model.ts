@@ -28,7 +28,6 @@ const Finca = sequelize.define<Model<Finca, FincaAtributosCreacion>>("fincas", {
             model: TipoDocumento,
             key: TipoDocumento.primaryKeyAttribute,
         },
-        onDelete: 'SET NULL',
     },
     genera_guias_certificadas: {
         type: DataTypes.BOOLEAN,

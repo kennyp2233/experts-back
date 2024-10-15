@@ -59,13 +59,12 @@ router.put('/',
 // DELETE /choferes
 router.delete('/',
     [
-        body('ids').isArray().withMessage('El cuerpo debe ser un array de IDs'),
-        body('ids.*').isInt({ min: 1 }).withMessage('Cada ID debe ser un número entero positivo'),
+        body().isArray().withMessage('El cuerpo debe ser un array de IDs'),
     ],
     validationMiddleware,
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            await deleteChoferes(req.body.ids);
+            await deleteChoferes(req.body);
             res.status(200).json({
                 ok: true,
                 msg: 'Choferes eliminados',

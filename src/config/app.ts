@@ -39,6 +39,7 @@ import agenciasIata from '@routes/mantenimiento/agencias_iata.route';
 import subAgencias from '@routes/mantenimiento/subagencias.route';
 import funcionariosAgrocalidad from '@routes/mantenimiento/funcionarios_agrocalidad.route';
 import bodegueros from '@routes/mantenimiento/bodeguero.route';
+import documento_base from '@routes/documentos/documentos_base/documento_base.route';
 
 const app = express();
 
@@ -105,6 +106,8 @@ app.use('/api/v1/agencias_iata', authorize('admin'), agenciasIata);
 app.use('/api/v1/subagencias', authorize('admin'), subAgencias);
 app.use('/api/v1/funcionarios_agrocalidad', authorize('admin'), funcionariosAgrocalidad);
 app.use('/api/v1/bodegueros', authorize('admin'), bodegueros);
+
+app.use('/api/v1/documentos_base', authorize('admin'), documento_base);
 
 // Rutas
 app.use('/api/v1',

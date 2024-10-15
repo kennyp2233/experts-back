@@ -59,13 +59,12 @@ router.put('/',
 // Eliminar agencias IATAs
 router.delete('/',
     [
-        body('ids').isArray().withMessage('Los IDs deben ser un arreglo de números enteros positivos'),
-        body('ids.*').isInt({ min: 1 }).withMessage('Cada ID debe ser un número entero positivo'),
+        body('').isArray().withMessage('Los IDs deben ser un arreglo de números enteros positivos'),
     ],
     validationMiddleware,
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            await deleteAgenciasIata(req.body.ids as number[]);
+            await deleteAgenciasIata(req.body as number[]);
             res.status(200).json({ ok: true, msg: 'Eliminando agencias IATA' });
         } catch (error) {
             next(error);

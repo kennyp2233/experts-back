@@ -14,7 +14,6 @@ const ConsignatarioFito = sequelize.define<Model<ConsignatarioFito>>('consignata
             model: Consignatarios,
             key: Consignatarios.primaryKeyAttribute,
         },
-        onDelete: 'CASCADE',
     },
     fito_declared_name: {
         type: DataTypes.STRING,

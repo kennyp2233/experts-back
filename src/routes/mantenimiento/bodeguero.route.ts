@@ -59,13 +59,13 @@ router.put('/',
 // Eliminar bodegueros
 router.delete('/',
     [
-        body('ids').isArray().withMessage('Los IDs deben ser un arreglo de números enteros positivos'),
-        body('ids.*').isInt({ min: 1 }).withMessage('Los IDs deben ser un arreglo de números enteros positivos')
+        body().isArray().withMessage('Los IDs deben ser un arreglo de números enteros positivos'),
+
     ],
     validationMiddleware,
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            await deleteBodegueros(req.body.ids);
+            await deleteBodegueros(req.body);
             res.status(200).json({ ok: true, msg: 'Eliminando bodegueros' });
         } catch (error) {
             next(error);

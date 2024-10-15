@@ -14,7 +14,7 @@ const AerolineasPlantillas = sequelize.define<Model<AerolineasPlantilla>>('aerol
             model: Aerolineas,
             key: Aerolineas.primaryKeyAttribute
         },
-        onDelete: 'RESTRICT',
+        onDelete: 'CASCADE',
     },
     costo_guia_abrv: {
         type: DataTypes.STRING
