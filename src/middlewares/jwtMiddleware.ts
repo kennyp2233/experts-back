@@ -20,43 +20,48 @@ export const jwtMiddleware = async (err: any, req: Request, res: Response, next:
     const accessToken = req.cookies.access_token;
     const refreshToken = req.cookies.refresh_token;
 
-    // Verificar si el access token está ausente o ha expirado
+    // If there's no error and a valid access token, just proceed
+    if (!err && accessToken) {
+        return next();
+    }
+
+    // Verify if the access token is absent or has expired
     if (!accessToken || (err && err.name === 'UnauthorizedError' && err.inner.name === 'TokenExpiredError')) {
         if (!refreshToken) {
-            // No hay refresh token, el usuario no está autenticado
-            res.status(401).json({ ok: false, msg: 'No autenticado - Refresh Token faltante' });
+            // No refresh token, the user is not authenticated
+            return res.status(401).json({ ok: false, msg: 'No autenticado - Refresh Token faltante' });
         }
 
         try {
-            // Verificar el refresh token
+            // Verify the refresh token
             const refreshDecoded = jwt.verify(refreshToken, SECRET_REFRESH_KEY as string) as { id_usuario: UUID };
             const isAdmin = await isUserAdmin(refreshDecoded.id_usuario);
 
-            // Generar un nuevo access token
+            // Generate a new access token
             const newAccessToken = jwt.sign(
                 { id_usuario: refreshDecoded.id_usuario, admin: isAdmin },
                 SECRET_KEY as string,
                 { expiresIn: '15m' }
             );
 
-            // Establecer el nuevo access token en la cookie
+            // Set the new access token in the cookie
             res.cookie('access_token', newAccessToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
                 sameSite: 'strict',
-                maxAge: 15 * 60 * 1000, // 15 minutos
+                maxAge: 15 * 60 * 1000, // 15 minutes
             });
 
             req.auth = { id_usuario: refreshDecoded.id_usuario, admin: isAdmin || false };
-            next();
+            return next();
         } catch (refreshErr) {
-            // Si el refresh token es inválido, eliminar ambos tokens y forzar re-autenticación
+            // If the refresh token is invalid, remove both tokens and force re-authentication
             res.clearCookie('access_token');
             res.clearCookie('refresh_token');
-            res.status(401).json({ ok: false, msg: 'No autenticado - Refresh Token inválido' });
+            return res.status(401).json({ ok: false, msg: 'No autenticado - Refresh Token inválido' });
         }
     } else {
-        // Si el access token aún es válido, proceder
-        next(err);
+        // If there's another type of error, pass it to the next error handler
+        return next(err);
     }
 };
