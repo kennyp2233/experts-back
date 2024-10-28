@@ -6,8 +6,16 @@ import { getCatalogoProductoUnidad, getCatalogoProductosUnidad } from '@services
 import { getTiposCarga } from '@services/catalogos/tipos_embarque/tipos_carga.servicio';
 import { getTiposEmbalaje } from '@services/catalogos/tipos_embarque/tipos_embajale.servicio';
 import { getTiposDocumento } from '@services/catalogos/consignatario/consignatario_tipo_documento.servicio';
-
+import { getDocumentosBaseStock } from '@services/catalogos/documentos_base/documentos_base_stock.servicio';
 const router = express.Router();
+
+router.get('/documento-base/stock', async (req, res, next) => {
+    try {
+        res.send(await getDocumentosBaseStock());
+    } catch (error: any) {
+        next(error);
+    }
+});
 
 router.get('/aerolineas/modo', async (req, res, next) => {
     try {
