@@ -141,7 +141,7 @@ export async function previewDocumentoBaseYGuias(
         secuencial: sec,
     }));
 
-    return { ...documento_base_creado, guias };
+    return { ...documento_base_creado, guias_madre: guias };
 }
 
 export async function getGuiasMadre(id_documento_base: number): Promise<GuiaMadreAttributes[]> {
