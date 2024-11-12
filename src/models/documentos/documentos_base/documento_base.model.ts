@@ -59,7 +59,7 @@ const DocumentoBase = sequelize.define<Model<DocumentoBaseAttributes, DocumentoB
 export default DocumentoBase;
 
 DocumentoBase.belongsTo(Aerolineas, { foreignKey: 'id_aerolinea', as: 'aerolinea' });
-DocumentoBase.belongsTo(AgenciaIata, { foreignKey: 'id_referencia', as: 'agencia_iata' });
+DocumentoBase.belongsTo(AgenciaIata, { foreignKey: 'id_referencia', as: 'referencia' });
 DocumentoBase.belongsTo(DocumentoBaseStock, { foreignKey: 'id_stock', as: 'stock' });
 // Relaciona el documento base con las guias madres
 DocumentoBase.hasMany(GuiaMadre, { foreignKey: 'id_documento_base', as: 'guias_madre' });
