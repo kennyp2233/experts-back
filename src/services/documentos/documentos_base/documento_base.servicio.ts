@@ -2,6 +2,9 @@ import DocumentoBase from "@models/documentos/documentos_base/documento_base.mod
 import GuiaMadre, { GuiaMadreAttributes } from "@models/documentos/documentos_base/guia_madre.model";
 import sequelize from "@db/experts.db";
 import { DocumentoBaseAttributes, DocumentoBaseCreationAttributes } from "@models/documentos/documentos_base/documento_base.model";
+import Aerolineas from "@models/mantenimiento/aerolinea.model";
+import AgenciaIata from "@models/mantenimiento/agencia_iata";
+import DocumentoBaseStock from "@models/catalogos/documentos/documento_base_stock";
 
 export async function getDocumentosBase(page: number = 1, pageSize: number = 10): Promise<{ data: any[], total: number }> {
     const offset = (page - 1) * pageSize; // Calcular el desplazamiento (offset)
@@ -159,6 +162,18 @@ export async function getGuiasBase(page: number = 1, pageSize: number = 10): Pro
             {
                 model: GuiaMadre,
                 as: 'guias_madre'
+            },
+            {
+                model: Aerolineas,
+                as: 'aerolinea'
+            },
+            {
+                model: AgenciaIata,
+                as: 'referencia'
+            },
+            {
+                model: DocumentoBaseStock,
+                as: 'stock'
             }
         ],
         limit,
