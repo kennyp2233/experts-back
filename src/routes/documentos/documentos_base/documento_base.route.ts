@@ -1,5 +1,5 @@
 import validationMiddleware from '@middlewares/validationMiddleware';
-import { getGuiasBase, crearDocumentoYGuias, previewDocumentoBaseYGuias, getDocumentoBase } from '@services/documentos/documentos_base/documento_base.servicio';
+import { getGuiasBase, crearDocumentoYGuias, previewDocumentoBaseYGuias, getDocumentoBase, updateDocumentoBase } from '@services/documentos/documentos_base/documento_base.servicio';
 import { Router } from 'express';
 import { body, query } from 'express-validator';
 
@@ -58,6 +58,23 @@ router.post('/preview',
         try {
             const response = await previewDocumentoBaseYGuias(req.body.documento_base, req.body.n_guias, req.body.secuencial_inicial, req.body.prefijo);
             res.json(response);
+        } catch (error: any) {
+            next(error);
+        }
+    }
+);
+
+router.put('/',
+    [
+        body('id').isInt({ min: 1 }).withMessage('El ID debe ser un número entero positivo'),
+
+    ],
+
+    validationMiddleware,
+    async (req: any, res: any, next: any) => {
+        try {
+            await updateDocumentoBase(req.body);
+            res.json({ ok: true, msg: 'Actualizando documento base' });
         } catch (error: any) {
             next(error);
         }

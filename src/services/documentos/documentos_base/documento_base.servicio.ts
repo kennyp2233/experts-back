@@ -28,7 +28,8 @@ export async function createDocumentoBase(documento_base: DocumentoBaseCreationA
     return await DocumentoBase.create({ ...documento_base, createdAt: new Date(), updatedAt: new Date() });
 }
 
-export async function updateDocumentoBase(documento_base: DocumentoBaseCreationAttributes) {
+export async function updateDocumentoBase(documento_base: DocumentoBaseAttributes) {
+    console.log(documento_base);
     const documento_baseToUpdate = await DocumentoBase.findByPk(documento_base.id);
     if (documento_baseToUpdate) {
         await DocumentoBase.update({ ...documento_base, updatedAt: new Date() }, {
