@@ -1,5 +1,5 @@
 import validationMiddleware from '@middlewares/validationMiddleware';
-import { getGuiasBase, crearDocumentoYGuias, previewDocumentoBaseYGuias, getDocumentoBase } from '@services/documentos/documentos_base/documento_base.servicio';
+import { getGuiasBase, crearDocumentoYGuias, previewDocumentoBaseYGuias, getDocumentoBase, updateDocumentoBase} from '@services/documentos/documentos_base/documento_base.servicio';
 import { Router } from 'express';
 import { body, query } from 'express-validator';
 
@@ -58,6 +58,25 @@ router.post('/preview',
         try {
             const response = await previewDocumentoBaseYGuias(req.body.documento_base, req.body.n_guias, req.body.secuencial_inicial, req.body.prefijo);
             res.json(response);
+        } catch (error: any) {
+            next(error);
+        }
+    }
+);
+
+router.put('/',
+    [
+        body().isObject().withMessage('El documento base debe ser un objeto'),
+    ],
+    validationMiddleware,
+    async (req: any, res: any, next: any) => {
+        try {
+            const documento_base = await updateDocumentoBase(req.body);
+            if (documento_base) {
+                res.json(documento_base);
+            } else {
+                res.status(404).json({ ok: false, msg: 'No se encontró el documento base' });
+            }
         } catch (error: any) {
             next(error);
         }
