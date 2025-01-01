@@ -34,7 +34,8 @@ export async function createDocumentoBase(documento_base: DocumentoBaseCreationA
 export async function updateDocumentoBase(documento_base: DocumentoBaseCreationAttributes) {
     const documento_baseToUpdate = await DocumentoBase.findByPk(documento_base.id);
     if (documento_baseToUpdate) {
-        await DocumentoBase.update({ ...documento_base, updatedAt: new Date() }, {
+        const { createdAt, ...updateData } = documento_base;
+        await DocumentoBase.update({ ...updateData, updatedAt: new Date() }, {
             where: {
                 id: documento_base.id
             }
@@ -53,32 +54,7 @@ export async function deleteDocumentosBase(ids: any[]) {
     });
 }
 
-/**
- * Genera una lista de secuenciales siguiendo una lógica específica:
- * - Suma 11 en cada incremento.
- * - Si el último dígito es 6, suma 4 en lugar de 11.
- * 
- * @param inicial - El secuencial inicial.
- * @param cantidad - La cantidad de secuenciales a generar.
- * @returns Un arreglo de secuenciales generados.
- */
-function generarSecuenciales(inicial: number, cantidad: number): number[] {
-    const secuenciales: number[] = [];
-    let actual = inicial;
 
-    for (let i = 0; i < cantidad; i++) {
-        secuenciales.push(actual);
-        const ultimoDigito = actual % 10;
-
-        if (ultimoDigito === 6) {
-            actual += 4;
-        } else {
-            actual += 11;
-        }
-    }
-
-    return secuenciales;
-}
 
 export async function crearDocumentoYGuias(
     documento_base: DocumentoBaseCreationAttributes,
@@ -184,4 +160,31 @@ export async function getGuiasBase(page: number = 1, pageSize: number = 10): Pro
         data: rows, // Los registros de la página actual
         total: count // El número total de registros (sin paginación)
     };
+}
+
+/**
+ * Genera una lista de secuenciales siguiendo una lógica específica:
+ * - Suma 11 en cada incremento.
+ * - Si el último dígito es 6, suma 4 en lugar de 11.
+ * 
+ * @param inicial - El secuencial inicial.
+ * @param cantidad - La cantidad de secuenciales a generar.
+ * @returns Un arreglo de secuenciales generados.
+ */
+function generarSecuenciales(inicial: number, cantidad: number): number[] {
+    const secuenciales: number[] = [];
+    let actual = inicial;
+
+    for (let i = 0; i < cantidad; i++) {
+        secuenciales.push(actual);
+        const ultimoDigito = actual % 10;
+
+        if (ultimoDigito === 6) {
+            actual += 4;
+        } else {
+            actual += 11;
+        }
+    }
+
+    return secuenciales;
 }
