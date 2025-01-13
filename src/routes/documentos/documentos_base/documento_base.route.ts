@@ -1,5 +1,5 @@
 import validationMiddleware from '@middlewares/validationMiddleware';
-import { getGuiasBase, crearDocumentoYGuias, previewDocumentoBaseYGuias, getDocumentoBase, updateDocumentoBase, updateDocumentoBase} from '@services/documentos/documentos_base/documento_base.servicio';
+import { getGuiasBase, crearDocumentoYGuias, previewDocumentoBaseYGuias, getDocumentoBase, updateDocumentoBase } from '@services/documentos/documentos_base/documento_base.servicio';
 import { Router } from 'express';
 import { body, query } from 'express-validator';
 

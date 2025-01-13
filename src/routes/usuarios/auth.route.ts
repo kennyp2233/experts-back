@@ -1,16 +1,16 @@
 import express, { Request, Response, NextFunction } from 'express';
 
 // Extend the Request interface to include the user property
-interface CustomRequest extends Request {
+export interface CustomRequest {
     auth?: {
         id_usuario: UUID;
-        admin: boolean;
+        rol: string;
         iat: number;
         exp: number;
         // Add other relevant fields here
     };
 }
-import { login, register, refreshToken } from '@services/usuarios/auth.servicio';
+import { login, register } from '@services/usuarios/auth.servicio';
 import validationMiddleware from '@middlewares/validationMiddleware';
 import { body, query } from 'express-validator';
 import { UUID } from 'crypto';
@@ -89,8 +89,8 @@ router.post('/register',
 
 // Ruta para obtener la información del usuario autenticado
 router.get('/me', (req: Request, res: Response, next: NextFunction) => {
-    const customReq = req as any;
-    console.log(customReq.auth);
+    const customReq = req as CustomRequest;
+    //console.log(customReq.auth);
     if (!customReq.auth) {
         res.status(401).json({ ok: false, msg: 'No autenticado' });
     }
@@ -100,7 +100,7 @@ router.get('/me', (req: Request, res: Response, next: NextFunction) => {
         ok: true,
         user: {
             id: customReq.auth?.id_usuario,
-            isAdmin: customReq.auth?.admin,
+            rol: customReq.auth?.rol
             // Otros campos relevantes
         },
     });
