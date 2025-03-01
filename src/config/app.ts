@@ -40,6 +40,10 @@ import subAgencias from '@routes/mantenimiento/subagencias.route';
 import funcionariosAgrocalidad from '@routes/mantenimiento/funcionarios_agrocalidad.route';
 import bodegueros from '@routes/mantenimiento/bodeguero.route';
 import documento_base from '@routes/documentos/documentos_base/documento_base.route';
+import asignacion from '@routes/documentos/centro_guias/asignacion.route';
+import guia_madre from '@routes/documentos/documentos_base/guia_madre.route';
+
+import { syncDatabase } from './experts.db';
 
 const app = express();
 
@@ -71,6 +75,7 @@ app.use(cors({
 
 app.use(express.json());
 app.use(cookieParser());
+
 
 // Middleware JWT
 app.use(expressjwt({
@@ -106,8 +111,9 @@ app.use('/api/v1/agencias_iata', authorize('admin'), agenciasIata);
 app.use('/api/v1/subagencias', authorize('admin'), subAgencias);
 app.use('/api/v1/funcionarios_agrocalidad', authorize('admin'), funcionariosAgrocalidad);
 app.use('/api/v1/bodegueros', authorize('admin'), bodegueros);
-
 app.use('/api/v1/documentos_base', authorize('admin'), documento_base);
+app.use('/api/v1/asignacion', authorize('admin'), asignacion);
+app.use('/api/v1/guia_madre', authorize('admin'), guia_madre);
 
 // Rutas
 app.use('/api/v1',
@@ -116,5 +122,5 @@ app.use('/api/v1',
 
 // Middleware para manejo de errores
 app.use(errorHandler);
-
+syncDatabase();
 export default app;

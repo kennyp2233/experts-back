@@ -7,7 +7,6 @@ export interface GuiaMadreAttributes {
     prefijo: number;
     secuencial: number;
     id_documento_base: number;
-    id_coordinacion?: number;
     prestamo?: boolean;
     observaciones?: string;
     fecha_prestamo?: string;
@@ -38,11 +37,9 @@ const GuiaMadre = sequelize.define<Model<GuiaMadreAttributes, GuiaMadreCreationA
     secuencial: {
         type: DataTypes.INTEGER,
     },
-    id_coordinacion: {
-        type: DataTypes.INTEGER,
-    },
     prestamo: {
         type: DataTypes.BOOLEAN,
+        defaultValue: false,
     },
     observaciones: {
         type: DataTypes.STRING,
@@ -52,6 +49,7 @@ const GuiaMadre = sequelize.define<Model<GuiaMadreAttributes, GuiaMadreCreationA
     },
     devolucion: {
         type: DataTypes.BOOLEAN,
+        defaultValue: false,
     },
     fecha_devolucion: {
         type: DataTypes.DATE,
@@ -64,7 +62,7 @@ const GuiaMadre = sequelize.define<Model<GuiaMadreAttributes, GuiaMadreCreationA
     },
 });
 
-//relaciones
+
 
 export default GuiaMadre;
 

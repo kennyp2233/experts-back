@@ -5,7 +5,7 @@ import sequelize from '@db/experts.db';
 
 import Usuario from './usuario.model';
 
-const Admin = sequelize.define<Model<Admin, AdminAtrubutosCreacion>>('admins', {
+const Admin = sequelize.define<Model<Admin, AdminAtrubutosCreacion>>('admins_rol', {
     id_usuario: {
         type: DataTypes.UUID,
         primaryKey: true,

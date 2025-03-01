@@ -65,3 +65,5 @@ DocumentoBase.belongsTo(DocumentoBaseStock, { foreignKey: 'id_stock', as: 'stock
 DocumentoBase.hasMany(GuiaMadre, { foreignKey: 'id_documento_base', as: 'guias_madre' });
 GuiaMadre.belongsTo(DocumentoBase, { foreignKey: 'id_documento_base', as: 'documento_base' });
 
+Aerolineas.hasMany(DocumentoBase, { foreignKey: 'id_aerolinea', as: 'documentos_base' });
+
