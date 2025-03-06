@@ -53,3 +53,47 @@ export async function updateGuiaMadre(guia_madre: GuiaMadreCreationAttributes) {
     }
     return null;
 }
+
+// Añadir a guia_madre.servicio.ts
+export async function marcarComoPrestada(id: number, observaciones?: string): Promise<GuiaMadreAttributes | null> {
+    const guiaMadre = await GuiaMadre.findByPk(id);
+
+    if (!guiaMadre) {
+        return null;
+    }
+
+    if ((guiaMadre as any).prestamo) {
+        throw new Error('La guía ya está marcada como prestada');
+    }
+
+    await GuiaMadre.update({
+        prestamo: true,
+        observaciones: observaciones || '',
+        fecha_prestamo: new Date().toISOString()
+    }, {
+        where: { id }
+    });
+
+    return await GuiaMadre.findByPk(id) as any;
+}
+
+export async function marcarComoDevuelta(id: number): Promise<GuiaMadreAttributes | null> {
+    const guiaMadre = await GuiaMadre.findByPk(id);
+
+    if (!guiaMadre) {
+        return null;
+    }
+
+    if (!(guiaMadre as any).prestamo) {
+        throw new Error('La guía no estaba prestada');
+    }
+
+    await GuiaMadre.update({
+        devolucion: true,
+        fecha_devolucion: new Date().toISOString()
+    }, {
+        where: { id }
+    });
+
+    return await GuiaMadre.findByPk(id) as any;
+}

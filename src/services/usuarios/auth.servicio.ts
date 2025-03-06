@@ -6,36 +6,9 @@ import { Usuario, UsuarioAtributosCreacion } from "@typesApp/usuarios/usuario.ty
 import { SECRET_KEY, BY_SALT, SECRET_REFRESH_KEY } from "@db/config";
 
 import { UUID } from 'crypto';
+import { getUserRole } from './usuarios.servicio';
 
-const roleTableMap: { [key: string]: any } = {
-    admin: Admins,
-    // Agrega otros roles y sus tablas aquí
-    // ejemplo: "editor": Editors,
-    // "manager": Managers,
-};
 
-export async function isUserInRole(userId: UUID, role: string): Promise<boolean> {
-    const roleTable = roleTableMap[role];
-    if (!roleTable) {
-        throw new Error(`El rol ${role} no está definido en el mapa de roles`);
-    }
-
-    const user = await roleTable.findOne({
-        where: { id_usuario: userId },
-    });
-
-    return user !== null;
-}
-
-export async function getUserRole(userId: UUID): Promise<string | null> {
-    for (const role of Object.keys(roleTableMap)) {
-        const isInRole = await isUserInRole(userId, role);
-        if (isInRole) {
-            return role; // Devuelve el primer rol encontrado
-        }
-    }
-    return null; // Si no pertenece a ningún rol
-}
 
 export async function login(usuario: string, pass: string, mantenerSesion: boolean): Promise<{ accessToken: string, refreshToken: string }> {
     let user: Usuario | null = null;
