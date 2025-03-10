@@ -19,5 +19,4 @@ const Admin = sequelize.define<Model<Admin, AdminAtrubutosCreacion>>('admins_rol
 });
 
 
-
 export default Admin;

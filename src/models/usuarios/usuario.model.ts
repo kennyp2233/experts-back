@@ -1,10 +1,10 @@
 import { DataTypes, Model } from 'sequelize';
-import { UsuarioAtributosCreacion, Usuario } from '@typesApp/usuarios/usuario.type';
+import { UsuarioAtributosCreacion, UsuarioAtributos } from '@typesApp/usuarios/usuario.type';
 
 import sequelize from '@db/experts.db';
 
 
-const Usuario = sequelize.define<Model<Usuario, UsuarioAtributosCreacion>>('usuarios', {
+const Usuario = sequelize.define<Model<UsuarioAtributos, UsuarioAtributosCreacion>>('usuarios', {
     id_usuario: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,

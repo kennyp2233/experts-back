@@ -1,6 +1,5 @@
 import Admins from "@models/usuarios/admins.model";
 import Usuarios from "@models/usuarios/usuario.model";
-import "src/config/assosiations/usuario/user_admin.as";
 
 import { Admin, AdminAtrubutosCreacion } from "@typesApp/usuarios/admin.type";
 import { UUID } from "crypto";

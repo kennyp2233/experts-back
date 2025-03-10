@@ -42,6 +42,7 @@ import bodegueros from '@routes/mantenimiento/bodeguero.route';
 import documento_base from '@routes/documentos/documentos_base/documento_base.route';
 import asignacion from '@routes/documentos/centro_guias/asignacion.route';
 import guia_madre from '@routes/documentos/documentos_base/guia_madre.route';
+import guia_hija from '@routes/documentos/centro_guias/guia_hija.route';
 
 import { syncDatabase } from './experts.db';
 
@@ -88,8 +89,14 @@ app.use(expressjwt({
     credentialsRequired: true,
 }).unless({ path: ['/api/v1/login', '/api/v1/register', '/api-docs'] }));
 
-// Middleware personalizado adicional (si es necesario)
-app.use(jwtMiddleware);
+// Mismo patrón que expressjwt
+app.use((req, res, next) => {
+    const excludedPaths = ['/api/v1/login', '/api/v1/register', '/api-docs'];
+    if (excludedPaths.some(path => req.path.startsWith(path))) {
+        return next();
+    }
+    jwtMiddleware(req, res, next);
+});
 
 app.use('/api/v1/aerolineas', authorize('admin'), aerolineasRouter);
 app.use('/api/v1/unidadesMedida', authorize('admin'), unidadesMedidaRouter);
@@ -114,6 +121,7 @@ app.use('/api/v1/bodegueros', authorize('admin'), bodegueros);
 app.use('/api/v1/documentos_base', authorize('admin'), documento_base);
 app.use('/api/v1/asignacion', authorize('admin'), asignacion);
 app.use('/api/v1/guia_madre', authorize('admin'), guia_madre);
+app.use('/api/v1/guia_hija', authorize('admin'), guia_hija);
 
 // Rutas
 app.use('/api/v1',

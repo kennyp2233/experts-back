@@ -1,14 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { SECRET_KEY, SECRET_REFRESH_KEY } from '@db/config';
-import { getUserRole } from '@services/usuarios/usuarios.servicio';
+import { getUserRoles } from '@services/usuarios/usuarios.servicio';
 import { UUID } from 'crypto';
 
 // Interfaz para extender Request con la propiedad auth
 interface AuthenticatedRequest extends Request {
     auth?: {
         id_usuario: UUID;
-        rol: string;
+        roles: any[];
         iat: number;
         exp: number;
     };
@@ -25,7 +25,7 @@ export const jwtMiddleware = async (req: AuthenticatedRequest, res: Response, ne
                 const decoded = jwt.verify(accessToken, SECRET_KEY as string) as any;
                 req.auth = {
                     id_usuario: decoded.id_usuario,
-                    rol: decoded.rol,
+                    roles: decoded.rol,
                     iat: decoded.iat,
                     exp: decoded.exp
                 };
@@ -45,14 +45,16 @@ export const jwtMiddleware = async (req: AuthenticatedRequest, res: Response, ne
                 const refreshDecoded = jwt.verify(refreshToken, SECRET_REFRESH_KEY as string) as { id_usuario: UUID };
 
                 // Obtener el rol del usuario
-                const userRole = await getUserRole(refreshDecoded.id_usuario);
+                const userRole = await getUserRoles(refreshDecoded.id_usuario);
                 if (!userRole) {
                     throw new Error('El usuario no tiene un rol asignado');
                 }
 
-                // Generar un nuevo access token
                 const newAccessToken = jwt.sign(
-                    { id_usuario: refreshDecoded.id_usuario, rol: userRole },
+                    {
+                        id_usuario: refreshDecoded.id_usuario,
+                        roles: userRole
+                    },
                     SECRET_KEY as string,
                     { expiresIn: '15m' }
                 );
@@ -67,7 +69,7 @@ export const jwtMiddleware = async (req: AuthenticatedRequest, res: Response, ne
 
                 req.auth = {
                     id_usuario: refreshDecoded.id_usuario,
-                    rol: userRole,
+                    roles: userRole,
                     iat: Date.now(),
                     exp: Date.now() + 15 * 60 * 1000
                 };
